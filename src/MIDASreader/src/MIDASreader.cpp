@@ -1,0 +1,650 @@
+#include "MIDASreader.h"
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include "muserawtree.h"
+#include "TBranchElement.h"
+
+#define NOTIMPLEMENTED std::cerr<<__PRETTY_FUNCTION__<<": not implemented\n"; exit(-1);
+
+
+
+
+
+MIDASfile::MIDASfile()
+{
+  std::cerr<<"MIDASfile: empty constructor is not supported"<<std::endl;
+  exit(-1);
+}
+
+MIDASfile::MIDASfile(char const *filename,char const *, char const *, int)
+{
+  theruninfo=new MRTRunInfo;
+  int offset=0;
+  
+  printf("%s\n",filename);
+  char filename2[1000];
+  if (2==sscanf(filename,"%i%%%s",&offset,filename2))
+    {
+      file=new std::ifstream(filename2);
+      printf("Reading %s with offset %i\n",filename2,offset);
+    }
+  else
+    file=new std::ifstream(filename);
+  MIDASevent event;
+  MIDASbankheader bankheader;
+  MIDASbank  bank;
+  unsigned int *namehash=(unsigned int*) bank.name;
+  std::cerr<<"Building index map... might take a while\n";
+  int events=0;
+  bool not_offset_yet;
+  while(file->good())
+    {
+      if (events % 10000 ==0)
+	{
+	  std::cout<<"\r"<<events<<" Events read                   ";
+	  std::cout.flush();
+	}
+
+
+      file->read((char *)&event,sizeof(MIDASevent));
+      not_offset_yet=true;
+      if ((event.id & 0xFFFE)==0x8000  && event.mask==0x494d)
+	{
+	  // handle bor/eor;
+	  file->seekg(event.size,file->cur);
+
+	  if (event.id==0x8000) //begin of run
+	    {
+	    	  theruninfo->runNumber=event.serial;
+		  theruninfo->startTime=event.timestamp;
+	    }
+	  else //end of run
+	    {
+	      theruninfo->stopTime=event.timestamp;
+	    }
+	}
+      else
+	{
+	  file->read((char*) &bankheader,8);
+	  int sizetoread=bankheader.banksize;
+	  int skip=0;
+	  while((sizetoread>0) && (file->good()))
+	    {
+	      file->read(bank.name,4);
+	      sizetoread-=4;
+	      if (bankheader.flags==17)
+		{
+		  file->read((char *) &bank.type,4);
+		  file->read((char *) &bank.size,4);
+		  skip=((bank.size +7) /8)*8;
+		  sizetoread-=8;
+		}
+	      else
+		{
+		  unsigned short temp;
+		  file->read((char *) &temp,2);
+		  bank.type=temp;
+		  file->read((char *) &temp,2);
+		  bank.size=temp;
+		  skip=temp;
+		  sizetoread-=4;
+		}
+
+	      if (bank.name[0]=='T' && bank.name[1]=='R' && bank.name[2]=='B' && not_offset_yet)// && bank.name[3]=='1')
+		{
+		  not_offset_yet=false;
+		  event.serial-=offset;
+//		  printf("\t Event Serial is %d",event.serial);
+		}
+
+// Ievgen: Added Trigger ID bank for every MIDAS event: Aug.28, 2017
+              if (bank.name[0]=='T' && bank.name[1]=='r' && bank.name[2]=='I' && bank.name[3]=='D')
+                {
+		 //readout TriggerID value from the bank:
+		  unsigned int trigger_number = 0;
+		  file->read((char *) &trigger_number,4);
+		  //printf("\n\t TrID bank = %d", trigger_number);
+                  sizetoread-=4;
+		  skip-=4;
+                  //if "TrID" bank exists, then use TriggerID for synchronization instead of event.serial.
+                  //sometimes Vulom4b fails to decode triggerID properly by skiping 1st bit. 
+
+// Nov 8. 2017 . This is a temporarily solution. I know that it doesn't loose more that a few packages in a raw)).		  
+		  if(event.serial != trigger_number && event.serial + 10000 >=trigger_number){	
+//     		    printf("\t Event Serial: %d, Trigger number: %d ",event.serial, trigger_number);
+		    event.serial = trigger_number;
+//                  printf("\t Event Serial after: %d \n",event.serial, trigger_number);
+                  }
+		}
+	 
+/*	      // fill information to map
+	      if ((int)offsetmap.size()<event.serial)
+		{
+		  std::cerr<<"Skipped eventnumber. Can't handle!\n"<<event.serial<<" "<<offsetmap.size()<<std::endl;
+		  exit(-2);
+		}
+	      if (offsetmap.size()==event.serial)
+		{
+		  events++;
+		  offsetmap.push_back(std::map<unsigned int,MIDASindex>());
+		}
+*/
+		//fill information to map, NEW
+		for (int i=offsetmap.size();i<=event.serial;i++){
+		  events++;
+		  offsetmap.push_back(std::map<unsigned int,MIDASindex>());
+		}
+
+
+//	      if  (bank.name[0]=='E' && bank.name[1]=='V' && bank.name[2]=='N' && bank.name[3]=='T')
+//		bank.name[3]=event.id+'0';
+
+// END Aug.28, 2017
+
+
+	      if (event.serial>=0)
+		{
+		  offsetmap[event.serial][*namehash].offset=file->tellg();
+		  offsetmap[event.serial][*namehash].size=bank.size;
+		}
+	      file->seekg(skip,file->cur);
+	      if (!file->good())
+		{
+		  std::cerr<<"\n\n\n*********************************\nFile corrupted?\n******************************\n\n\n"<<std::endl;
+		  offsetmap[event.serial].erase(*namehash);
+		}
+		sizetoread-=skip;
+
+	      
+	    }
+	}
+    }
+  theruninfo->nrOfEvents=events;
+  std::cout<<"\rTotal of "<<events<<" Events read. "<<std::endl;
+  std::cout<< theruninfo->runNumber<<" "<<theruninfo->startTime<<" to "<<theruninfo->stopTime<<" "<<theruninfo->nrOfEvents<<std::endl;
+	      
+  file->clear();
+
+  thetree=new MIDAStree(this);
+
+}
+
+MIDASfile::~MIDASfile()
+{
+  delete file;
+  delete thetree;
+  delete theruninfo;
+}
+
+TObject* MIDASfile::Get(const char* namecycle){
+  // here we special case the gets we support on this file.
+  if (strcmp(namecycle,"midas")==0)
+    {
+      //we return a MIDAStree
+      return (TObject *) thetree;
+    }
+  if (strcmp(namecycle,"RunInfo")==0     )
+    {
+
+      return (TObject *) theruninfo;
+    }
+
+  return NULL;
+}
+
+
+
+
+ClassImp(MIDASfile);
+
+
+//ostream helpers
+
+std::ostream & operator<<(std::ostream & os, const MIDASevent& ev)
+{
+  os<<"Event ID: "<<std::hex<<ev.id<<" Mask:"<< ev.mask<<std::dec<<std::endl;
+  os<<"Serial: "<<ev.serial<<" Timestamp:"<<ev.timestamp;
+}
+
+std::ostream & operator<<(std::ostream & os, const MIDASbankheader& bh)
+{
+ os<<"  Banksize:"<<bh.banksize<<" Flags:"<<bh.flags;
+}
+
+
+std::ostream & operator<<(std::ostream & os, const MIDASbank& b)
+{
+  os<<"     Bank name: "<<b.name[0]<<b.name[1]<<b.name[2]<<b.name[3]<<" Type:"<<b.type<<" Size:"<<b.size;
+}
+
+
+
+
+
+
+// MIDAStree
+
+
+MIDAStree::MIDAStree(MIDASfile *f):thefile(f)
+{
+  dummyelement=new TBranchElement();
+}
+
+MIDAStree::~MIDAStree()
+{
+  delete dummyelement;
+}
+
+ClassImp(MIDAStree);
+
+
+//ignore branch status
+void MIDAStree::SetBranchStatus(const char* bname, Bool_t status , UInt_t* found ){  } 
+
+
+//get number of events
+
+Long64_t MIDAStree::GetEntries() const{ return thefile->theruninfo->nrOfEvents;}
+
+
+Int_t MIDAStree::GetEntry(Long64_t entry , Int_t getall ){
+  int size=0;
+  for (std::map<unsigned int,MRTBinaryBlob *>::iterator mapped=mappedBranches.begin();mapped!=mappedBranches.end();mapped++)
+    {
+      delete[] mapped->second->data;
+      std::map<unsigned int,MIDASindex>::iterator posinfile=thefile->offsetmap[entry].find(mapped->first);
+      if (posinfile==thefile->offsetmap[entry].end())
+	{
+	  //	  printf("Could not find %i in %li\n",mapped->first,entry);
+	  mapped->second->size=0;
+	  mapped->second->data = new UChar_t[0];
+	}
+      else
+	{
+	  mapped->second->size=posinfile->second.size;
+	  mapped->second->data=new UChar_t[mapped->second->size];
+	  thefile->file->seekg(posinfile->second.offset,thefile->file->beg);
+	  thefile->file->read((char *) mapped->second->data,mapped->second->size);
+	  if (!thefile->file->good())
+	    {
+	      printf("Error reading %i bytes at %li\n",mapped->second->size,posinfile->second.offset);
+	      for (std::map<unsigned int,MIDASindex>::iterator it=thefile->offsetmap[entry].begin();it!=thefile->offsetmap[entry].end();it++)
+		printf("%i %i %li\n",it->first,it->second.size,it->second.offset);
+	    }
+	      
+	  size+=mapped->second->size;
+	}
+    }
+  
+  return size;
+};
+
+// print some information:
+void MIDAStree::Print(Option_t* option ) const{
+  std::cout<<"MIDAS TREE\n";
+  //todo
+}
+
+
+// should fall back to setbranchaddress
+TBranch* MIDAStree::GetBranch(const char* name){
+  if (strlen(name)!=4)
+      return NULL;
+  return dummyelement;
+}
+
+
+Int_t MIDAStree::SetBranchAddress(const char* bname, void* add, TBranch** ptr, TClass* realClass, EDataType datatype, Bool_t isptr)
+{
+
+
+  if (strlen(bname)!=4)
+    {
+      * (char **)add=NULL;
+      return -1;
+    }
+  unsigned int *hash=(unsigned int*) bname;
+
+    // Check if module exists in the first 500 events (or last event if less than 500)
+    unsigned int upper_limit = 500;
+    if (thefile->offsetmap.size() < upper_limit) upper_limit = thefile->offsetmap.size();
+
+    bool module_found = false;
+    for (unsigned int i = 0; i < upper_limit; i++)
+    {
+        if (thefile->offsetmap[i].find(*hash)!=thefile->offsetmap[i].end()) module_found = true;
+
+        if (module_found)
+        {
+            if (i > 0) printf("Warning: Module %s found for the first time on event %i\n",bname,i);
+            break;
+        }
+    }
+
+    // If we don't find the module, we should return
+    if (!module_found) return -1;
+
+    // If module is found, output the name/hash
+    printf("Found: %s, hash: %i\n",bname,*hash);
+    {
+      mappedBranches[*hash]=new MRTBinaryBlob();
+    }
+  *(MRTBinaryBlob **) add= mappedBranches[*hash];
+return 0;
+};
+
+
+Bool_t MIDAStree::GetBranchStatus(const char* branchname) const{ return true;}
+
+
+
+
+//not implement all other methods:
+
+void MIDASfile::Add(TObject* obj, Bool_t replace ){ NOTIMPLEMENTED }
+void MIDASfile::Append(TObject* obj, Bool_t replace ){ NOTIMPLEMENTED }
+Int_t MIDASfile::AppendKey(TKey* key){ NOTIMPLEMENTED }
+void MIDASfile::AppendPad(Option_t* option ){ NOTIMPLEMENTED }
+void MIDASfile::Browse(TBrowser* b){ NOTIMPLEMENTED }
+void MIDASfile::Build(TFile* motherFile , TDirectory* motherDir ){ NOTIMPLEMENTED }
+Bool_t MIDASfile::cd(const char* path ){ NOTIMPLEMENTED }
+void MIDASfile::Clear(Option_t* option ){ NOTIMPLEMENTED }
+TObject* MIDASfile::CloneObject(const TObject* obj, Bool_t autoadd ){ NOTIMPLEMENTED }
+void MIDASfile::Close(Option_t* option ){ NOTIMPLEMENTED }
+void MIDASfile::Copy(TObject&) const{ NOTIMPLEMENTED }
+Bool_t MIDASfile::Cp(const char* dst, Bool_t progressbar , UInt_t buffersize ){ NOTIMPLEMENTED }
+TKey* MIDASfile::CreateKey(TDirectory* mother, const TObject* obj, const char* name, Int_t bufsize){ NOTIMPLEMENTED }
+TKey* MIDASfile::CreateKey(TDirectory* mother, const void* obj, const TClass* cl, const char* name, Int_t bufsize){ NOTIMPLEMENTED }
+void MIDASfile::Delete(const char* namecycle ){ NOTIMPLEMENTED }
+void MIDASfile::DeleteAll(Option_t* option ){ NOTIMPLEMENTED }
+void MIDASfile::Draw(Option_t* option ){ NOTIMPLEMENTED }
+void MIDASfile::DrawMap(const char* keys , Option_t* option ){ NOTIMPLEMENTED }
+void MIDASfile::FillBuffer(char*& buffer){ NOTIMPLEMENTED }
+TKey* MIDASfile::FindKey(const char* keyname) const{ NOTIMPLEMENTED }
+TKey* MIDASfile::FindKeyAny(const char* keyname) const{ NOTIMPLEMENTED }
+TObject* MIDASfile::FindObject(const char* name) const{ NOTIMPLEMENTED }
+TObject* MIDASfile::FindObject(const TObject* obj) const{ NOTIMPLEMENTED }
+TObject* MIDASfile::FindObjectAny(const char* name) const{ NOTIMPLEMENTED }
+TObject* MIDASfile::FindObjectAnyFile(const char* name) const{ NOTIMPLEMENTED }
+void MIDASfile::Flush(){ NOTIMPLEMENTED }
+
+Int_t MIDASfile::GetBufferSize() const{ NOTIMPLEMENTED }
+Long64_t MIDASfile::GetBytesRead() const{ NOTIMPLEMENTED }
+Long64_t MIDASfile::GetBytesReadExtra() const{ NOTIMPLEMENTED }
+Int_t MIDASfile::GetBytesToPrefetch() const{ NOTIMPLEMENTED }
+Long64_t MIDASfile::GetBytesWritten() const{ NOTIMPLEMENTED }
+TDirectory* MIDASfile::GetDirectory(const char* apath, Bool_t printError , const char* funcname ){ NOTIMPLEMENTED }
+Long64_t MIDASfile::GetEND() const{ NOTIMPLEMENTED }    
+const TUrl* MIDASfile::GetEndpointUrl() const{ NOTIMPLEMENTED }
+Int_t MIDASfile::GetErrno() const{ NOTIMPLEMENTED }
+TFile* MIDASfile::GetFile() const{ NOTIMPLEMENTED }
+TKey* MIDASfile::GetKey(const char* name, Short_t cycle ) const{ NOTIMPLEMENTED }
+TList* MIDASfile::GetList() const{ NOTIMPLEMENTED }
+TList* MIDASfile::GetListOfKeys() const{ NOTIMPLEMENTED }
+TObject* MIDASfile::GetMother() const{ NOTIMPLEMENTED }
+TDirectory* MIDASfile::GetMotherDir() const{ NOTIMPLEMENTED }
+Int_t MIDASfile::GetNbytesFree() const{ NOTIMPLEMENTED }
+Int_t MIDASfile::GetNbytesInfo() const{ NOTIMPLEMENTED }
+Int_t MIDASfile::GetNbytesKeys() const{ NOTIMPLEMENTED }
+TString MIDASfile::GetNewUrl(){ NOTIMPLEMENTED }
+Int_t MIDASfile::GetNfree() const{ NOTIMPLEMENTED }
+Int_t MIDASfile::GetNkeys() const{ NOTIMPLEMENTED }
+Int_t MIDASfile::GetNProcessIDs() const{ NOTIMPLEMENTED }
+void* MIDASfile::GetObjectChecked(const char* namecycle, const char* classname){ NOTIMPLEMENTED }
+void* MIDASfile::GetObjectChecked(const char* namecycle, const TClass* cl){ NOTIMPLEMENTED }
+void* MIDASfile::GetObjectUnchecked(const char* namecycle){ NOTIMPLEMENTED }
+Option_t* MIDASfile::GetOption() const{ NOTIMPLEMENTED }
+const char* MIDASfile::GetPath() const{ NOTIMPLEMENTED }
+const char* MIDASfile::GetPathStatic() const{ NOTIMPLEMENTED }
+Int_t MIDASfile::GetReadCalls() const{ NOTIMPLEMENTED }
+Long64_t MIDASfile::GetSeekDir() const{ NOTIMPLEMENTED }
+Long64_t MIDASfile::GetSeekFree() const{ NOTIMPLEMENTED }
+Long64_t MIDASfile::GetSeekInfo() const{ NOTIMPLEMENTED }
+Long64_t MIDASfile::GetSeekKeys() const{ NOTIMPLEMENTED }
+Long64_t MIDASfile::GetSeekParent() const{ NOTIMPLEMENTED }
+Long64_t MIDASfile::GetSize() const{ NOTIMPLEMENTED }
+#if ROOT_VERSION_CODE >= ROOT_VERSION(6,14,0)
+TList* MIDASfile::GetStreamerInfoListImp(){ NOTIMPLEMENTED }
+#else
+TList* MIDASfile::GetStreamerInfoList(){ NOTIMPLEMENTED }
+#endif
+void MIDASfile::IncrementProcessIDs(){ NOTIMPLEMENTED }
+Bool_t MIDASfile::IsFolder() const{ NOTIMPLEMENTED }
+Bool_t MIDASfile::IsModified() const{ NOTIMPLEMENTED }
+Bool_t MIDASfile::IsOpen() const{ NOTIMPLEMENTED }
+Bool_t MIDASfile::IsWritable() const{ NOTIMPLEMENTED }
+void MIDASfile::ls(Option_t* option ) const{ NOTIMPLEMENTED }
+void MIDASfile::MakeFree(Long64_t first, Long64_t last){ NOTIMPLEMENTED }
+void MIDASfile::MakeProject(const char* dirname, const char* classes , Option_t* option ){ NOTIMPLEMENTED }
+void MIDASfile::Map(){ NOTIMPLEMENTED }
+Bool_t MIDASfile::Matches(const char* name){ NOTIMPLEMENTED }
+TDirectory* MIDASfile::mkdir(const char* name, const char* title ){ NOTIMPLEMENTED }
+Bool_t MIDASfile::MustFlush() const{ NOTIMPLEMENTED }
+TFile* MIDASfile::OpenFile(const char* name, Option_t* option , const char* ftitle , Int_t compress , Int_t netopt ){ NOTIMPLEMENTED }
+void MIDASfile::Paint(Option_t* option ){ NOTIMPLEMENTED }
+void MIDASfile::Print(Option_t* option ) const{ NOTIMPLEMENTED }
+void MIDASfile::Purge(Short_t nkeep ){ NOTIMPLEMENTED }
+void MIDASfile::pwd() const{ NOTIMPLEMENTED }
+void MIDASfile::ReadAll(Option_t* option ){ NOTIMPLEMENTED }
+Bool_t MIDASfile::ReadBuffer(char* buf, Int_t len){ NOTIMPLEMENTED }
+Bool_t MIDASfile::ReadBuffer(char* buf, Long64_t pos, Int_t len){ NOTIMPLEMENTED }
+Bool_t MIDASfile::ReadBufferAsync(Long64_t offs, Int_t len){ NOTIMPLEMENTED }
+Bool_t MIDASfile::ReadBuffers(char* buf, Long64_t* pos, Int_t* len, Int_t nbuf){ NOTIMPLEMENTED }
+void MIDASfile::ReadFree(){ NOTIMPLEMENTED }
+Int_t MIDASfile::ReadKeys(Bool_t forceRead ){ NOTIMPLEMENTED }
+TProcessID* MIDASfile::ReadProcessID(UShort_t pidf){ NOTIMPLEMENTED }
+void MIDASfile::ReadStreamerInfo(){ NOTIMPLEMENTED }
+Int_t MIDASfile::ReadTObject(TObject* obj, const char* keyname){ NOTIMPLEMENTED }
+Int_t MIDASfile::Recover(){ NOTIMPLEMENTED }
+void MIDASfile::RecursiveRemove(TObject* obj){ NOTIMPLEMENTED }
+TObject* MIDASfile::Remove(TObject*){ NOTIMPLEMENTED }
+Int_t MIDASfile::ReOpen(Option_t* mode){ NOTIMPLEMENTED }
+void MIDASfile::ResetAfterMerge(TFileMergeInfo*){ NOTIMPLEMENTED }
+void MIDASfile::ResetErrno() const{ NOTIMPLEMENTED }
+void MIDASfile::rmdir(const char* name){ NOTIMPLEMENTED }
+void MIDASfile::Save(){ NOTIMPLEMENTED }
+Int_t MIDASfile::SaveObjectAs(const TObject* obj, const char* filename , Option_t* option ) const{ NOTIMPLEMENTED }
+void MIDASfile::SaveSelf(Bool_t force ){ NOTIMPLEMENTED }
+void MIDASfile::Seek(Long64_t offset, TFile::ERelativeTo pos ){ NOTIMPLEMENTED }
+Bool_t MIDASfile::IsArchive() const { NOTIMPLEMENTED}
+void MIDASfile::SetBufferSize(Int_t bufsize){ NOTIMPLEMENTED }
+void MIDASfile::SetCacheRead(TFileCacheRead* cache, TObject* tree , TFile::ECacheAction action ){ NOTIMPLEMENTED }
+void MIDASfile::SetCacheWrite(TFileCacheWrite* cache){ NOTIMPLEMENTED }
+void MIDASfile::SetCompressionAlgorithm(Int_t algorithm ){ NOTIMPLEMENTED }
+void MIDASfile::SetCompressionLevel(Int_t level ){ NOTIMPLEMENTED }
+void MIDASfile::SetCompressionSettings(Int_t settings ){ NOTIMPLEMENTED }
+void MIDASfile::SetEND(Long64_t last){ NOTIMPLEMENTED }
+void MIDASfile::SetModified(){ NOTIMPLEMENTED }
+void MIDASfile::SetMother(TObject* mother){ NOTIMPLEMENTED }
+void MIDASfile::SetName(const char* newname){ NOTIMPLEMENTED }
+void MIDASfile::SetOffset(Long64_t offset, TFile::ERelativeTo pos ){ NOTIMPLEMENTED }
+void MIDASfile::SetOption(Option_t* option ){ NOTIMPLEMENTED }
+void MIDASfile::SetReadCalls(Int_t readcalls ){ NOTIMPLEMENTED }
+void MIDASfile::SetSeekDir(Long64_t v){ NOTIMPLEMENTED }
+void MIDASfile::SetTRefAction(TObject* ref, TObject* parent){ NOTIMPLEMENTED }
+void MIDASfile::SetWritable(Bool_t writable ){ NOTIMPLEMENTED }
+void MIDASfile::ShowStreamerInfo(){ NOTIMPLEMENTED }
+Int_t MIDASfile::Sizeof() const{ NOTIMPLEMENTED }
+void MIDASfile::UseCache(Int_t maxCacheSize , Int_t pageSize ){ NOTIMPLEMENTED }
+Int_t MIDASfile::Write(const char* name , Int_t opt , Int_t bufsiz ){ NOTIMPLEMENTED }
+Int_t MIDASfile::Write(const char* name , Int_t opt , Int_t bufsiz ) const{ NOTIMPLEMENTED }
+Bool_t MIDASfile::WriteBuffer(const char* buf, Int_t len){ NOTIMPLEMENTED }
+void MIDASfile::WriteDirHeader(){ NOTIMPLEMENTED }
+void MIDASfile::WriteFree(){ NOTIMPLEMENTED }
+void MIDASfile::WriteHeader(){ NOTIMPLEMENTED }
+void MIDASfile::WriteKeys(){ NOTIMPLEMENTED }
+Int_t MIDASfile::WriteObjectAny(const void* obj, const char* classname, const char* name, Option_t* option , Int_t bufsize ){ NOTIMPLEMENTED }
+Int_t MIDASfile::WriteObjectAny(const void* obj, const TClass* cl, const char* name, Option_t* option , Int_t bufsize ){ NOTIMPLEMENTED }
+UShort_t MIDASfile::WriteProcessID(TProcessID* pid){ NOTIMPLEMENTED }
+void MIDASfile::WriteStreamerInfo(){ NOTIMPLEMENTED }
+Int_t MIDASfile::WriteTObject(const TObject* obj, const char* name , Option_t* option , Int_t bufsize ){ NOTIMPLEMENTED }
+
+
+
+
+ROOTRET MIDAStree::AddBranchToCache(const char* bname, Bool_t subbranches ){ NOTIMPLEMENTED }
+ROOTRET MIDAStree::AddBranchToCache(TBranch* branch, Bool_t subbranches ){ NOTIMPLEMENTED }
+TFriendElement* MIDAStree::AddFriend(const char* treename, const char* filename ){ NOTIMPLEMENTED }
+TFriendElement* MIDAStree::AddFriend(const char* treename, TFile* file){ NOTIMPLEMENTED }
+TFriendElement* MIDAStree::AddFriend(TTree* tree, const char* alias , Bool_t warn ){ NOTIMPLEMENTED }
+void MIDAStree::AddTotBytes(Int_t tot){ NOTIMPLEMENTED }
+void MIDAStree::AddZipBytes(Int_t zip){ NOTIMPLEMENTED }
+Long64_t MIDAStree::AutoSave(Option_t* option ){ NOTIMPLEMENTED }
+Int_t MIDAStree::Branch(TList* list, Int_t bufsize , Int_t splitlevel ){ NOTIMPLEMENTED }
+Int_t MIDAStree::Branch(const char* folder, Int_t bufsize , Int_t splitlevel ){ NOTIMPLEMENTED }
+Int_t MIDAStree::Branch(TCollection* list, Int_t bufsize , Int_t splitlevel , const char* name ){ NOTIMPLEMENTED }
+TBranch* MIDAStree::Branch(const char* name, void* address, const char* leaflist, Int_t bufsize ){ NOTIMPLEMENTED }
+TBranch* MIDAStree::BranchOld(const char* name, const char* classname, void* addobj, Int_t bufsize , Int_t splitlevel ){ NOTIMPLEMENTED }
+TBranch* MIDAStree::BranchRef(){ NOTIMPLEMENTED }
+TBranch* MIDAStree::Bronch(const char* name, const char* classname, void* addobj, Int_t bufsize , Int_t splitlevel ){ NOTIMPLEMENTED }
+void MIDAStree::Browse(TBrowser*){ NOTIMPLEMENTED }
+Int_t MIDAStree::BuildIndex(const char* majorname, const char* minorname ){ NOTIMPLEMENTED }
+TFile* MIDAStree::ChangeFile(TFile* file){ NOTIMPLEMENTED }
+TTree* MIDAStree::CloneTree(Long64_t nentries , Option_t* option ){ NOTIMPLEMENTED }
+void MIDAStree::CopyAddresses(TTree*, Bool_t undo ){ NOTIMPLEMENTED }
+Long64_t MIDAStree::CopyEntries(TTree* tree, Long64_t nentries , Option_t* option ){ NOTIMPLEMENTED }
+TTree* MIDAStree::CopyTree(const char* selection, Option_t* option , Long64_t nentries , Long64_t firstentry ){ NOTIMPLEMENTED }
+TBasket* MIDAStree::CreateBasket(TBranch*){ NOTIMPLEMENTED }
+void MIDAStree::Delete(Option_t* option ){ NOTIMPLEMENTED }
+void MIDAStree::DirectoryAutoAdd(TDirectory*){ NOTIMPLEMENTED }
+void MIDAStree::Draw(Option_t* opt){ NOTIMPLEMENTED }
+Long64_t MIDAStree::Draw(const char* varexp, const TCut& selection, Option_t* option , Long64_t nentries , Long64_t firstentry ){ NOTIMPLEMENTED }
+Long64_t MIDAStree::Draw(const char* varexp, const char* selection, Option_t* option , Long64_t nentries , Long64_t firstentry ){ NOTIMPLEMENTED }
+void MIDAStree::DropBaskets(){ NOTIMPLEMENTED }
+ROOTRET MIDAStree::DropBranchFromCache(const char* bname, Bool_t subbranches ){ NOTIMPLEMENTED }
+ROOTRET MIDAStree::DropBranchFromCache(TBranch* branch, Bool_t subbranches ){ NOTIMPLEMENTED }
+void MIDAStree::DropBuffers(Int_t nbytes){ NOTIMPLEMENTED }
+Int_t MIDAStree::Fill(){ NOTIMPLEMENTED }
+TBranch* MIDAStree::FindBranch(const char* name){ NOTIMPLEMENTED }
+TLeaf* MIDAStree::FindLeaf(const char* name){ NOTIMPLEMENTED }
+Int_t MIDAStree::Fit(const char* funcname, const char* varexp, const char* selection , Option_t* option , Option_t* goption , Long64_t nentries , Long64_t firstentry ){ NOTIMPLEMENTED }
+Int_t MIDAStree::FlushBaskets() const{ NOTIMPLEMENTED }
+const char * MIDAStree::GetAlias(const char* aliasName) const{ NOTIMPLEMENTED }
+Long64_t MIDAStree::GetAutoFlush() const{ NOTIMPLEMENTED }
+Long64_t MIDAStree::GetAutoSave() const{ NOTIMPLEMENTED }
+
+TBranchRef* MIDAStree::GetBranchRef() const{ NOTIMPLEMENTED }
+
+Long64_t MIDAStree::GetCacheSize() const{ NOTIMPLEMENTED }
+Long64_t MIDAStree::GetChainEntryNumber(Long64_t entry) const{ NOTIMPLEMENTED }
+Long64_t MIDAStree::GetChainOffset() const{ NOTIMPLEMENTED }
+TTree::TClusterIterator	MIDAStree::GetClusterIterator(Long64_t firstentry){ NOTIMPLEMENTED }
+Long64_t MIDAStree::GetEntries(const char* selection){ NOTIMPLEMENTED }
+Long64_t MIDAStree::GetEntriesFast() const{ NOTIMPLEMENTED }
+Long64_t MIDAStree::GetEntriesFriend() const{ NOTIMPLEMENTED }
+
+TEntryList* MIDAStree::GetEntryList(){ NOTIMPLEMENTED }
+Long64_t MIDAStree::GetEntryNumber(Long64_t entry) const{ NOTIMPLEMENTED }
+Long64_t MIDAStree::GetEntryNumberWithBestIndex(Long64_t major, Long64_t minor ) const{ NOTIMPLEMENTED }
+Long64_t MIDAStree::GetEntryNumberWithIndex(Long64_t major, Long64_t minor ) const{ NOTIMPLEMENTED }
+Int_t MIDAStree::GetEntryWithIndex(Int_t major, Int_t minor ){ NOTIMPLEMENTED }
+Long64_t MIDAStree::GetEstimate() const{ NOTIMPLEMENTED }
+Int_t MIDAStree::GetFileNumber() const{ NOTIMPLEMENTED }
+TTree* MIDAStree::GetFriend(const char*) const{ NOTIMPLEMENTED }
+const char*	MIDAStree::GetFriendAlias(TTree*) const{ NOTIMPLEMENTED }
+Int_t* MIDAStree::GetIndex(){ NOTIMPLEMENTED }
+Double_t* MIDAStree::GetIndexValues(){ NOTIMPLEMENTED }
+TIterator* MIDAStree::GetIteratorOnAllLeaves(Bool_t dir ){ NOTIMPLEMENTED }
+TLeaf* MIDAStree::GetLeaf(const char* name){ NOTIMPLEMENTED }
+TLeaf* MIDAStree::GetLeaf(const char* branchname, const char* leafname){ NOTIMPLEMENTED }
+TList* MIDAStree::GetListOfAliases() const{ NOTIMPLEMENTED }
+TObjArray* MIDAStree::GetListOfBranches(){ NOTIMPLEMENTED }
+TList* MIDAStree::GetListOfClones(){ NOTIMPLEMENTED }
+TList* MIDAStree::GetListOfFriends() const{ NOTIMPLEMENTED }
+TObjArray* MIDAStree::GetListOfLeaves(){ NOTIMPLEMENTED }
+Long64_t MIDAStree::GetMaxEntryLoop() const{ NOTIMPLEMENTED }
+Double_t MIDAStree::GetMaximum(const char* columname){ NOTIMPLEMENTED }
+Long64_t MIDAStree::GetMaxVirtualSize() const{ NOTIMPLEMENTED }
+Double_t MIDAStree::GetMinimum(const char* columname){ NOTIMPLEMENTED }
+Int_t MIDAStree::GetNbranches(){ NOTIMPLEMENTED }
+Int_t MIDAStree::GetPacketSize() const{ NOTIMPLEMENTED }
+TVirtualPerfStats* MIDAStree::GetPerfStats() const{ NOTIMPLEMENTED }
+Long64_t MIDAStree::GetReadEntry() const{ NOTIMPLEMENTED }
+Long64_t MIDAStree::GetReadEvent() const{ NOTIMPLEMENTED }
+Int_t MIDAStree::GetScanField() const{ NOTIMPLEMENTED }
+Long64_t MIDAStree::GetSelectedRows(){ NOTIMPLEMENTED }
+Int_t MIDAStree::GetTimerInterval() const{ NOTIMPLEMENTED }
+Long64_t MIDAStree::GetTotBytes() const{ NOTIMPLEMENTED }
+TTree* MIDAStree::GetTree() const{ NOTIMPLEMENTED }
+TVirtualIndex* MIDAStree::GetTreeIndex() const{ NOTIMPLEMENTED }
+Int_t MIDAStree::GetTreeNumber() const{ NOTIMPLEMENTED }
+Int_t MIDAStree::GetUpdate() const{ NOTIMPLEMENTED }
+TList* MIDAStree::GetUserInfo(){ NOTIMPLEMENTED }
+  Double_t* MIDAStree::GetV1(){ NOTIMPLEMENTED }
+Double_t* MIDAStree::GetV2(){ NOTIMPLEMENTED }
+Double_t* MIDAStree::GetV3(){ NOTIMPLEMENTED }
+Double_t* MIDAStree::GetV4(){ NOTIMPLEMENTED }
+Double_t* MIDAStree::GetVal(Int_t i){ NOTIMPLEMENTED }
+  Double_t* MIDAStree::GetW(){ NOTIMPLEMENTED }
+Double_t MIDAStree::GetWeight() const{ NOTIMPLEMENTED }
+Long64_t MIDAStree::GetZipBytes() const{ NOTIMPLEMENTED }
+void MIDAStree::IncrementTotalBuffers(Int_t nbytes){ NOTIMPLEMENTED }
+Bool_t MIDAStree::IsFolder() const{ NOTIMPLEMENTED }
+Int_t MIDAStree::LoadBaskets(Long64_t maxmemory ){ NOTIMPLEMENTED }
+Long64_t MIDAStree::LoadTree(Long64_t entry){ NOTIMPLEMENTED }
+Long64_t MIDAStree::LoadTreeFriend(Long64_t entry, TTree* T){ NOTIMPLEMENTED }
+Int_t MIDAStree::MakeClass(const char* classname , Option_t* option ){ NOTIMPLEMENTED }
+Int_t MIDAStree::MakeCode(const char* filename ){ NOTIMPLEMENTED }
+Int_t MIDAStree::MakeProxy(const char* classname, const char* macrofilename , const char* cutfilename , const char* option , Int_t maxUnrolling ){ NOTIMPLEMENTED }
+Int_t MIDAStree::MakeSelector(const char* selector ){ NOTIMPLEMENTED }
+Long64_t MIDAStree::Merge(TCollection* list, Option_t* option ){ NOTIMPLEMENTED }
+Long64_t MIDAStree::Merge(TCollection* list, TFileMergeInfo* info){ NOTIMPLEMENTED }
+Bool_t MIDAStree::Notify(){ NOTIMPLEMENTED }
+void MIDAStree::OptimizeBaskets(ULong64_t maxMemory , Float_t minComp , Option_t* option ){ NOTIMPLEMENTED }
+
+void MIDAStree::PrintCacheStats(Option_t* option ) const{ NOTIMPLEMENTED }
+Long64_t MIDAStree::Process(void* selector, Option_t* option , Long64_t nentries , Long64_t firstentry ){ NOTIMPLEMENTED }
+Long64_t MIDAStree::Process(const char* filename, Option_t* option , Long64_t nentries , Long64_t firstentry ){ NOTIMPLEMENTED }
+Long64_t MIDAStree::Project(const char* hname, const char* varexp, const char* selection , Option_t* option , Long64_t nentries , Long64_t firstentry ){ NOTIMPLEMENTED }
+TSQLResult* MIDAStree::Query(const char* varexp , const char* selection , Option_t* option , Long64_t nentries , Long64_t firstentry ){ NOTIMPLEMENTED }
+Long64_t MIDAStree::ReadFile(const char* filename, const char* branchDescriptor , char delimiter ){ NOTIMPLEMENTED }
+Long64_t MIDAStree::ReadStream(std::istream& inputStream, const char* branchDescriptor , char delimiter ){ NOTIMPLEMENTED }
+void MIDAStree::RecursiveRemove(TObject* obj){ NOTIMPLEMENTED }
+void MIDAStree::Refresh(){ NOTIMPLEMENTED }
+void MIDAStree::RemoveFriend(TTree*){ NOTIMPLEMENTED }
+void MIDAStree::Reset(Option_t* option ){ NOTIMPLEMENTED }
+void MIDAStree::ResetAfterMerge(TFileMergeInfo*){ NOTIMPLEMENTED }
+void MIDAStree::ResetBranchAddress(TBranch*){ NOTIMPLEMENTED }
+void MIDAStree::ResetBranchAddresses(){ NOTIMPLEMENTED }
+Long64_t MIDAStree::Scan(const char* varexp , const char* selection , Option_t* option , Long64_t nentries , Long64_t firstentry ){ NOTIMPLEMENTED }
+Bool_t MIDAStree::SetAlias(const char* aliasName, const char* aliasFormula){ NOTIMPLEMENTED }
+void MIDAStree::SetAutoFlush(Long64_t autof ){ NOTIMPLEMENTED }
+void MIDAStree::SetAutoSave(Long64_t autos ){ NOTIMPLEMENTED }
+void MIDAStree::SetBasketSize(const char* bname, Int_t buffsize ){ NOTIMPLEMENTED }
+Int_t MIDAStree::SetBranchAddress(const char* bname, void* add, TClass* realClass, EDataType datatype, Bool_t isptr){ NOTIMPLEMENTED }
+
+Int_t MIDAStree::SetBranchAddress(const char* bname, void** add, TBranch** ptr ){ NOTIMPLEMENTED }
+ROOTRET MIDAStree::SetCacheEntryRange(Long64_t first, Long64_t last){ NOTIMPLEMENTED }
+void MIDAStree::SetCacheLearnEntries(Int_t n ){ NOTIMPLEMENTED }
+ROOTRET MIDAStree::SetCacheSize(Long64_t cachesize ){ NOTIMPLEMENTED }
+void MIDAStree::SetChainOffset(Long64_t offset ){ NOTIMPLEMENTED }
+void MIDAStree::SetCircular(Long64_t maxEntries){ NOTIMPLEMENTED }
+void MIDAStree::SetDebug(Int_t level , Long64_t min , Long64_t max ){ NOTIMPLEMENTED }
+void MIDAStree::SetDefaultEntryOffsetLen(Int_t newdefault, Bool_t updateExisting ){ NOTIMPLEMENTED }
+void MIDAStree::SetDirectory(TDirectory* dir){ NOTIMPLEMENTED }
+Long64_t MIDAStree::SetEntries(Long64_t n ){ NOTIMPLEMENTED }
+void MIDAStree::SetEntryList(TEntryList* list, Option_t* opt ){ NOTIMPLEMENTED }
+void MIDAStree::SetEstimate(Long64_t nentries ){ NOTIMPLEMENTED }
+void MIDAStree::SetEventList(TEventList* list){ NOTIMPLEMENTED }
+void MIDAStree::SetFileNumber(Int_t number ){ NOTIMPLEMENTED }
+void MIDAStree::SetMakeClass(Int_t make){ NOTIMPLEMENTED }
+void MIDAStree::SetMaxEntryLoop(Long64_t maxev ){ NOTIMPLEMENTED }
+void MIDAStree::SetMaxVirtualSize(Long64_t size ){ NOTIMPLEMENTED }
+void MIDAStree::SetName(const char* name){ NOTIMPLEMENTED }
+void MIDAStree::SetNotify(TObject* obj){ NOTIMPLEMENTED }
+void MIDAStree::SetObject(const char* name, const char* title){ NOTIMPLEMENTED }
+void MIDAStree::SetParallelUnzip(Bool_t opt , Float_t RelSize ){ NOTIMPLEMENTED }
+void MIDAStree::SetPerfStats(TVirtualPerfStats* perf){ NOTIMPLEMENTED }
+void MIDAStree::SetScanField(Int_t n ){ NOTIMPLEMENTED }
+void MIDAStree::SetTimerInterval(Int_t msec ){ NOTIMPLEMENTED }
+void MIDAStree::SetTreeIndex(TVirtualIndex* index){ NOTIMPLEMENTED }
+void MIDAStree::SetUpdate(Int_t freq ){ NOTIMPLEMENTED }
+void MIDAStree::SetWeight(Double_t w , Option_t* option ){ NOTIMPLEMENTED }
+void MIDAStree::Show(Long64_t entry , Int_t lenmax ){ NOTIMPLEMENTED }
+void MIDAStree::StartViewer(){ NOTIMPLEMENTED }
+ROOTRET MIDAStree::StopCacheLearningPhase(){ NOTIMPLEMENTED }
+Int_t MIDAStree::UnbinnedFit(const char* funcname, const char* varexp, const char* selection , Option_t* option , Long64_t nentries , Long64_t firstentry ){ NOTIMPLEMENTED }
+void MIDAStree::UseCurrentStyle(){ NOTIMPLEMENTED }
+Int_t MIDAStree::Write(const char* name , Int_t option , Int_t bufsize ){ NOTIMPLEMENTED }
+Int_t MIDAStree::Write(const char* name , Int_t option , Int_t bufsize ) const{ NOTIMPLEMENTED }

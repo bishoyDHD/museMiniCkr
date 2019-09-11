@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LumiGEM>
+  <config>
+    <!-- GEM APV mapping configuration tags                           -->
+    <AddAPVright>    AddAPVtoGEMright </AddAPVright>
+    <AddAPVleft>     AddAPVtoGEMleft  </AddAPVleft>
+    <ModifyAPVright> ModifyAPVright   </ModifyAPVright>
+    <ModifyAPVleft>  ModifyAPVleft    </ModifyAPVleft>
+    <SwapGEMaxis>    SwapGEMaxis      </SwapGEMaxis>
+    <!-- Cluster Finder configuration tags                            -->
+    <LMGaussFilterSigma>   SetLMGaussFilterSigma </LMGaussFilterSigma>
+    <LMMinimumAmplitude>   SetLMMininumAmplitude </LMMinimumAmplitude>
+    <LMMinimumDistance>    SetLMMinimumDistance  </LMMinimumDistance>
+    <LMMaximumNLM>         SetLMMaximumNLM       </LMMaximumNLM>
+    <CFMinimumAmplitude>   SetCFMinimumAmplitude </CFMinimumAmplitude>
+    <CFSigmaRange>         SetCFSigmaRange       </CFSigmaRange>
+    <CFMake1dClusters>     SetMake1dClusters     </CFMake1dClusters>
+    <CFRepairBrokenStrips> SetRepairBrokenStrips </CFRepairBrokenStrips>
+    <!-- Trigger Pattern of Interest configuration tags               -->
+    <TriggerPattern> SetTriggerPattern </TriggerPattern>
+    <!-- Monitoring of SC channels to determine detector status       -->
+    <MonitorSC>    watchSCchannel   </MonitorSC>
+    <MonitorGEMHV> watchSCHVchannel </MonitorGEMHV>
+  </config>
+<!--##################################################################-->
+  <date time="2000-01-01T00:00:00Z">
+<!--
+    The following section contains the GEM APV mapping configuration.
+
+    The idea is to map logical APV numbers to the axis of the GEMs in
+    the right order. The parameters are
+
+      lAPV    logical APV number in the data stream
+      gem     "US": upstream, "MI": middle, "DS": downstream
+      xy      "x": APV sits on GEM x axis, "y": y axis
+      skip    skip the first n samples from the APV data block
+
+    To add an APV to the right sector use 'AddAPVright' and for the
+    left sector 'AddAPVleft'.
+
+    N.B.: The parameter 'id' is mandatory in these xml files. The
+    following lines will be processed in order of ascending 'id' for
+    each kind of tag (i.e. 'AddPAVright/left'). As the proper cGEM
+    configuration depends on the order in which the APVs are added to
+    the GEM objects the 'id' parameter needs to be taken into account,
+    although in principle it has no meaning in the configuration
+    process of the cGEM class itself. We just have to cope with the
+    fact that it is mandatory here...
+-->
+
+<!-- ================================== Testbeam 22 ================================== -->
+
+    <!-- =====           lAPV gem   xy  skip      ===== -->  <!-- =====              lAPV  channels  size  method              ===== -->
+    <AddAPVleft id=" 0">  0, "US", "x",  6  </AddAPVleft>  <ModifyAPVleft id=" 0">  0, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 1">  1, "US", "x",  0  </AddAPVleft>  <ModifyAPVleft id=" 1">  1, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 2">  2, "US", "y",  6  </AddAPVleft>  <ModifyAPVleft id=" 2">  2, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 3">  3, "US", "y",  0  </AddAPVleft>  <ModifyAPVleft id=" 3">  3, "0 32 64 96", 4, 2 </ModifyAPVleft>
+
+    <AddAPVleft id=" 4">  4, "MI", "x",  6  </AddAPVleft>  <ModifyAPVleft id=" 4">  4, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 5">  5, "MI", "x",  0  </AddAPVleft>  <ModifyAPVleft id=" 5">  5, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 6">  6, "MI", "y",  6  </AddAPVleft>  <ModifyAPVleft id=" 6">  6, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 7">  7, "MI", "y",  0  </AddAPVleft>  <ModifyAPVleft id=" 7">  7, "0 32 64 96", 4, 2 </ModifyAPVleft>
+
+    <AddAPVleft id=" 8">  8, "DS", "x",  6  </AddAPVleft>  <ModifyAPVleft id=" 8">  8, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 9">  9, "DS", "x",  0  </AddAPVleft>  <ModifyAPVleft id=" 9">  9, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id="10"> 10, "DS", "y",  6  </AddAPVleft>  <ModifyAPVleft id="10"> 10, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id="11"> 11, "DS", "y",  0  </AddAPVleft>  <ModifyAPVleft id="11"> 11, "0 32 64 96", 4, 2 </ModifyAPVleft>
+
+<!--
+    The following section contains the cluster finder configuration.
+-->
+<!--  Preprocessing                                                   -->
+     <!-- preprocessing config not in use yet -->
+<!--  Local maximum                                                   -->
+    <LMGaussFilterSigma   id="0">  1.0  </LMGaussFilterSigma>
+    <LMMinimumAmplitude   id="0">   50  </LMMinimumAmplitude>
+    <LMMinimumDistance    id="0">    5  </LMMinimumDistance>
+    <LMMaximumNLM         id="0">   10  </LMMaximumNLM>
+<!--  Cluster finder                                                  -->
+    <CFMinimumAmplitude   id="0">   100  </CFMinimumAmplitude>
+    <CFSigmaRange         id="0"> 0.4, 2.5 </CFSigmaRange>
+
+    <CFMake1dClusters     id="0">    1  </CFMake1dClusters>
+    <CFRepairBrokenStrips id="0">    1  </CFRepairBrokenStrips>
+<!--  Trigger Pattern                                                 -->
+    <TriggerPattern       id="0"> 0x6  </TriggerPattern>
+
+<!--  Slow Control channels to watch                                  -->
+<!--   This section contains default ranges for the GEM HV slow control
+       variables to be watched by the SCManager                       -->
+<!--    left sector US GEM           sector value   +/-               -->
+    <MonitorGEMHV id=" 1"> "LG:LUSMVI", 0, 4150.0, 150.0 </MonitorGEMHV>
+    <MonitorGEMHV id=" 2"> "LG:LUSMCI", 0,  300.0,  15.0 </MonitorGEMHV>
+    <MonitorGEMHV id=" 3"> "LG:LUSSTI", 0,   1.0,    0.1 </MonitorGEMHV>
+<!--    left sector MI GEM                                            -->
+    <MonitorGEMHV id=" 4"> "LG:LMIMVI", 0, 4150.0, 150.0 </MonitorGEMHV>
+    <MonitorGEMHV id=" 5"> "LG:LMIMCI", 0,  300.0,  15.0 </MonitorGEMHV>
+    <MonitorGEMHV id=" 6"> "LG:LMISTI", 0,   1.0,    0.1 </MonitorGEMHV>
+<!--    left sector DS GEM                                            -->
+    <MonitorGEMHV id=" 7"> "LG:LDSMVI", 0, 4150.0, 150.0 </MonitorGEMHV>
+    <MonitorGEMHV id=" 8"> "LG:LDSMCI", 0,  300.0,  15.0 </MonitorGEMHV>
+    <MonitorGEMHV id=" 9"> "LG:LDSSTI", 0,   1.0,    0.1 </MonitorGEMHV>
+<!--    right sector US GEM                                            -->
+    <MonitorGEMHV id="10"> "LG:RUSMVI", 1, 4150.0, 150.0 </MonitorGEMHV>
+    <MonitorGEMHV id="11"> "LG:RUSMCI", 1,  300.0,  15.0 </MonitorGEMHV>
+    <MonitorGEMHV id="12"> "LG:RUSSTI", 1,   1.0,    0.1 </MonitorGEMHV>
+<!--    right sector MI GEM                                            -->
+    <MonitorGEMHV id="13"> "LG:RMIMVI", 1, 4150.0, 150.0 </MonitorGEMHV>
+    <MonitorGEMHV id="14"> "LG:RMIMCI", 1,  300.0,  15.0 </MonitorGEMHV>
+    <MonitorGEMHV id="15"> "LG:RMISTI", 1,   1.0,    0.1 </MonitorGEMHV>
+<!--    right sector DS GEM                                            -->
+    <MonitorGEMHV id="16"> "LG:RDSMVI", 1, 4150.0, 150.0 </MonitorGEMHV>
+    <MonitorGEMHV id="17"> "LG:RDSMCI", 1,  300.0,  15.0 </MonitorGEMHV>
+    <MonitorGEMHV id="18"> "LG:RDSSTI", 1,   1.0,    0.1 </MonitorGEMHV>
+  </date>
+
+  <date time="2012-01-01T00:00:00Z">
+
+    <!-- ===== Right sector GEM APV configuration ===== -->  <!-- ===== Right sector APV modification config. (averaging etc.) ===== -->
+    <!-- =====           lAPV gem   xy  skip      ===== -->  <!-- =====              lAPV  channels  size  method              ===== -->
+    <AddAPVright id=" 0">  1, "US", "x",  6  </AddAPVright>  <ModifyAPVright id=" 0">  1, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 1">  0, "US", "x",  0  </AddAPVright>  <ModifyAPVright id=" 1">  0, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 2">  3, "US", "y",  6  </AddAPVright>  <ModifyAPVright id=" 2">  3, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 3">  2, "US", "y",  0  </AddAPVright>  <ModifyAPVright id=" 3">  2, "0 2 4 6 8 10 22 32 64 96", 10, 2 </ModifyAPVright>
+    
+
+    <AddAPVright id=" 4">  5, "MI", "x",  6  </AddAPVright>  <ModifyAPVright id=" 4">  5, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 5">  4, "MI", "x",  0  </AddAPVright>  <ModifyAPVright id=" 5">  4, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 6">  7, "MI", "y",  6  </AddAPVright>  <ModifyAPVright id=" 6">  7, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 7">  6, "MI", "y",  0  </AddAPVright>  <ModifyAPVright id=" 7">  6, "0 32 64 96", 4, 2 </ModifyAPVright>
+   
+
+    <AddAPVright id=" 8">  9, "DS", "x",  6  </AddAPVright>  <ModifyAPVright id=" 8">  9, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 9">  8, "DS", "x",  0  </AddAPVright>  <ModifyAPVright id=" 9">  8, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id="10"> 11, "DS", "y",  6  </AddAPVright>  <ModifyAPVright id="10"> 11, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id="11"> 10, "DS", "y",  0  </AddAPVright>  <ModifyAPVright id="11"> 10, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <SwapGEMaxis id=" 0"> "right", "DS", "y" </SwapGEMaxis>
+
+    <!-- ===== Left sector GEM APV configuration ===== -->  <!-- ===== Left sector APV modification config. (averaging etc.) ===== -->
+    <!-- =====     lAPV        xy  skip          ===== -->  <!-- =====            lAPV  channels  size  method               ===== -->
+    <AddAPVleft id=" 0">  3, "US", "x",  6  </AddAPVleft>   <ModifyAPVleft id=" 0">  3, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 1">  2, "US", "x",  0  </AddAPVleft>   <ModifyAPVleft id=" 1">  2, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 2">  5, "US", "y",  6  </AddAPVleft>   <ModifyAPVleft id=" 2">  5, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 3">  4, "US", "y",  0  </AddAPVleft>   <ModifyAPVleft id=" 3">  4, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    
+
+    <AddAPVleft id=" 4">  1, "MI", "x",  6  </AddAPVleft>   <ModifyAPVleft id=" 4">  1, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 5">  0, "MI", "x",  0  </AddAPVleft>   <ModifyAPVleft id=" 5">  0, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 6"> 98, "MI", "y",  6  </AddAPVleft>   <ModifyAPVleft id=" 6"> 98, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 7"> 99, "MI", "y",  0  </AddAPVleft>   <ModifyAPVleft id=" 7"> 99, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    
+
+    <AddAPVleft id=" 8">  7, "DS", "x",  6  </AddAPVleft>   <ModifyAPVleft id=" 8">  7, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 9">  6, "DS", "x",  0  </AddAPVleft>   <ModifyAPVleft id=" 9">  6, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id="10">  9, "DS", "y",  6  </AddAPVleft>   <ModifyAPVleft id="10">  9, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id="11">  8, "DS", "y",  0  </AddAPVleft>   <ModifyAPVleft id="11">  8, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <SwapGEMaxis id=" 1"> "left", "DS", "y" </SwapGEMaxis>
+  </date>
+
+    
+<!--##################################################################-->
+
+  <date time="2012-02-05T20:50:00Z">
+    <!-- right sector LumiGEM HVs changed during run #2688 -->
+<!--  
+    <MonitorGEMHV id="10"> "LG:RUSMVI", 1, 4115.0, 5.0 </MonitorGEMHV>
+    <MonitorGEMHV id="11"> "LG:RUSMCI", 1,  312.0, 3.0 </MonitorGEMHV>
+    <MonitorGEMHV id="13"> "LG:RMIMVI", 1, 4175.0, 5.0 </MonitorGEMHV>
+    <MonitorGEMHV id="14"> "LG:RMIMCI", 1,  316.0, 3.0 </MonitorGEMHV>
+    <MonitorGEMHV id="16"> "LG:RDSMVI", 1, 4115.0, 5.0 </MonitorGEMHV>
+    <MonitorGEMHV id="17"> "LG:RDSMCI", 1,  312.0, 3.0 </MonitorGEMHV>
+-->
+  </date>
+
+<!--##################################################################-->
+
+ 
+<!--##################################################################-->
+
+</LumiGEM>

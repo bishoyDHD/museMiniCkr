@@ -1,0 +1,916 @@
+#include <Det_LumiGEM.h>
+#include "TStyle.h"
+
+#include<iostream>
+#include<cmath>
+#include <unistd.h>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include<stdio.h> 
+
+// Event display files
+#include "TGeoManager.h"
+#include "TGeoVolume.h"
+#include "TProfile.h"
+
+// Root
+#include <math.h>
+#include "TF1.h"
+#include "TGraph.h"
+#include "TH1.h"
+#include "TMath.h"
+#include "Plugin.h"
+#include "TTree.h"
+
+#include "TAxis.h"
+#include "TGraph.h"
+#include "TMultiGraph.h"
+#include "TCanvas.h"
+#include "TApplication.h"
+#include "TStyle.h"
+#include "TPad.h"
+#include "TROOT.h"
+#include "TColor.h"
+#include "TFrame.h"
+#include "TVirtualPad.h"
+
+
+Long_t Det_LumiGEM::histos_cm_ped()
+{
+  //InitRMShistos();
+
+  for (int t=0; t<2; t++)
+    for (int i=0; i<3; i++)
+      {
+	//	deadchmap[t][i]=dH2(Form("MUSEtele/%s/%s/deadchmap%s",leftright[t],GEMname[i],GEMname[i]), Form("%d GEM Dead Channel Map",i), 250, -0.5, 249.5,250, -0.5, 249.5);
+
+	///// before background subtractions /////////////
+	//	h2adcspec_x[t][i]=dH2(Form("MUSEtele/%s/%s/adcspectra_x",leftright[t],GEMname[i]), Form("%d GEM X APV ADCs",i), 250,-0.5, 249.5,4096,-0.5,4095.5); 
+	//	h2adcspec_y[t][i]=dH2(Form("MUSEtele/%s/%s/adcspectra_y",leftright[t],GEMname[i]), Form("%d GEM Y APV ADCs",i), 250,-0.5, 249.5,4096,-0.5,4095.5); 
+	h2adcspec_nopk_x[t][i]=dH2(Form("MUSEtele/%s/%s/adcspectra_nopk_x",leftright[t],GEMname[i]), Form("%d GEM X APV ADCs - nopk (excluding peak)",i), 250,-0.5, 249.5,4096,-0.5,4095.5);
+	h2adcspec_nopk_y[t][i]=dH2(Form("MUSEtele/%s/%s/adcspectra_nopk_y",leftright[t],GEMname[i]), Form("%d GEM Y APV ADCs - nopk (excluding peak)",i), 250,-0.5, 249.5,4096,-0.5,4095.5);	
+	h2evespec_nopk_x[t][i]=dH2(Form("MUSEtele/%s/%s/evespectra_nopk_x",leftright[t],GEMname[i]), Form("%d GEM X APV entries - nopk (excluding peak)",i), 250,-0.5, 249.5,100,0.0,100000);
+	h2evespec_nopk_y[t][i]=dH2(Form("MUSEtele/%s/%s/evespectra_nopk_y",leftright[t],GEMname[i]), Form("%d GEM Y APV entries - nopk (excluding peak)",i), 250,-0.5, 249.5,100,0.0,100000);
+
+	// cmode related................ 
+	h1adcspec_cmode_x_apv1[t][i]=dH1(Form("MUSEtele/%s/%s/getmean_cmode_x_apv1",leftright[t],GEMname[i]), Form("%d GEM X APV 1 - peak excluded average ADCs for many events",i),100,0.0,3000.0);
+	h1adcspec_cmode_y_apv1[t][i]=dH1(Form("MUSEtele/%s/%s/getmean_cmode_y_apv1",leftright[t],GEMname[i]), Form("%d GEM Y APV 1- peak excluded average ADCs for many events",i),100,0.0,3000.0);
+	h1adcspec_cmode_x_apv2[t][i]=dH1(Form("MUSEtele/%s/%s/getmean_cmode_x_apv2",leftright[t],GEMname[i]), Form("%d GEM X APV 2- peak excluded average ADCs for many events",i),100,0.0,3000.0);
+	h1adcspec_cmode_y_apv2[t][i]=dH1(Form("MUSEtele/%s/%s/getmean_cmode_y_apv2",leftright[t],GEMname[i]), Form("%d GEM Y APV 2- peak excluded average ADCs for many events",i),100,0.0,3000.0);
+
+	h2adcspec_cmode_nopk_x[t][i]=dH2(Form("MUSEtele/%s/%s/adcspectra_cmode_nopk_x",leftright[t],GEMname[i]), Form("%d GEM X APV ADCs - nopk (excluding peak)-c mode subtracted",i), 250,-0.5, 249.5,4096,-500.5,3595.5);
+	h2adcspec_cmode_nopk_y[t][i]=dH2(Form("MUSEtele/%s/%s/adcspectra_cmode_nopk_y",leftright[t],GEMname[i]), Form("%d GEM Y APV ADCs - nopk (excluding peak)-c mode subtracted",i), 250,-0.5, 249.5,4096,-500.5,3595.5);
+
+	//////////////////cmode and pedestal subtraction related///////////////////////////
+
+	h2adcspec_cm_pedsub_nopk_x[t][i]=dH2(Form("MUSEtele/%s/%s/adcspectra_cm_pedsub_nopk_x",leftright[t],GEMname[i]), Form("%d GEM X APV ADCs after both cm and ped subtraction (excluding peak)",i), 250,-0.5, 249.5,4096,-500.5,3595.5);
+	h2adcspec_cm_pedsub_nopk_y[t][i]=dH2(Form("MUSEtele/%s/%s/adcspectra_cm_pedsub_nopk_y",leftright[t],GEMname[i]), Form("%d GEM Y APV ADCs after both cm and ped subtraction (excluding peak)",i), 250,-0.5, 249.5,4096,-500.5,3595.5);
+	h2adcspec_cm_pedsub_peak_x[t][i]=dH2(Form("MUSEtele/%s/%s/adcspectra_cm_pedsub_peak_x",leftright[t],GEMname[i]), Form("%d GEM X APV Signal ADCs after both cm and ped subtraction",i), 250,-0.5, 249.5,4096,-595.5,3500.5);
+	h2adcspec_cm_pedsub_peak_y[t][i]=dH2(Form("MUSEtele/%s/%s/adcspectra_cm_pedsub_peak_y",leftright[t],GEMname[i]), Form("%d GEM Y APV Signal ADCs after both cm and ped subtraction",i), 250,-0.5, 249.5,4096,-595.5,3500.5);
+	
+	//	xcm_ped[t][i] = dH2(Form("MUSEtele/%s/%s/adc_cm_pedsub_nopk_x",leftright[t],GEMname[i]), Form("%d GEM X APV ADCs after both cm and ped subtraction (excluding peak)",i), 250,0,250,1000,-400,1500);
+	//	ycm_ped[t][i] = dH2(Form("MUSEtele/%s/%s/adc_cm_pedsub_nopk_y",leftright[t],GEMname[i]), Form("%d GEM Y APV ADCs after both cm and ped subtraction (excluding peak)",i), 250,0,250,1000,-400,1500);
+
+	h2maxxADCb4cm[t][i]=dH2(Form("MUSEtele/%s/%s/maxadc_b4cmsub_x",leftright[t],GEMname[i]), Form("%d GEM X APV - maximum ADC (before cmode subtraction)",i), 250, 0.0, 250.0,100,0.0,3000.0);
+	h2maxyADCb4cm[t][i]=dH2(Form("MUSEtele/%s/%s/maxadc_b4cmsub_y",leftright[t],GEMname[i]), Form("%d GEM Y APV - maximum ADC (before cmode subtraction)",i), 250, 0.0, 250.0,100,0.0,3000.0);
+	h2maxxADCcm[t][i]=dH2(Form("MUSEtele/%s/%s/maxadc_aftcmsub_x",leftright[t],GEMname[i]), Form("%d GEM X APV - maximum ADC (after cmode subtraction)",i), 250, 0.0, 250.0,100,0.0,3000.0);
+	h2maxyADCcm[t][i]=dH2(Form("MUSEtele/%s/%s/maxadc_aftcmsub_y",leftright[t],GEMname[i]), Form("%d GEM Y APV - maximum ADC (after cmode subtraction)",i), 250, 0.0, 250.0,100,0.0,3000.0);
+	h2maxxADCcmped[t][i]=dH2(Form("MUSEtele/%s/%s/maxadc_aftcmpedsub_x",leftright[t],GEMname[i]), Form("%d GEM X APV - maximum ADC (after both cmode and ped subtraction)",i), 250, 0.0, 250.0,100,0.0,3000.0);
+	h2maxyADCcmped[t][i]=dH2(Form("MUSEtele/%s/%s/maxadc_aftcmpedsub_y",leftright[t],GEMname[i]), Form("%d GEM Y APV - maximum ADC (after both cmode and ped subtraction)",i), 250, 0.0, 250.0,100,0.0,3000.0);
+	     	
+	
+	h2adcspec_cmode_x[t][i]=dH2(Form("MUSEtele/%s/%s/adcspectra_cmode_x",leftright[t],GEMname[i]), Form("%d GEM X APV ADCs - c mode subtracted",i), 250,-0.5, 249.5,4096,-595.5,3500.5);
+	h2adcspec_cmode_y[t][i]=dH2(Form("MUSEtele/%s/%s/adcspectra_cmode_y",leftright[t],GEMname[i]), Form("%d GEM Y APV ADCs - c mode subtracted",i), 250,-0.5, 249.5,4096,-595.5,3500.5);
+	h2adcspec_cm_pedsub_x[t][i]=dH2(Form("MUSEtele/%s/%s/adcspectra_cm_pedsub_x",leftright[t],GEMname[i]), Form("%d GEM X APV ADCs after both cm and ped subtraction",i), 250,-0.5, 249.5,4096,-595.5,3500.5);
+	h2adcspec_cm_pedsub_y[t][i]=dH2(Form("MUSEtele/%s/%s/adcspectra_cm_pedsub_y",leftright[t],GEMname[i]), Form("%d GEM Y APV ADCs after both cm and ped subtraction",i), 250,-0.5, 249.5,4096,-595.5,3500.5);
+
+
+	if (onlybin2binsub){
+	  h2adcspec_pedsub_nopk_x[t][i]=dH2(Form("MUSEtele/%s/%s/adcspectra_pedsub_nopk_x",leftright[t],GEMname[i]), Form("%d GEM X APV ADCs only ped subtraction (excluding peak)",i), 250,-0.5, 249.5,4096,-500.5,3595.5);
+	  h2adcspec_pedsub_nopk_y[t][i]=dH2(Form("MUSEtele/%s/%s/adcspectra_pedsub_nopk_y",leftright[t],GEMname[i]), Form("%d GEM Y APV ADCs only ped subtraction (excluding peak)",i), 250,-0.5, 249.5,4096,-500.5,3595.5);
+	};
+
+	if (doSubtractbaseline){
+	  h2adcspec_base_x[t][i]=dH2(Form("MUSEtele/%s/%s/adcspectra_base_x",leftright[t],GEMname[i]), Form("%d GEM X APV ADCs - baseline subtracted",i), 250,-0.5, 249.5,4096,-595.5,3500.5);
+	  h2adcspec_base_y[t][i]=dH2(Form("MUSEtele/%s/%s/adcspectra_base_y",leftright[t],GEMname[i]), Form("%d GEM Y APV ADCs - baseline subtracted",i), 250,-0.5, 249.5,4096,-595.5,3500.5);
+	  h2adcspec_base_nopk_x[t][i]=dH2(Form("MUSEtele/%s/%s/adcspectra_base_nopk_x",leftright[t],GEMname[i]), Form("%d GEM X APV ADCs - baseline subtracted (excluding peak)",i), 250,-0.5, 249.5,4096,-595.5,3500.5);
+	  h2adcspec_base_nopk_y[t][i]=dH2(Form("MUSEtele/%s/%s/adcspectra_base_nopk_y",leftright[t],GEMname[i]), Form("%d GEM Y APV ADCs - baseline subtracted (excluding peak)",i), 250,-0.5, 249.5,4096,-595.5,3500.5);
+	};
+
+      }
+    return ok;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+std::vector <int> dattot(250,0);
+//std::vector <int> dattoty(250,0);
+
+std::vector <std::vector <int> > dattotx_nopk_ent(3,dattot);
+std::vector <std::vector <int> > dattoty_nopk_ent(3,dattot);
+
+std::vector <std::vector <int> > gettotpedx(3,dattot);
+std::vector <std::vector <int> > gettotpedy(3,dattot);
+std::vector <std::vector <int> > gettotpedxentries(3,dattot);
+std::vector <std::vector <int> > gettotpedyentries(3,dattot);
+
+std::vector <std::vector <int> > gettotonlypedx(3,dattot);
+std::vector <std::vector <int> > gettotonlypedy(3,dattot);
+std::vector <std::vector <int> > gettotonlypedxentries(3,dattot);
+std::vector <std::vector <int> > gettotonlypedyentries(3,dattot);
+
+
+std::vector <std::vector <int> > gettotx_adc(3,dattot);
+std::vector <std::vector <int> > gettoty_adc(3,dattot);
+std::vector <std::vector <int> > gettotx_adc_e(3,dattot);
+std::vector <std::vector <int> > gettoty_adc_e(3,dattot);
+//std::vector <std::vector <int> > totent(3,dattoty);
+
+ //////////////////////////////////////////////////////////////////////////////////////////////////
+
+Long_t Det_LumiGEM::startup_cmode()
+{
+  if (asciifile) startup_ASCII();
+  else startup();
+  //startup_ASCII();
+  //  startup();
+  //  getmeancmode=true;
+  // disable subtracting existing cmode
+  doSubtractcmode=false;
+  onlybin2binsub=false;
+  // disable subtracting existing pedestals
+  doSubtractped=false;
+ // disable subtracting the baseline
+ doSubtractbaseline=false;
+  // disable the slow stuff
+  doFindClusters=false;
+  return ok;
+}
+
+Long_t Det_LumiGEM::startup_findPedestal()
+{
+  if (asciifile) startup_ASCII();
+  else startup();
+  //  startup();
+
+ // disable subtracting cmode, ONLY if you want to check the bin-2-bin pedestal effects alone.//////////////////
+ doSubtractcmode=true;
+ onlybin2binsub=false;
+  // disable subtracting existing pedestals
+  doSubtractped=false;
+ // disable subtracting the baseline
+ doSubtractbaseline=false;
+  // disable the slow stuff
+  doFindClusters=false;
+  return ok;
+}
+
+Long_t Det_LumiGEM::startup_onlyPedestal()
+{
+  if (asciifile) startup_ASCII();
+  else startup();
+// startup();
+ // disable subtracting cmode, ONLY if you want to check the bin-2-bin pedestal effects alone.//////////////////
+ doSubtractcmode=false;
+  // disable subtracting existing pedestals
+  doSubtractped=false;
+ // disable subtracting the baseline
+ doSubtractbaseline=false;
+  // disable the slow stuff
+  doFindClusters=false;
+  //doSubtractonlyped=true;
+  onlybin2binsub=true;
+  return ok;
+}
+
+
+Long_t Det_LumiGEM::startup_APVcalib()
+{
+if (asciifile) startup_ASCII();
+else startup();
+
+  doAPVcalib=true; // Only to do the APV gain calibration
+  use_gainmatch=false; // Use APV gain maching, TRUE only if you want to check your calib constants. Otherwise always FALSE here
+ // Use common mode subtraction
+ doSubtractcmode=true;
+  // Use pedestal subtraction
+  doSubtractped=true;
+ // disable the baseline subtraction (the polynomial fit method)
+ doSubtractbaseline=false;
+  // disable the cluster finding
+  doFindClusters=false;
+  return ok;
+}
+
+
+
+/////////////////////////////////////////////////////
+
+void Det_LumiGEM::callib_apvchannels(int t,int i)
+{
+  int maxxadc,maxxch,maxyadc,maxych;  
+
+  maxxadc = -10000;
+  maxxch = 0;
+  maxyadc = -10000;
+  maxych = 0;
+  for (int k=0; k<250; k++)		      
+    {
+      if(xdat[k]>maxxadc) //THis gets the maximum ADC value and it's strip # for xdat
+	{
+	  maxxadc=xdat[k];
+	  maxxch =k;
+	};
+      if(ydat[k]>maxyadc) //THis gets the maximum ADC value and it's strip # for ydat
+	{
+	  maxyadc=ydat[k];
+	  maxych =k;
+	};
+    };
+
+  for (int k=0; k<250; k++)		      
+    {
+      //  if ((k==maxxch)&&(xdat[k]>500)&&(xdat[k]<1800)) //THis adds the maximum ADCs on each strip for # of "eve" events  
+   if ((k==maxxch)) //THis adds the maximum ADCs on each strip for # of "eve" events 
+	{
+	  gettotx_adc[i][k] +=xdat[k];
+	  gettotx_adc_e[i][k] = gettotx_adc_e[i][k]+1;
+	   // printf("2 check after %d %d %d %d \n ",k,gettotx_adc[i][k],xdat[k],gettotx_adc_e[i][k]);
+	};
+  
+      //  if ((k==maxych)&&(ydat[k]>500)&&(ydat[k]<1800)) //THis adds the maximum ADCs on each strip for # of "eve" events
+     if ((k==maxych)) //THis adds the maximum ADCs on each strip for # of "eve" events
+	{
+	  gettoty_adc[i][k] +=ydat[k];
+	  gettoty_adc_e[i][k] = gettoty_adc_e[i][k]+1;
+	  //if (k==100)	  printf("check after %d %d %d %d\n ",i,k,gettoty_adc[i][k],gettoty_adc_e[i][k]);  
+	};
+    };
+}
+////////////////////////////////////////////
+
+cmodeinfo_apv Det_LumiGEM::findCMode_apv(int t,int i)
+{
+  int maxxadc_apv1,maxxch_apv1,maxxadc_apv2,maxxch_apv2,maxyadc_apv1,maxych_apv1,maxyadc_apv2,maxych_apv2;  
+  int gettoty_cmode_apv1,gettoty_cmode_e_apv1,gettoty_cmode_apv2,gettoty_cmode_e_apv2,gettotx_cmode_apv1,gettotx_cmode_e_apv1,gettotx_cmode_apv2,gettotx_cmode_e_apv2;
+
+  maxxadc_apv1 = 0;
+  maxxch_apv1 = 1000;
+  maxyadc_apv1 = 0;
+  maxych_apv1 = 1000;
+  maxxadc_apv2 = 0;
+  maxxch_apv2 = 1000;
+  maxyadc_apv2 = 0;
+  maxych_apv2 = 1000;
+
+ for (int k=0; k<apvx1; k++)		      
+    {
+      if(xdat[k]>maxxadc_apv1) //THis gets the maximum ADC value and it's strip # for xdat
+	{
+	  maxxadc_apv1 =xdat[k];
+	  maxxch_apv1 =k;
+	};
+    };
+ for (int k=apvx1; k<250; k++)		      
+   {
+     if(xdat[k]>maxxadc_apv2) //THis gets the maximum ADC value and it's strip # for xdat
+       {
+	 maxxadc_apv2 =xdat[k];
+	 maxxch_apv2 =k;
+       };
+   };
+
+ for (int k=0; k<apvy1; k++)		      
+   {
+     if(ydat[k]>maxyadc_apv1) //THis gets the maximum ADC value and it's strip # for xdat
+       {
+	 maxyadc_apv1 =ydat[k];
+	 maxych_apv1 =k;
+       };
+   };
+for (int k=apvy1; k<250; k++)		      
+   {
+     if(ydat[k]>maxyadc_apv2) //THis gets the maximum ADC value and it's strip # for xdat
+       {
+	 maxyadc_apv2 =ydat[k];
+	 maxych_apv2 =k;
+       };
+   };
+
+  gettotx_cmode_e_apv1=0;
+  gettoty_cmode_e_apv1=0;
+  gettotx_cmode_apv1=0;
+  gettoty_cmode_apv1=0;
+
+  gettotx_cmode_e_apv2=0;
+  gettoty_cmode_e_apv2=0;
+  gettotx_cmode_apv2=0;
+  gettoty_cmode_apv2=0;
+
+/// for the first APV on both X and Y ////////////////////
+
+  for (int k=0; k<apvx1; k++)		      
+    {
+      if ((k<=maxxch_apv1-2)||(k>=maxxch_apv1+2)) //THis adds ADCs for each strip without the maximum ADC strip # +/- 2 on each event
+	{
+	  gettotx_cmode_apv1 +=xdat[k];
+	  gettotx_cmode_e_apv1 = gettotx_cmode_e_apv1+1;
+	};
+    };
+ for (int k=apvx1; k<250; k++)		      
+    {
+      if ((k<=maxxch_apv2-2)||(k>=maxxch_apv2+2)) //THis adds ADCs for each strip without the maximum ADC strip # +/- 2 on each event
+	{
+	  gettotx_cmode_apv2 +=xdat[k];
+	  gettotx_cmode_e_apv2 = gettotx_cmode_e_apv2+1;
+	};
+    };
+
+ for (int k=0; k<apvy1; k++)		      
+   {
+      if ((k<=maxych_apv1-2)||(k>=maxych_apv1+2)) //THis adds ADCs for each strip without the maximum ADC strip # +/- 2 on each event
+	{
+	  gettoty_cmode_apv1 +=ydat[k];
+	  gettoty_cmode_e_apv1 = gettoty_cmode_e_apv1+1;
+	};
+    };
+
+ for (int k=apvy1; k<250; k++)		      
+   {
+     if ((k<=maxych_apv2-2)||(k>=maxych_apv2+2)) //THis adds ADCs for each strip without the maximum ADC strip # +/- 2 on each event
+       {
+	 gettoty_cmode_apv2 +=ydat[k];
+	 gettoty_cmode_e_apv2 = gettoty_cmode_e_apv2+1;
+       };
+   };
+ 
+  cmodeinfo_apv cm_apv;
+  cm_apv.x_event_apv1=gettotx_cmode_apv1/gettotx_cmode_e_apv1; // gives the average non-cluster ADC on each event on first X apv
+  cm_apv.y_event_apv1=gettoty_cmode_apv1/gettoty_cmode_e_apv1; // gives the average non-cluster ADC on each event on first Y apv
+  cm_apv.x_event_apv2=gettotx_cmode_apv2/gettotx_cmode_e_apv2; // gives the average non-cluster ADC on each event on second X apv
+  cm_apv.y_event_apv2=gettoty_cmode_apv2/gettoty_cmode_e_apv2; // gives the average non-cluster ADC on each event on second Y apv
+  
+  cm_apv.x_apv1=(gettotx_cmode_apv1/gettotx_cmode_e_apv1)-cmode_mean_x_apv1[t][i]; //cm for first X apv
+  cm_apv.y_apv1=(gettoty_cmode_apv1/gettoty_cmode_e_apv1)-cmode_mean_y_apv1[t][i]; //cm for first Y apv
+  cm_apv.x_apv2=(gettotx_cmode_apv2/gettotx_cmode_e_apv2)-cmode_mean_x_apv2[t][i]; //cm for second X apv
+  cm_apv.y_apv2=(gettoty_cmode_apv2/gettoty_cmode_e_apv2)-cmode_mean_y_apv2[t][i]; //cm for second Y apv
+
+  cm_apv.maxx_apv1=maxxadc_apv1; //maximum X ADC on first APV
+  cm_apv.maxy_apv1=maxyadc_apv1; //maximum Y ADC on first APV
+  cm_apv.maxchx_apv1=maxxch_apv1; //THe channel which gives maximum X ADC on first APV
+  cm_apv.maxchy_apv1=maxych_apv1;//THe channel which gives maximum X ADC on first APV
+
+  cm_apv.maxx_apv2=maxxadc_apv2;
+  cm_apv.maxy_apv2=maxyadc_apv2;
+  cm_apv.maxchx_apv2=maxxch_apv2;
+  cm_apv.maxchy_apv2=maxych_apv2;
+ 
+  //  printf("check befre %d %d %5.2lf %5.2lf\n ",t,i,cmode_mean_x[t][i],cmode_mean_y[t][i]);
+  //  printf("check after %d %d  %d %d\n ",cm.x_event,cm.y_event,cm.x,cm.y);  
+
+  return cm_apv;
+}
+
+
+//////////////////////////////////////////////////////////
+
+void Det_LumiGEM::subtractCMode(int t,int i,cmodeinfo_apv &info)
+{
+  for (int k=0; k<250; k++)		      
+    {
+      if ((i==0)||(i==1)) {
+	if (k<122) {
+	  xdat[k]-=info.x_apv1;
+	  ydat[k]-=info.y_apv1;
+	};
+	if (k>121) {
+	  xdat[k]-=info.x_apv2;
+	  ydat[k]-=info.y_apv2;
+	};
+      };
+      if (i==2) {
+	if (k<122) xdat[k]-=info.x_apv1;
+	if (k>121) xdat[k]-=info.x_apv2;
+	if (k<128) ydat[k]-=info.y_apv1;
+	if (k>127) ydat[k]-=info.y_apv2;
+      };
+    };
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void Det_LumiGEM::subtractBin2Bin(int t,int i)
+{
+  for (int k=0;k<250;k++)
+    {
+
+      xdat[k]-=avg_ped_x[i][k];
+      ydat[k]-=avg_ped_y[i][k];
+      //  xdat[k]-=perchannelped[k*2+2*250*i+2*250*3*t];
+      //  ydat[k]-=perchannelped[1+k*2+2*250*i+2*250*3*t];
+      //      debug(0,"%i %i %i %i %i\n",k,i,t,1+k*2+2*250*i+2*250*3*t,perchannelped[1+k*2+2*250*i+2*250*3*t]);
+      // printf ("channels per ped %i %i %i %i %i\n",t,i,k,k*2+2*250*i+2*250*3*t,perchannelped[k*2+2*250*i+2*250*3*t]);
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void Det_LumiGEM::subtractonlyBin2Bin(int t,int i)
+{
+  for (int k=0;k<250;k++)
+    {
+      //printf("read before average (only)ped at startup %d %d %d %d %d\n ",t,i,k,xdat[k],ydat[k]);
+      xdat[k]-=avg_pedonly_x[i][k];
+      ydat[k]-=avg_pedonly_y[i][k];
+    
+      //printf("read after average (only)ped at startup %d %d %d %d %d\n ",t,i,k,xdat[k],ydat[k]);
+      //      printf("read average (only)ped at startup %d %d %d %d %d\n ",t,i,k,avg_pedonly_x[i][k],avg_pedonly_y[i][k]);
+// printf ("channels per ped %i %i %i %i %i\n",t,i,k,k*2+2*250*i+2*250*3*t,perchannelped[k*2+2*250*i+2*250*3*t]);
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void Det_LumiGEM::dobaselinesub(int t, int i)
+{
+  if (verbose>1)
+	    printf(" %d x samples, %d y samples\n", nx, ny);
+	  
+	    hitfinder->SetPreProcessMethod(cHitFinder::ppRemoveLinearBaseline);
+	   // //hitfinder->SetPreProcessMethod(cHitFinder::ppDoNothing);	    
+	   hitfinder->RemoveLinearBaseline(GEM[t][i]->GetNXsamplesList(), xdat);
+	   hitfinder->RemoveLinearBaseline(GEM[t][i]->GetNYsamplesList(), ydat);
+}
+
+/////////////////////////////////////////////////////////////////////////
+Long_t Det_LumiGEM::Channel_2_channel_gain_calib(int id, int tele, int gem, int strip, int dir, double calibc)
+{
+  CalibConsts[1500*tele+500*gem+2*strip+dir]=calibc;
+  //printf(" Calibration Constants %d %d %d %d %8.5lf\n",tele,gem,strip,dir,CalibConsts[1500*tele+500*gem+2*strip+dir]);
+  return ok;
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////
+Long_t Det_LumiGEM::process_cm_ped()
+{
+ printf("LumiGEM: process_cm_ped called...........................\n");
+
+  if (Long_t r=common_process()!=ok) return r;
+    int xclustercnt[3], yclustercnt[3];
+  int gettoty_onlycmode,gettotx_onlycmode,gettoty_onlycmode_e,gettotx_onlycmode_e;
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  for (int t=0; t<1; t++)  // two telescopes
+    {
+      
+      //      if (LUMI[t]==NULL){continue;}
+      //     lumibankcounter[t]++;
+      if (verbose>1) printf(" processing LUMI[%d]:\n", t);
+      //   for (int i=0; i<3; i++)
+      //	GEM[t][i]->ClearAPVs();
+      //     if (ReadTelescopeData(t)==0) { // is there any lumi data for this event?
+      //	continue;}
+        ReadTelescopeDataASCII(t);
+      for (int i=0; i<3; i++)// three GEMs per telescope
+	{
+	  if (common_process_inner(t,i)) continue;
+
+	  int xraw[250],yraw[250];	 
+	  for (int k=0; k<250; k++) 		      
+	    {
+	      xraw[k]=xdat[k];
+	      yraw[k]=ydat[k];	   
+	    };       
+	  
+	  cmodeinfo_apv cminfo_apv=findCMode_apv(t,i);
+	 
+	    h1adcspec_cmode_x_apv1[t][i]->Fill(cminfo_apv.x_event_apv1);
+	    h1adcspec_cmode_y_apv1[t][i]->Fill(cminfo_apv.y_event_apv1);	  
+	    h1adcspec_cmode_x_apv2[t][i]->Fill(cminfo_apv.x_event_apv2);
+	    h1adcspec_cmode_y_apv2[t][i]->Fill(cminfo_apv.y_event_apv2);
+	
+	  //      h2maxxADCb4cm[t][i]->Fill(cminfo.maxchx,cminfo.maxx);
+	  //      h2maxyADCb4cm[t][i]->Fill(cminfo.maxchy,cminfo.maxy);
+	
+
+	  
+	 
+  /////////////////// Total "raw" ADC vs strip #.  (before applying common-mode noise, bin-2-bin pedestals or polynomial fit baseline subtractions.////////////////////////////
+
+	    // if (allSpecHist)
+	    for (int k=0; k<250; k++)		      
+	      {
+		//h2adcspec_x[t][i]->Fill(k,xdat[k]);
+		//h2adcspec_y[t][i]->Fill(k,ydat[k]);
+		//Get the total X/Y ADCs and # of events on each strip excluding the maximum ADC strip # +/- 2 for each event
+		if (((k<apvx1)&&((k<=cminfo_apv.maxchx_apv1-2)||(k>=cminfo_apv.maxchx_apv1+2)))||((k>apvx1-1)&&((k<=cminfo_apv.maxchx_apv2-2)||(k>=cminfo_apv.maxchx_apv2+2)))) {		       
+		  h2adcspec_nopk_x[t][i]->Fill(k,xdat[k]);
+		  dattotx_nopk_ent[i][k]=dattotx_nopk_ent[i][k]+1;
+		};
+		if (((k<apvy1)&&((k<=cminfo_apv.maxchy_apv1-2)||(k>=cminfo_apv.maxchy_apv1+2)))||((k>apvy1-1)&&((k<=cminfo_apv.maxchy_apv2-2)||(k>=cminfo_apv.maxchy_apv2+2)))) {
+		  h2adcspec_nopk_y[t][i]->Fill(k,ydat[k]);
+		  dattoty_nopk_ent[i][k]=dattoty_nopk_ent[i][k]+1;
+		};
+
+			h2evespec_nopk_x[t][i]->Fill(k,dattotx_nopk_ent[i][k]);
+		h2evespec_nopk_y[t][i]->Fill(k,dattoty_nopk_ent[i][k]);
+	      };
+
+	 	   ////////////////////////Check only bin-2-bin pedestal subtraction. No cmode is used//////////////////////////////////////////////////////////////////
+
+	  if (onlybin2binsub){	
+	      for (int k=0; k<250; k++)		      
+		{
+		  if (((k<apvx1)&&((k<=cminfo_apv.maxchx_apv1-2)||(k>=cminfo_apv.maxchx_apv1+2)))||((k>apvx1-1)&&((k<=cminfo_apv.maxchx_apv2-2)||(k>=cminfo_apv.maxchx_apv2+2)))) {
+		    // h2adcspec_pedsub_nopk_x[t][i]->Fill(k,xdat[k]);
+		    gettotonlypedx[i][k] +=xdat[k];
+		    gettotonlypedxentries[i][k]=gettotonlypedxentries[i][k]+1;
+		  };
+		  if (((k<apvy1)&&((k<=cminfo_apv.maxchy_apv1-2)||(k>=cminfo_apv.maxchy_apv1+2)))||((k>apvy1-1)&&((k<=cminfo_apv.maxchy_apv2-2)||(k>=cminfo_apv.maxchy_apv2+2)))) {
+		    // h2adcspec_pedsub_nopk_y[t][i]->Fill(k,ydat[k]);
+		    gettotonlypedy[i][k] +=ydat[k];
+		    gettotonlypedyentries[i][k]=gettotonlypedyentries[i][k]+1;
+		  };
+
+		  //	printf("get ped %d %d %d %d %d \n",k,gettotonlypedx[i][k],gettotonlypedxentries[i][k],gettotonlypedy[i][k],gettotonlypedyentries[i][k]);
+		};
+
+	    if (doSubtractonlyped) subtractonlyBin2Bin(t,i);
+	    cmodeinfo_apv cminfo_apv_onlyb2b=findCMode_apv(t,i);
+	  
+	      for (int k=0; k<250; k++)		      
+	  	{
+		  if (((k<apvx1)&&((k<=cminfo_apv_onlyb2b.maxchx_apv1-2)||(k>=cminfo_apv_onlyb2b.maxchx_apv1+2)))||((k>apvx1-1)&&((k<=cminfo_apv_onlyb2b.maxchx_apv2-2)||(k>=cminfo_apv_onlyb2b.maxchx_apv2+2)))) 
+		    h2adcspec_pedsub_nopk_x[t][i]->Fill(k,xdat[k]);
+
+		  if (((k<apvy1)&&((k<=cminfo_apv_onlyb2b.maxchy_apv1-2)||(k>=cminfo_apv_onlyb2b.maxchy_apv1+2)))||((k>apvy1-1)&&((k<=cminfo_apv_onlyb2b.maxchy_apv2-2)||(k>=cminfo_apv_onlyb2b.maxchy_apv2+2)))) 
+		    h2adcspec_pedsub_nopk_y[t][i]->Fill(k,ydat[k]);
+
+		  // printf("get ped %d %d %d %d %d \n",k,cminfo_apv_onlyb2b.maxchx_apv1,cminfo_apv_onlyb2b.maxchx_apv2,cminfo_apv_onlyb2b.maxchy_apv1,cminfo_apv_onlyb2b.maxchy_apv2);
+	  	};
+	     
+	    };
+	  
+	  //////////////////////////////////////////// 
+
+  	  if (doSubtractbaseline) {	 
+	    /// This is only to check the baseline subtraction effets without common-mode or bin-2-bin pedestal subtractions. So, the raw data is using.//////
+	    for (int k=0; k<250; k++)		      
+	      {
+		xdat[k]=xraw[k];
+		ydat[k]=yraw[k];
+	      };
+	    
+	    dobaselinesub(t,i);
+	    cmodeinfo cminfo_base=findCMode(t,i);
+	   
+	      for (int k=0; k<250; k++)		      
+		{
+		  h2adcspec_base_x[t][i]->Fill(k,xdat[k]);
+		  h2adcspec_base_y[t][i]->Fill(k,ydat[k]);
+		  
+		  if ((k<=cminfo_base.maxchx-2)||(k>=cminfo_base.maxchx+2)) 
+		    h2adcspec_base_nopk_x[t][i]->Fill(k,xdat[k]);
+		  if ((k<=cminfo_base.maxchy-2)||(k>=cminfo_base.maxchy+2)) 
+		    h2adcspec_base_nopk_y[t][i]->Fill(k,ydat[k]);
+		};
+	  }
+	  //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////
+///  check the common-mode and bin-2-bin pedestal subtractions. So, the raw data is using.//////
+	  for (int k=0; k<250; k++)		      
+	    {
+	      xdat[k]=xraw[k];
+	      ydat[k]=yraw[k];
+	    };
+	  if (doSubtractcmode) subtractCMode(t,i,cminfo_apv); //////Subtract common mode
+	  cmodeinfo_apv cminfo_apv_cm=findCMode_apv(t,i);
+	  
+	      //   h2maxxADCcm[t][i]->Fill(cminfo.maxchx,cminfo.maxx);
+	      //   h2maxyADCcm[t][i]->Fill(cminfo.maxchy,cminfo.maxy);
+	  
+	  
+	    for (int k=0; k<250; k++)		      
+	      {
+		
+		    h2adcspec_cmode_x[t][i]->Fill(k,xdat[k]);
+		    h2adcspec_cmode_y[t][i]->Fill(k,ydat[k]);
+		 
+		if (((k<apvx1)&&((k<=cminfo_apv_cm.maxchx_apv1-2)||(k>=cminfo_apv_cm.maxchx_apv1+2)))||((k>apvx1-1)&&((k<=cminfo_apv_cm.maxchx_apv2-2)||(k>=cminfo_apv_cm.maxchx_apv2+2)))) {
+		  h2adcspec_cmode_nopk_x[t][i]->Fill(k,xdat[k]);
+		  gettotpedx[i][k] +=xdat[k];
+		  gettotpedxentries[i][k]=gettotpedxentries[i][k]+1;
+		};
+		if (((k<apvy1)&&((k<=cminfo_apv_cm.maxchy_apv1-2)||(k>=cminfo_apv_cm.maxchy_apv1+2)))||((k>apvy1-1)&&((k<=cminfo_apv_cm.maxchy_apv2-2)||(k>=cminfo_apv_cm.maxchy_apv2+2)))) {
+		  h2adcspec_cmode_nopk_y[t][i]->Fill(k,ydat[k]);
+		  gettotpedy[i][k] +=ydat[k];
+		  gettotpedyentries[i][k]=gettotpedyentries[i][k]+1;
+		};
+		//	printf("get ped %d %d %d %d %d \n",k,gettotpedx[i][k],gettotpedxentries[i][k],gettotpedy[i][k],gettotpedyentries[i][k]);
+	      };	    
+	    ///////////////////////////////////
+
+  if (doSubtractped) subtractBin2Bin(t,i);  //////Subtract bin-to-bin pedestals (after common mode)
+  cmodeinfo_apv cminfo_apv_b2b=findCMode_apv(t,i);
+
+  for (int k=0; k<250; k++)		      
+    {
+      h2adcspec_cm_pedsub_x[t][i]->Fill(k,xdat[k]);
+      h2adcspec_cm_pedsub_y[t][i]->Fill(k,ydat[k]);
+      
+      if (((k<apvx1)&&((k<=cminfo_apv_b2b.maxchx_apv1-2)||(k>=cminfo_apv_b2b.maxchx_apv1+2)))||((k>apvx1-1)&&((k<=cminfo_apv_b2b.maxchx_apv2-2)||(k>=cminfo_apv_b2b.maxchx_apv2+2))))
+	h2adcspec_cm_pedsub_nopk_x[t][i]->Fill(k,xdat[k]);
+      
+      if (((k<apvx1)&&((k>cminfo_apv_b2b.maxchx_apv1-2)&&(k<cminfo_apv_b2b.maxchx_apv1+2)))||((k>apvx1-1)&&((k>cminfo_apv_b2b.maxchx_apv2-2)&&(k<cminfo_apv_b2b.maxchx_apv2+2)))&&(xdat[k]>0)) 
+	h2adcspec_cm_pedsub_peak_x[t][i]->Fill(k,xdat[k]);
+      
+      if (((k<apvy1)&&((k<=cminfo_apv_b2b.maxchy_apv1-2)||(k>=cminfo_apv_b2b.maxchy_apv1+2)))||((k>apvy1-1)&&((k<=cminfo_apv_b2b.maxchy_apv2-2)||(k>=cminfo_apv_b2b.maxchy_apv2+2))))
+	h2adcspec_cm_pedsub_nopk_y[t][i]->Fill(k,ydat[k]);
+      
+      if (((k<apvy1)&&((k>cminfo_apv_b2b.maxchy_apv1-2)&&(k<cminfo_apv_b2b.maxchy_apv1+2)))||((k>apvy1-1)&&((k>cminfo_apv_b2b.maxchy_apv2-2)&&(k<cminfo_apv_b2b.maxchy_apv2+2)))&&(ydat[k]>0)) 
+	h2adcspec_cm_pedsub_peak_y[t][i]->Fill(k,ydat[k]);
+     
+	//printf("get ped %d %d %d %d %d \n",k,cminfo_apv_b2b.maxchx_apv1,cminfo_apv_b2b.maxchx_apv2,cminfo_apv_b2b.maxchy_apv1,cminfo_apv_b2b.maxchy_apv2);
+    };
+
+  /*
+	  //////////////////// check common-mode noise after both cmode and bin-2-bin pedestal subtraction ////////////
+	  cmodeinfo_apv cminfo_after=findCMode_apv(t,i);
+	
+	      //  h2maxxADCcmped[t][i]->Fill(cminfo_after.maxchx,cminfo_after.maxx);
+	      // h2maxyADCcmped[t][i]->Fill(cminfo_after.maxchy,cminfo_after.maxy);
+	   
+*/
+
+	  //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////Dead Channels Masking ////////////////////////////////////////////////////
+/////////////// The dead channels are determined from the cmod and pedestal subtracted X and Y ADCs. They are defined in the init file for each GEM X and Y axis. But now this has set to be "false" because of the hit finder taking care of the dead channels ///////////////////////////////////////////// 
+
+	  if (dead_ch_masking) {   
+	    for (int k=0; k<250; k++)
+	      {
+		if (deadchannels[k*2+2*250*i+2*250*3*t]>0) {
+		  //	printf ("X channels per ped %i %i %i %i %i %i\n",t,i,k,k*2+2*250*i+2*250*3*t,deadchannels[k*2+2*250*i+2*250*3*t],xdat[deadchannels[k*2+2*250*i+2*250*3*t]]);   
+		  xdat[deadchannels[k*2+2*250*i+2*250*3*t]]=-100000;
+		};
+		if (deadchannels[k*2+2*250*i+2*250*3*t+1]>0) {
+		  //	printf ("Y channels per ped %i %i %i %i %i %i\n",t,i,k,k*2+2*250*i+2*250*3*t,deadchannels[k*2+2*250*i+2*250*3*t],xdat[deadchannels[k*2+2*250*i+2*250*3*t]]);   
+		  ydat[deadchannels[k*2+2*250*i+2*250*3*t+1]]=-100000;	
+		};
+
+		for (int ky=0; ky<250; ky++)
+		  {
+		    if ((deadchannels[k*2+2*250*i+2*250*3*t]>0)||(deadchannels[ky*2+2*250*i+2*250*3*t+1]>0)) {
+		      if (someSpecHist) {
+			deadchmap[t][i]->Fill(k,ky);
+		      };
+		    };
+		  };
+	      };
+	  };
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// APV channel-to-channel gain calibration ////////////////////////
+	   if (doAPVcalib) callib_apvchannels(t,i); /// Determine the  APV channel-to-channel gain calibration constants//////
+
+
+	};//for GEMs
+    };//for telescope
+  };
+
+
+Long_t Det_LumiGEM::getmean_cmode()
+{
+  if (doSubtractcmode)
+    debug(0,"***************\nWarning: common mode has been subtracted! Please deactivate the 'doSubtractcmode' \n**************\n");
+
+   ofstream outf("event_avg_cmode.dat");
+  //  int id=0;
+  for (int t=0;t<2;t++)
+    for (int i=0;i<3;i++)
+      {
+	//Get the mean of common mode spectra histogram:
+
+	double meancm_x_apv1=h1adcspec_cmode_x_apv1[t][i]->GetMean();
+	double meancm_y_apv1=h1adcspec_cmode_y_apv1[t][i]->GetMean();
+
+	double meancm_x_apv2=h1adcspec_cmode_x_apv2[t][i]->GetMean();
+	double meancm_y_apv2=h1adcspec_cmode_y_apv2[t][i]->GetMean();
+
+		printf(" get cmode mean %d %d %5.2lf %5.2lf %5.2lf %5.2lf\n", t,i, meancm_x_apv1, meancm_x_apv2, meancm_y_apv1, meancm_y_apv2);
+	
+		outf<< t<<"\t"<<i<<"\t"<<meancm_x_apv1<<"\t"<<meancm_x_apv2<<"\t"<<meancm_y_apv1<<"\t"<<meancm_y_apv2<<std::endl;    
+      }    
+   outf.close();
+
+   debug(0,"****************\nCreated avg_cmode.dat in current directory for further use\n**************");
+ 
+  return ok;
+}
+
+//////////////////////////////////////////////////////////////////// 
+
+Long_t Det_LumiGEM::dumpPedestals()
+{
+  if (doSubtractped)
+    debug(0,"***************\nWarning: Pedestals have been subtracted: Exported Pedestals are difference only!\n**************\n");
+
+  ofstream myfile;
+  myfile.open("bin_2_bin_pedestals.dat");
+
+  // ofstream outf("ped.xml");
+  //int id=0;
+  for (int t=0;t<2;t++)
+    for (int i=0;i<3;i++)
+      {
+	//	TProfile  *xprof=h2adcspec_cmode_nopk_x[t][i]->ProfileX();
+	//	TProfile  *yprof=h2adcspec_cmode_nopk_y[t][i]->ProfileX();
+	for (int k=0;k<250;k++)
+	  {
+	    // find average of cm and peak suppressed spectra histogram:
+	    // if (((int)xprof->GetBinContent(k+1))!=0)
+	    //  outf<<"<PerChannelPed id="<<'"'<<id<<'"'<<">"<< t<<","<<i<<","<<k<<",0,"<<(int) xprof->GetBinContent(k+1)<<"</PerChannelPed>"<<std::endl;
+	    // id++;
+	    // if (((int)yprof->GetBinContent(k+1))!=0)
+	    //   outf<<"<PerChannelPed id="<<'"'<<id<<'"'<<">"<< t<<","<<i<<","<<k<<",1,"<<(int) yprof->GetBinContent(k+1)<<"</PerChannelPed>"<<std::endl;
+	    // id++;
+	   
+	    // get the average pedestals on each bin
+	    if (gettotpedxentries[i][k]>0) getavgpedx[i][k]=gettotpedx[i][k]/gettotpedxentries[i][k];
+	    else getavgpedx[i][k]=10000;
+	    if ((getavgpedx[i][k]==1)||(getavgpedx[i][k]==0)) getavgpedx[i][k]=10000;
+	    if (gettotpedyentries[i][k]>0) getavgpedy[i][k]=gettotpedy[i][k]/gettotpedyentries[i][k];
+	    else getavgpedy[i][k]=10000;
+	    if ((getavgpedy[i][k]==1)||(getavgpedy[i][k]==0)) getavgpedy[i][k]=10000;
+	    myfile <<i<<"\t"<<k<<"\t"<<getavgpedx[i][k]<<"\t"<<getavgpedy[i][k]<<std::endl;
+	  }    
+      }
+  myfile.close();
+  //      outf.close();
+
+  //  debug(0,"****************\nCreated bin_2_bin_pedestals.txt in current directory. Please paste contents into gem init xml with appropriate time tag\n**************");
+  debug(0,"****************\nCreated bin_2_bin_pedestals.dat in current directory. \n**************");
+  //  cleanup();
+  return ok;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+Long_t Det_LumiGEM::dumponlyPedestals()
+{
+   if (onlybin2binsub)
+    debug(0,"***************\nWarning: Only Pedestals have been subtracted: Exported Pedestals are difference only!\n**************\n");
+
+  ofstream onlypedfile;
+  onlypedfile.open("only_bin_2_bin_pedestals.dat");
+
+  for (int t=0;t<2;t++)
+    for (int i=0;i<3;i++)
+      {
+	for (int k=0;k<250;k++)
+	  {  
+	    // get the average pedestals on each bin
+	    if (gettotonlypedxentries[i][k]>0) getavgonlypedx[i][k]=gettotonlypedx[i][k]/gettotonlypedxentries[i][k];
+	    else getavgonlypedx[i][k]=10000;
+	    if ((getavgonlypedx[i][k]==1)||(getavgonlypedx[i][k]==0)) getavgonlypedx[i][k]=10000;
+	    if (gettotonlypedyentries[i][k]>0) getavgonlypedy[i][k]=gettotonlypedy[i][k]/gettotonlypedyentries[i][k];
+	    else getavgonlypedy[i][k]=10000;
+	    if ((getavgonlypedy[i][k]==1)||(getavgonlypedy[i][k]==0)) getavgonlypedy[i][k]=10000;
+	    onlypedfile <<i<<"\t"<<k<<"\t"<<getavgonlypedx[i][k]<<"\t"<<getavgonlypedy[i][k]<<std:: endl;
+	    // printf("process  xdat ydat %d %d %d %d %d %d \n",i,k,getavgonlypedx[i][k],getavgonlypedy[i][k]);
+	  }    
+      }
+  onlypedfile.close();
+debug(0,"****************\nCreated only_bin_2_bin_pedestals.dat in current directory. \n**************");
+
+  return ok;
+}
+
+////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+Long_t Det_LumiGEM::done_APVcalib()
+{
+   if (doAPVcalib)
+     debug(0,"***************\nWarning: If you really don't want to perform APV channel-to-channel gain calibrations, then please deactivate the 'doAPVcalib' \n**************\n");
+
+   ofstream myxcalibfile,myycalibfile;
+  myxcalibfile.open("do_APV_Xcalib.dat");
+ myycalibfile.open("do_APV_Ycalib.dat");
+
+double avgmaxADC_x[3][250],avgmaxADC_y[3][250];
+double xmaxdata[3][250],ymaxdata[3][250];
+
+
+  for (int t=1;t<2;t++)
+    for (int i=0;i<3;i++)
+      {
+
+
+ int count_x,count_y;
+ count_x=0;
+ count_y=0;
+ int index_x[250],index_y[250];
+
+ for (int k=0;k<250;k++)
+   {
+	//Get the mean of maximum ADCs on each APV channel (After common mode and Pedestal subtraction)	   
+     if ((gettotx_adc_e[i][k]>0)){
+       avgmaxADC_x[i][k]=gettotx_adc[i][k]/gettotx_adc_e[i][k];
+       count_x=count_x+1;
+       index_x[count_x]=k;
+       xmaxdata[i][k]=avgmaxADC_x[i][k];
+       //printf(" get avg. max. X ADC %d %d %d %d %d %d %10.2lf\n", t,i, k,count_x, gettotx_adc[i][k],gettotx_adc_e[i][k], avgmaxADC_x[i][k]);
+     }
+	    //  else avgmaxADC_x[i][k]=-10000;
+     else xmaxdata[i][k]=-100000;
+
+     if ((gettoty_adc_e[i][k]>0)) {
+       avgmaxADC_y[i][k]=gettoty_adc[i][k]/gettoty_adc_e[i][k];
+	      //  if (avgmaxADC_y[i][k]>1000) {
+       count_y=count_y+1;
+       index_y[count_y]=k;
+		  //  ymaxdata[i][k]=avgmaxADC_y[i][k];
+       ymaxdata[i][k]=avgmaxADC_y[i][k];
+		  //	};
+     }
+     else ymaxdata[i][k]=-100000;
+	    //	printf(" get avg. max. X ADC %d %d %d %d %10.2lf %d %10.2lf  \n", t,i, k,count_x,gettotx_adc[i][k],gettotx_adc_e[i][k],avgmaxADC_x[i][k]);
+
+	    //printf(" get avg. max. X ADC %d %d %d %d %d  %10.2lf %d %d %d %10.2lf %d\n", t,i, k, gettotx_adc[i][k],gettotx_adc_e[i][k],avgmaxADC_x[i][k],count_x[i], gettoty_adc[i][k],gettoty_adc_e[i][k],avgmaxADC_y[i][k],count_y[i]);
+	   
+   }; 
+
+	double index[count_x];
+	double xdata[count_x];
+	for (int n=1;n<count_x+1;n++)
+	  {
+	    index[n] = index_x[n];
+	    xdata[n]=avgmaxADC_x[i][index_x[n]];
+	    //	    xdata[n]=avgmaxADC_x[i][index_x[n]];	
+	    //printf(" get avg. max. X ADC %d %d %d %d %10.2lf %10.2lf %10.2lf\n", t,i,n,index_x[n],index[n],avgmaxADC_x[i][index_x[n]],xdata[n]);
+	    myxcalibfile <<t<<"\t"<<i<<"\t"<<n<<"\t"<<index[n]<<"\t"<<xdata[n]<< std::endl;
+	  };
+
+	double yindex[count_y];
+	double ydata[count_y];
+	for (int ny=1;ny<count_y+1;ny++)
+	  {
+	    yindex[ny] = index_y[ny];
+	    ydata[ny]=avgmaxADC_y[i][index_y[ny]];
+	    //	    ydata[ny]=avgmaxADC_y[i][index_y[ny]];	
+		//	printf(" get avg. max. X ADC %d %d %d %d %10.2lf %10.2lf %10.2lf\n", t,i,n,index_x[n],index[n],avgmaxADC_x[i][index_x[n]],xdata[n]);
+	    myycalibfile <<t<<"\t"<<i<<"\t"<<ny<<"\t"<<yindex[ny]<<"\t"<<ydata[ny]<< std::endl;
+	  };
+
+
+	//	TGraph *gtmp  = new TGraph(count_x, index, xdata);
+      }    
+    myxcalibfile.close();
+    myycalibfile.close();
+gettotx_adc.clear();
+gettoty_adc.clear();
+gettotx_adc_e.clear();
+gettoty_adc_e.clear();
+    debug(0,"****************\nCreated do_APV_X(Y)calib.dat in the current directory. Use it for linear fit and do the gain calibrations accordingly.\n**************");
+
+  return ok;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+Long_t Det_LumiGEM::done_cm_ped()
+{
+  cleanup_cm_ped();
+  return 0;
+}
+
+void Det_LumiGEM::cleanup_cm_ped()
+{
+  std::cout << "LumiGEM: deleting GEM objects..." << std::endl;
+
+
+
+ 
+
+  for (int t=0; t<2; t++)  // two telescopes
+    for (int i=0; i<3; i++)// three GEMs per telescope
+      {
+	//	delete H_hitmap2d[t][i];
+	for (int j=0; j<3; j++)
+	  {
+	    //   delete H_XvsX[t][i][j];
+	    //  delete H_YvsY[t][i][j];
+	  };
+      };
+
+ gettotpedx.clear();
+gettotpedy.clear();
+gettotpedxentries.clear();
+gettotpedyentries.clear();
+gettotonlypedx.clear();
+gettotonlypedy.clear();
+gettotonlypedxentries.clear();
+gettotonlypedyentries.clear();
+
+}

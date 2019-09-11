@@ -1,0 +1,1892 @@
+#include <Det_LumiGEM.h>
+#include "TStyle.h"
+
+#include<iostream>
+#include<cmath>
+#include <unistd.h>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include<stdio.h> 
+
+// Event display files
+#include "TGeoManager.h"
+#include "TGeoVolume.h"
+#include "TProfile.h"
+
+// Root
+#include <math.h>
+#include "TF1.h"
+#include "TGraph.h"
+#include "TH1.h"
+#include "TMath.h"
+
+#include "TAxis.h"
+#include "TGraph.h"
+#include "TMultiGraph.h"
+#include "TCanvas.h"
+#include "TApplication.h"
+#include "TStyle.h"
+#include "TPad.h"
+#include "TROOT.h"
+#include "TColor.h"
+#include "TFrame.h"
+#include "TVirtualPad.h"
+
+using namespace std;
+
+
+
+Det_LumiGEM::Det_LumiGEM(TTree *in, TTree *out, TFile *inf_, TFile *outf_, TObject *p)
+  : Plugin(in, out, inf_, outf_, p)
+{
+  cout << "LumiGEM: Plugin constructor called" << endl;
+
+  verbose=0;
+
+  // generate six cGEM objects to build two telescopes:
+  for (int t=0; t<2; t++)  // two telescopes
+    for (int i=0; i<3; i++)// three GEMs per telescope
+      {
+	GEM[t][i] = new cGEM(4); // our GEMs have 4 APVs each
+	rmshisto[t][i] = NULL;
+      };
+
+  // some hard-coded defaults for the configuration:
+  valLMGaussFilterSigma = 1.5;
+  valLMMinimumAmplitude =  25;
+  valLMMinimumDistance  =   5;
+  valLMMaximumNLM       =  10;
+  valCFMinimumAmplitude = 100;
+  valCFSigmaMin         = 0.4;
+  valCFSigmaMax         = 1.5;
+  valmake1dhits         =   0;
+  valrepairbrokenstrips =   1;
+  // triggerpatternOI      = 0x4;
+  valAPVsyncDataRangeLow      = -65535;
+  valAPVsyncDataRangeHigh     = +65535;
+  valAPVoutOfSyncSampleThreshold   = 0;
+  valAPVoutOfSyncEventThreshold    = 1;
+  valAPVzeroSamplesEventThreshold  = 1;
+
+  // Not event display mode by default
+  vis = false;
+  asciifile = NULL;
+  // trigger pattern of interest: by default we're interested in anything:
+  triggerpatternOI = 0xff;
+
+  // slowcontrol lumi info not yet connected:
+  //  SClumi = NULL;
+  // eventinfo branch not yet connected:
+  // eventinfo = NULL;
+
+  // Detector status undefined at the beginning:
+  ProcessDetectorFlagOnly = false;
+  DetectorStatus = LumiGEM::unknown;
+  WriteDetectorFlagFilename[0]=0;
+
+  LumiGUI = new Tab_LumiGEM();
+
+  for (int i=0;i<250*3*2*2;i++)
+    perchannelped[i]=0;
+
+  someSpecHist=false;
+  allSpecHist=false;
+}
+
+/*
+Det_LumiGEM::~Det_LumiGEM()
+{
+}
+*/
+Long_t Det_LumiGEM::defineHistogramsASCII()
+{
+  printf(" Det_LumiGEM::defineHistograms() called\n");
+  InitRMShistos();
+
+
+	// Make some 2D hit maps when 2D hits are being made
+	if (valmake1dhits == 0)
+	{
+		hm0 = dH2("Hit Maps/US Left GEM","All Hits Left US GEM",100,-60,60,100,-60,60);
+		hm1 = dH2("Hit Maps/MI Left GEM","All Hits Left MI GEM",100,-60,60,100,-60,60);
+		hm2 = dH2("Hit Maps/DS Left GEM)","All Hits Left DS GEM",100,-60,60,100,-60,60);
+		hm3 = dH2("Hit Maps/US Right GEM)","All Hits Right US GEM",100,-60,60,100,-60,60);
+		hm4 = dH2("Hit Maps/MI Right GEM)","All Hits Right MI GEM",100,-60,60,100,-60,60);
+		hm5 = dH2("Hit Maps/DS Right GEM)","All Hits Right DS GEM",100,-60,60,100,-60,60);
+	}
+
+
+  for (int t=0; t<2; t++)
+    for (int i=0; i<3; i++)
+      {
+	LMhitmapX[t][i] = dH1(Form("LumiGEM/LocalMaxima/%s%sGEMxlm", leftright[t], GEMname[i]), 
+			      Form("%s%sGEMxlm", leftright[t], GEMname[i]),
+			      250, -0.5, 249.5);
+	LMhitmapY[t][i] = dH1(Form("LumiGEM/LocalMaxima/%s%sGEMylm", leftright[t], GEMname[i]), 
+			      Form("%s%sGEMylm", leftright[t], GEMname[i]),
+			      250, -0.5, 249.5);
+	LMhitmapXw[t][i] = dH1(Form("LumiGEM/LocalMaxima/%s%sGEMxlm_w", leftright[t], GEMname[i]), 
+			       Form("%s%sGEMxlm_w", leftright[t], GEMname[i]),
+			       250, -0.5, 249.5);
+	LMhitmapYw[t][i] = dH1(Form("LumiGEM/LocalMaxima/%s%sGEMylm_w", leftright[t], GEMname[i]), 
+			       Form("%s%sGEMylm_w", leftright[t], GEMname[i]),
+			       250, -0.5, 249.5);
+      };
+
+  //LumiGUI->defineHistograms();
+  return 0;
+}
+
+
+
+void Det_LumiGEM::InitHitFinderASCII()
+{
+  hitfinder = new cHitFinder(250, 250);
+  hitfinder->SetClusterSigmaRange(valCFSigmaMin, valCFSigmaMax);
+  // allocate memory for processed and raw data (for one GEM at a time only):
+  xdat    = new int[256];
+  ydat    = new int[256];
+  xdatraw = new int[256];
+  ydatraw = new int[256];
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+std::vector <int> dattotx(250,0);
+std::vector <int> dattoty(250,0);
+std::vector <std::vector <int> > dattotx_nopk_ent(3,dattoty);
+std::vector <std::vector <int> > dattoty_nopk_ent(3,dattoty);
+
+std::vector <std::vector <int> > gettotpedx(3,dattotx);
+std::vector <std::vector <int> > gettotpedy(3,dattoty);
+std::vector <std::vector <int> > gettotpedxentries(3,dattotx);
+std::vector <std::vector <int> > gettotpedyentries(3,dattoty);
+
+std::vector <std::vector <int> > gettotonlypedx(3,dattotx);
+std::vector <std::vector <int> > gettotonlypedy(3,dattoty);
+std::vector <std::vector <int> > gettotonlypedxentries(3,dattotx);
+std::vector <std::vector <int> > gettotonlypedyentries(3,dattoty);
+
+
+std::vector <std::vector <int> > gettotx_adc(3,dattotx);
+std::vector <std::vector <int> > gettoty_adc(3,dattotx);
+std::vector <std::vector <int> > gettotx_adc_e(3,dattotx);
+std::vector <std::vector <int> > gettoty_adc_e(3,dattotx);
+std::vector <std::vector <int> > totent(3,dattoty);
+
+int totampx[2][3][250];
+int totampy[2][3][250];
+int totampentx[2][3][250];
+int totampenty[2][3][250];
+*/
+//std::vector <std::vector <int> > avgampx(3,dattotx);
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Startup function for event display (currently not in use)
+Long_t Det_LumiGEM::startup_vis()
+{
+  vis = true; // Flag that this is event display mode
+  startup(); // Call the usual startup
+  return ok;
+}
+
+/*
+Long_t Det_LumiGEM::startup()
+{ 
+  cout << "LumiGEM: Startup called" << endl;
+  // get the SiPM TDC/ADC output tree:
+ 
+  InitSC();
+  InitLumiBranches_in();
+  InitLumiBranches_out();
+  
+  //  getBranchObject("EventInfo", (TObject**)&eventinfo);
+  runinfo = (MRTRunInfo*)getFileObject("RunInfo");
+
+  // printf("*** eventinfo is %p\n", eventinfo);
+  printf("*** runinfo is %p\n", runinfo);
+
+  runstarttime   = runinfo->startTime;
+  runstoptime    = runinfo->stopTime;
+  nextsctime     = runstarttime+1.0;
+  beamcharge     = 0.;
+  estlumicounter = 0.;
+
+  blobreader = new cLumiGEMBinaryBlobRead();
+
+  InitHitFinder();
+
+  tmpdat = new int[1024];
+
+  // Do any initializations, e.g. creating histograms, that need the
+  // ROOT files already opened:
+  //InitRMShistos();
+
+  // print some config information:
+  ShowBasicConfig();
+
+  // In case we're called from within the Visual Cooker (visco), we should
+  // try to add a tab here:
+  viscotab    = addTab("LumiGEM");
+  if (viscotab && !vis)
+    {
+      //gStyle->SetOptStat(1111001);
+      printf("LumiGEM: ** VisCo mode **\n");
+      LumiGUI->InitGUI(this, viscotab);
+      LumiGUI->defineHistograms();
+    }
+  else if (vis)
+    {
+      printf("LumiGEM: ** Event Display mode **\n");
+      LumiGUI->InitGUI(this, viscotab);
+      LumiGUI->defineHistograms();
+    }
+  else
+    printf("LumiGEM: ** non-VisCo mode **\n");
+
+  // count triggers:
+  lumitriggercounter[0] = 0;
+  lumitriggercounter[1] = 1;
+  lumibankcounter[0] = 0;
+  lumibankcounter[1] = 0;
+
+  dead_ch_masking=false;/// Keep this always "true" if you want to mask the dead channels defined in /init/LumiGEM.xml file.
+  use_gainmatch=false;  /// Keep this always "true" if you want to use channel-to-channel gain match for all APV channels.
+
+  doFindClusters=true;
+  doSubtractped=true;
+  doSubtractcmode=true;
+  doAPVcalib=false;
+  doSubtractbaseline=false;
+  onlybin2binsub=true;
+
+ 
+ //////////////////////////////////Read the common mode mean values at startup/////////////////////////////////////
+ printf("LumiGEM: ** read mean cmode at startup **\n");
+  std::ifstream cmfile("event_avg_cmode.dat");
+  std::string line;
+  int tel,gem;
+  double avgx_cmode_apv1,avgx_cmode_apv2,avgy_cmode_apv1,avgy_cmode_apv2;
+  while (std::getline(cmfile, line)) 
+    {
+      std::istringstream ss(line);
+      ss >> tel>>gem >> avgx_cmode_apv1>> avgx_cmode_apv2 >> avgy_cmode_apv1>> avgy_cmode_apv2;
+      cmode_mean_x_apv1[tel][gem]=avgx_cmode_apv1;
+      cmode_mean_y_apv1[tel][gem]=avgy_cmode_apv1;
+      cmode_mean_x_apv2[tel][gem]=avgx_cmode_apv2;
+      cmode_mean_y_apv2[tel][gem]=avgy_cmode_apv2;
+       printf("read mean cmode at startup %d %d %5.2lf %5.2lf %5.2lf %5.2lf\n ",tel,gem,cmode_mean_x_apv1[tel][gem],cmode_mean_x_apv2[tel][gem],cmode_mean_y_apv1[tel][gem],cmode_mean_y_apv2[tel][gem]);
+    };
+  cmfile.close();
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////Read the average pedestalonly values at startup/////////////////////////////////////
+//printf("LumiGEM: ** read average (only)pedestal at startup **\n");
+  std::ifstream pedonlyfile("only_bin_2_bin_pedestals.dat");
+  std::string pedonlyline;
+  int onlygem,onlystrip;
+  double pedonlyx,pedonlyy;
+  while (std::getline(pedonlyfile, pedonlyline)) 
+    {
+      std::istringstream onlypss(pedonlyline);
+      onlypss >> onlygem >> onlystrip >>pedonlyx >> pedonlyy;
+      avg_pedonly_x[onlygem][onlystrip]=pedonlyx;
+      avg_pedonly_y[onlygem][onlystrip]=pedonlyy;
+      //printf("read average (only)ped at startup %d %d %d %d\n ",onlygem,onlystrip,avg_pedonly_x[onlygem][onlystrip],avg_pedonly_y[onlygem][onlystrip]);
+    };
+  pedonlyfile.close();
+ 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////Read the average pedestal values at startup/////////////////////////////////////
+//printf("LumiGEM: ** read average cmode subtracted pedestal at startup **\n");
+  std::ifstream pedfile("bin_2_bin_pedestals.dat");
+  std::string pedline;
+  int pedgem,pedstrip;
+  double pedx,pedy;
+  while (std::getline(pedfile, pedline)) 
+    {
+      std::istringstream pss(pedline);
+      pss >> pedgem >> pedstrip >>pedx >> pedy;
+      avg_ped_x[pedgem][pedstrip]=pedx;
+      avg_ped_y[pedgem][pedstrip]=pedy;
+      
+      // printf("read average ped at startup %d %d %d %d\n ",pedgem,pedstrip,avg_ped_x[pedgem][pedstrip],avg_ped_y[pedgem][pedstrip]);
+    };
+  pedfile.close();
+ 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  // Process the background histograms after subtracting both common mode and pedestals
+  preproc = true;
+   for (unsigned int j=0; j<in->GetEntries(); j++)
+   {
+     //  if (!(j%50000))
+     //   cout<<"Pre-processing event "<<j<<"/"<<in->GetEntries()<<" ("<<(((double)j)/((double)(in->GetEntries()))*100)<<"%)\n";      
+      in->GetEntry(j);
+      process();
+   } 
+
+  // Set-up the common mode and pedestal subtracted threshold containers
+ 
+  std::vector<double> temp(250,0);
+   // std::vector< std::vector<double> > cmcth(3,temp);
+  for (unsigned int j=0; j<6; j++) cmcthx.push_back(temp);
+  for (unsigned int j=0; j<6; j++) cmcthy.push_back(temp);
+   //  cmcth.push_back(temp);
+ for (unsigned int t=1; t<2; t++)
+  for (unsigned int i=0; i<3; i++)
+    {
+      for (unsigned int q=0; q<250; q++)
+	{	  
+	  TH1D * xcor = xcm_ped[t][i]->ProjectionY("xcor",q+1,q+1);
+	  TH1D * ycor = ycm_ped[t][i]->ProjectionY("ycor",q+1,q+1);
+
+	  cmcthx[i][q] = 2.5*xcor->GetRMS();
+	  cmcthy[i][q] = 2.5*ycor->GetRMS();
+
+	    //  cmcthx[i][q]   = 60;
+	    //  cmcthy[i][q]   = 60;	 	
+	  //  printf("local maxima %d %d %d %5.3lf %5.3lf %5.3lf %5.3lf \n",t,i,q,testx,cmcthx[i][q],testy,cmcthy[i][q]);
+
+	  delete xcor;
+	  delete ycor;
+	};    
+    };
+ in->GetEntry(0);
+ preproc = false;
+
+ //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  return ok;
+}
+
+
+Long_t Det_LumiGEM::startup_cmode()
+{
+  startup();
+  //  getmeancmode=true;
+  // disable subtracting existing cmode
+  doSubtractcmode=false;
+  onlybin2binsub=false;
+  // disable subtracting existing pedestals
+  doSubtractped=false;
+ // disable subtracting the baseline
+ doSubtractbaseline=false;
+  // disable the slow stuff
+  doFindClusters=false;
+  return ok;
+}
+
+Long_t Det_LumiGEM::startup_findPedestal()
+{
+  startup();
+ // disable subtracting cmode, ONLY if you want to check the bin-2-bin pedestal effects alone.//////////////////
+ doSubtractcmode=true;
+ onlybin2binsub=false;
+  // disable subtracting existing pedestals
+  doSubtractped=false;
+ // disable subtracting the baseline
+ doSubtractbaseline=false;
+  // disable the slow stuff
+  doFindClusters=false;
+  return ok;
+}
+
+
+Long_t Det_LumiGEM::startup_onlyPedestal()
+{
+  startup();
+ // disable subtracting cmode, ONLY if you want to check the bin-2-bin pedestal effects alone.//////////////////
+ doSubtractcmode=false;
+  // disable subtracting existing pedestals
+  doSubtractped=false;
+ // disable subtracting the baseline
+ doSubtractbaseline=false;
+  // disable the slow stuff
+  doFindClusters=false;
+  //doSubtractonlyped=true;
+  onlybin2binsub=true;
+  return ok;
+}
+
+
+Long_t Det_LumiGEM::startup_APVcalib()
+{
+  startup();
+  doAPVcalib=true; // Only to do the APV gain calibration
+  use_gainmatch=false; // Use APV gain maching, TRUE only if you want to check your calib constants. Otherwise always FALSE here
+ // Use common mode subtraction
+ doSubtractcmode=true;
+  // Use pedestal subtraction
+  doSubtractped=true;
+ // disable the baseline subtraction (the polynomial fit method)
+ doSubtractbaseline=false;
+  // disable the cluster finding
+  doFindClusters=false;
+  return ok;
+}
+*/
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+Long_t Det_LumiGEM::startup_ASCII()
+{
+  cout << "LumiGEM: Startup_ascii called" << endl;
+
+  // eventinfo = NULL;
+
+  asciireader = new cLumiGEMAsciiRead(24);
+
+  InitLumiBranches_out();
+  InitHitFinder();
+  InitRMShistos();
+
+    // print some config information:
+  ShowBasicConfig();
+
+  // In case we're called from within the Visual Cooker (visco), we should
+  // try to add a tab here:
+  viscotab    = addTab("LumiGEM");
+  if (viscotab)
+    {
+      gStyle->SetOptStat(1111001);
+      printf("LumiGEM: ** VisCo mode **\n");
+      LumiGUI->InitGUI(this, viscotab);
+      // special: in ascii mode call Tab_LumiGEM::defineHistograms() explicitely here:
+      LumiGUI->defineHistograms();
+    }
+  else
+    printf("LumiGEM: ** non-VisCo mode **\n");
+
+  // count triggers:
+  lumitriggercounter[0] = 0;
+  lumitriggercounter[1] = 1;
+  lumibankcounter[0] = 0;
+  lumibankcounter[1] = 0;
+
+ dead_ch_masking=false;/// Keep this always "true" if you want to mask the dead channels defined in /init/LumiGEM.xml file.
+  use_gainmatch=false;  /// Keep this always "true" if you want to use channel-to-channel gain match for all APV channels.
+
+  doFindClusters=true;
+  doSubtractped=false;
+  doSubtractcmode=false;
+  doAPVcalib=false;
+  doSubtractbaseline=false;
+  onlybin2binsub=false;
+  return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+int Det_LumiGEM::ReadTelescopeDataASCII(int t)
+{
+  int cnt=0;
+  if (asciifile)
+    {
+      asciireader->ReadBank(asciifile);
+      for (int i=0; i<3; i++)// three GEMs per telescope
+	{
+	  int napvs = asciireader->GetNAPVs();
+	  for (int apv=0; apv<napvs; apv++)
+	    cnt += GEM[t][i]->AddAPVData(apv, asciireader->GetBankBuffer(apv));
+	};
+    }
+  else
+    {
+      if (blobreader->ReadBank(LUMI[t])==0)
+	return 0;
+      if (verbose>1)
+	printf(" bank LUMI[%d] has %d APVs\n", t, blobreader->GetNAPVs());
+      for (int i=0; i<3; i++)// three GEMs per telescope
+	{
+	  int napvs = blobreader->GetNAPVs();
+	  for (int apv=0; apv<napvs; apv++)
+	    cnt += GEM[t][i]->AddAPVData(apv, blobreader->GetBankBuffer(apv));
+	};
+    };
+  return cnt;
+
+};
+
+int Det_LumiGEM::CheckRangeASCII(int n, int *dat, int low, int high)
+// Returns the number of samples in 'dat' outside range [low,high]
+//  Return values:
+//     0:  everything inside range
+//    >0:  number of samples outside range
+//    -1:  everything inside range AND all samples are equal to zero! (missing data?)
+{
+  // counter for number of events outside range; flag to signal if all samples are =0
+  int cnt=0, nullflag=1;
+  for (int i=0; i<n; i++)
+    if ((dat[i]<low)||(dat[i]>high)) cnt++;
+    else if (dat[i]!=0) nullflag=0;
+  if (cnt==0)
+    if (nullflag)
+      return -1;
+  return cnt;
+}
+
+/*
+Long_t Det_LumiGEM::common_processASCII()
+{
+  gemo->hits.clear();
+  gemo->eval.clear();
+  //  int eventid=eventinfo->eventNumber;
+  //  int triggerpattern=eventinfo->trigFired;
+   int triggerpattern=0xffff;
+
+  // count the number of lumi triggers:
+  //if (triggerpattern&0x02) {lumitriggercounter[0]++;}// cout<<"Lumi left\n\n";}
+   // if (triggerpattern&0x04) {lumitriggercounter[1]++;}// cout<<"Lumi right\n\n";}
+
+  if (viscotab)
+    {
+      LumiGUI->SetTriggerPatternOI();
+      if (LumiGUI->CheckTriggerPattern()!=ok)
+	{
+	  debug(2, " LumiGEM::process(): skip!\n");
+	  return maySkip;
+	};
+    };
+
+  // Check trigger pattern:
+  // if (triggerpatternOI<0xffff) // 0xffff is to override _everything_, even broken runs were trigFrired is always zero!
+       //   if ((triggerpattern&triggerpatternOI)==0)
+  //   return maySkip;
+
+  // if (verbose)
+  //  printf(" Event %6d has lumi trigger: trigFired = 0x%04x\n",  eventid, triggerpattern);
+
+  // flags to remember data quality problems for this event:
+  zeroFLAG=false;
+  outofsyncFLAG=false;
+
+  return ok;
+}
+  */
+
+bool Det_LumiGEM::common_process_innerASCII(int t,int i)
+{
+  if (verbose>1)
+    {
+      printf("=======================================================\n");
+      printf("===================== G E M  %d ========================\n", i);
+      printf("=======================================================\n");
+    };
+   nx = GEM[t][i]->PushXdata();
+   ny = GEM[t][i]->PushYdata();
+  GEM[t][i]->GetXdata(xdat);
+  GEM[t][i]->GetYdata(ydat);
+    
+  // printf(" nx and ny %d %d %d %d \n",t,i,nx,ny);
+
+  // histogram mean rms's:
+  double rmsxval=TMath::RMS(nx, xdat);
+  double rmsyval=TMath::RMS(ny, ydat);
+  if (rmshisto[t][i])
+    {
+      rmshisto[t][i]->Fill(rmsxval);
+      rmshisto[t][i]->Fill(rmsyval);
+    };
+  LumiGEMeval eval;
+  eval.GEMid = t*3+i;
+  eval.rmsx = rmsxval;
+  eval.rmsy = rmsyval;
+  gemo->eval.push_back(eval);
+    
+  //
+  // Check raw data for sync losses:
+  //   Sync losses occur when an APV chip "forgets" its configuration
+  //   and sends invalid data to the VME module or when the VME module
+  //   ADC chip configuration breaks during a run (actually I don't know
+  //   if the latter happens, but I'm pretty sure that the APV go crazy
+  //   every once in a while.
+  //   Such sync losses can be detected by checking the raw data for
+  //   invalid values, i.e. beyond the range of the 12 bit ADCs like
+  //   negative values or values >4095 counts.
+  //   In order to be not too conservative and accept small hickups in
+  //   the data stream we can specify a range inside the data is "valid"
+  //   and a number of samples that need to be outside that range in
+  //   order to raise the "bad_daqsync" flag.
+  int outofsynccnt=0;
+  int outofsynccntx = CheckRange(nx, xdat, valAPVsyncDataRangeLow, valAPVsyncDataRangeHigh);
+  outofsynccnt += outofsynccntx;
+  if (outofsynccnt==-1)
+    {
+      outofsynccnt = 0;
+      // DetectorStatus |= LumiGEM::bad | LumiGEM::bad_zerodata;
+      debug(0, " ----*****---- ZERO APV FRAME! t=%d GEM=%d X\n", t, i);
+      zeroFLAG=true;
+    };
+  int outofsynccnty = CheckRange(ny, ydat, valAPVsyncDataRangeLow, valAPVsyncDataRangeHigh);
+  //  if ( ((t==0)&&(i==1)) ) // left middle GEM has NO Y READOUT! Skip those channels here!
+  //  outofsynccnty=0;
+  outofsynccnt += outofsynccnty;
+  H2((t*3+i)*2,   outofsynccntx, "APVsOutOfSync", "APVs out of sync", 12, -0.5, 11.5, 252, -1.5, 250.5);
+  H2((t*3+i)*2+1, outofsynccnty, "APVsOutOfSync", "APVs out of sync", 12, -0.5, 11.5, 252, -1.5, 250.5);
+  if (outofsynccnt==-1)
+    {
+      outofsynccnt = 0;
+      // DetectorStatus |= LumiGEM::bad | LumiGEM::bad_zerodata;
+      debug(0, " ----*****---- ZERO APV FRAME! t=%d GEM=%d Y\n", t, i);
+      zeroFLAG=true;
+    };
+  if (outofsynccnt > valAPVoutOfSyncSampleThreshold)
+    {
+      //DetectorStatus |= LumiGEM::bad | LumiGEM::bad_daqsync;
+      debug(0, " ----******---- OUT OF SYNC: %d samples in t=%d GEM=%d\n", outofsynccnt, t, i);
+      outofsyncFLAG=true;
+    };
+   
+ if ((i==0)||(i==1)) {
+    apvx1=122;
+    apvy1=122;
+  };
+  if (i==2) {
+    apvx1=122;
+    apvy1=128;
+  };
+  //  printf("check after %d %d %d  %d\n ",t,i,apvx1,apvy1);  
+
+  //
+  // If we should only do all the DetectorFlag stuff we can stop here:
+  if (ProcessDetectorFlagOnly)
+    return true;
+  return false;
+}
+ 
+
+/////////////////////////////////////////////////////
+/*
+void Det_LumiGEM::callib_apvchannels(int t,int i)
+{
+  int maxxadc,maxxch,maxyadc,maxych;  
+
+  maxxadc = -10000;
+  maxxch = 0;
+  maxyadc = -10000;
+  maxych = 0;
+  for (int k=0; k<250; k++)		      
+    {
+      if(xdat[k]>maxxadc) //THis gets the maximum ADC value and it's strip # for xdat
+	{
+	  maxxadc=xdat[k];
+	  maxxch =k;
+	};
+      if(ydat[k]>maxyadc) //THis gets the maximum ADC value and it's strip # for ydat
+	{
+	  maxyadc=ydat[k];
+	  maxych =k;
+	};
+    };
+
+  for (int k=0; k<250; k++)		      
+    {
+      //  if ((k==maxxch)&&(xdat[k]>500)&&(xdat[k]<1800)) //THis adds the maximum ADCs on each strip for # of "eve" events  
+   if ((k==maxxch)) //THis adds the maximum ADCs on each strip for # of "eve" events 
+	{
+	  gettotx_adc[i][k] +=xdat[k];
+	  gettotx_adc_e[i][k] = gettotx_adc_e[i][k]+1;
+	   // printf("2 check after %d %d %d %d \n ",k,gettotx_adc[i][k],xdat[k],gettotx_adc_e[i][k]);
+	};
+  
+      //  if ((k==maxych)&&(ydat[k]>500)&&(ydat[k]<1800)) //THis adds the maximum ADCs on each strip for # of "eve" events
+     if ((k==maxych)) //THis adds the maximum ADCs on each strip for # of "eve" events
+	{
+	  gettoty_adc[i][k] +=ydat[k];
+	  gettoty_adc_e[i][k] = gettoty_adc_e[i][k]+1;
+	  //if (k==100)	  printf("check after %d %d %d %d\n ",i,k,gettoty_adc[i][k],gettoty_adc_e[i][k]);  
+	};
+    };
+}
+
+cmodeinfo_apv Det_LumiGEM::findCMode_apv(int t,int i)
+{
+  int maxxadc_apv1,maxxch_apv1,maxxadc_apv2,maxxch_apv2,maxyadc_apv1,maxych_apv1,maxyadc_apv2,maxych_apv2;  
+  int gettoty_cmode_apv1,gettoty_cmode_e_apv1,gettoty_cmode_apv2,gettoty_cmode_e_apv2,gettotx_cmode_apv1,gettotx_cmode_e_apv1,gettotx_cmode_apv2,gettotx_cmode_e_apv2;
+
+  maxxadc_apv1 = 0;
+  maxxch_apv1 = 1000;
+  maxyadc_apv1 = 0;
+  maxych_apv1 = 1000;
+  maxxadc_apv2 = 0;
+  maxxch_apv2 = 1000;
+  maxyadc_apv2 = 0;
+  maxych_apv2 = 1000;
+
+ for (int k=0; k<apvx1; k++)		      
+    {
+      if(xdat[k]>maxxadc_apv1) //THis gets the maximum ADC value and it's strip # for xdat
+	{
+	  maxxadc_apv1 =xdat[k];
+	  maxxch_apv1 =k;
+	};
+    };
+ for (int k=apvx1; k<250; k++)		      
+   {
+     if(xdat[k]>maxxadc_apv2) //THis gets the maximum ADC value and it's strip # for xdat
+       {
+	 maxxadc_apv2 =xdat[k];
+	 maxxch_apv2 =k;
+       };
+   };
+
+ for (int k=0; k<apvy1; k++)		      
+   {
+     if(ydat[k]>maxyadc_apv1) //THis gets the maximum ADC value and it's strip # for xdat
+       {
+	 maxyadc_apv1 =ydat[k];
+	 maxych_apv1 =k;
+       };
+   };
+for (int k=apvy1; k<250; k++)		      
+   {
+     if(ydat[k]>maxyadc_apv2) //THis gets the maximum ADC value and it's strip # for xdat
+       {
+	 maxyadc_apv2 =ydat[k];
+	 maxych_apv2 =k;
+       };
+   };
+
+  gettotx_cmode_e_apv1=0;
+  gettoty_cmode_e_apv1=0;
+  gettotx_cmode_apv1=0;
+  gettoty_cmode_apv1=0;
+
+  gettotx_cmode_e_apv2=0;
+  gettoty_cmode_e_apv2=0;
+  gettotx_cmode_apv2=0;
+  gettoty_cmode_apv2=0;
+
+/// for the first APV on both X and Y ////////////////////
+
+  for (int k=0; k<apvx1; k++)		      
+    {
+      if ((k<=maxxch_apv1-2)||(k>=maxxch_apv1+2)) //THis adds ADCs for each strip without the maximum ADC strip # +/- 2 on each event
+	{
+	  gettotx_cmode_apv1 +=xdat[k];
+	  gettotx_cmode_e_apv1 = gettotx_cmode_e_apv1+1;
+	};
+    };
+ for (int k=apvx1; k<250; k++)		      
+    {
+      if ((k<=maxxch_apv2-2)||(k>=maxxch_apv2+2)) //THis adds ADCs for each strip without the maximum ADC strip # +/- 2 on each event
+	{
+	  gettotx_cmode_apv2 +=xdat[k];
+	  gettotx_cmode_e_apv2 = gettotx_cmode_e_apv2+1;
+	};
+    };
+
+ for (int k=0; k<apvy1; k++)		      
+   {
+      if ((k<=maxych_apv1-2)||(k>=maxych_apv1+2)) //THis adds ADCs for each strip without the maximum ADC strip # +/- 2 on each event
+	{
+	  gettoty_cmode_apv1 +=ydat[k];
+	  gettoty_cmode_e_apv1 = gettoty_cmode_e_apv1+1;
+	};
+    };
+
+ for (int k=apvy1; k<250; k++)		      
+   {
+     if ((k<=maxych_apv2-2)||(k>=maxych_apv2+2)) //THis adds ADCs for each strip without the maximum ADC strip # +/- 2 on each event
+       {
+	 gettoty_cmode_apv2 +=ydat[k];
+	 gettoty_cmode_e_apv2 = gettoty_cmode_e_apv2+1;
+       };
+   };
+ 
+  cmodeinfo_apv cm_apv;
+  cm_apv.x_event_apv1=gettotx_cmode_apv1/gettotx_cmode_e_apv1; // gives the average non-cluster ADC on each event on first X apv
+  cm_apv.y_event_apv1=gettoty_cmode_apv1/gettoty_cmode_e_apv1; // gives the average non-cluster ADC on each event on first Y apv
+  cm_apv.x_event_apv2=gettotx_cmode_apv2/gettotx_cmode_e_apv2; // gives the average non-cluster ADC on each event on second X apv
+  cm_apv.y_event_apv2=gettoty_cmode_apv2/gettoty_cmode_e_apv2; // gives the average non-cluster ADC on each event on second Y apv
+  
+  cm_apv.x_apv1=(gettotx_cmode_apv1/gettotx_cmode_e_apv1)-cmode_mean_x_apv1[t][i]; //cm for first X apv
+  cm_apv.y_apv1=(gettoty_cmode_apv1/gettoty_cmode_e_apv1)-cmode_mean_y_apv1[t][i]; //cm for first Y apv
+  cm_apv.x_apv2=(gettotx_cmode_apv2/gettotx_cmode_e_apv2)-cmode_mean_x_apv2[t][i]; //cm for second X apv
+  cm_apv.y_apv2=(gettoty_cmode_apv2/gettoty_cmode_e_apv2)-cmode_mean_y_apv2[t][i]; //cm for second Y apv
+
+  cm_apv.maxx_apv1=maxxadc_apv1; //maximum X ADC on first APV
+  cm_apv.maxy_apv1=maxyadc_apv1; //maximum Y ADC on first APV
+  cm_apv.maxchx_apv1=maxxch_apv1; //THe channel which gives maximum X ADC on first APV
+  cm_apv.maxchy_apv1=maxych_apv1;//THe channel which gives maximum X ADC on first APV
+
+  cm_apv.maxx_apv2=maxxadc_apv2;
+  cm_apv.maxy_apv2=maxyadc_apv2;
+  cm_apv.maxchx_apv2=maxxch_apv2;
+  cm_apv.maxchy_apv2=maxych_apv2;
+ 
+  //  printf("check befre %d %d %5.2lf %5.2lf\n ",t,i,cmode_mean_x[t][i],cmode_mean_y[t][i]);
+  //  printf("check after %d %d  %d %d\n ",cm.x_event,cm.y_event,cm.x,cm.y);  
+
+  return cm_apv;
+}
+
+
+//////////////////////////////////////////////////////////
+
+void Det_LumiGEM::subtractCMode(int t,int i,cmodeinfo_apv &info)
+{
+  for (int k=0; k<250; k++)		      
+    {
+      if ((i==0)||(i==1)) {
+	if (k<122) {
+	  xdat[k]-=info.x_apv1;
+	  ydat[k]-=info.y_apv1;
+	};
+	if (k>121) {
+	  xdat[k]-=info.x_apv2;
+	  ydat[k]-=info.y_apv2;
+	};
+      };
+      if (i==2) {
+	if (k<122) xdat[k]-=info.x_apv1;
+	if (k>121) xdat[k]-=info.x_apv2;
+	if (k<128) ydat[k]-=info.y_apv1;
+	if (k>127) ydat[k]-=info.y_apv2;
+      };
+    };
+}
+ 
+
+void Det_LumiGEM::subtractBin2Bin(int t,int i)
+{
+  for (int k=0;k<250;k++)
+    {
+
+      xdat[k]-=avg_ped_x[i][k];
+      ydat[k]-=avg_ped_y[i][k];
+      //  xdat[k]-=perchannelped[k*2+2*250*i+2*250*3*t];
+      //  ydat[k]-=perchannelped[1+k*2+2*250*i+2*250*3*t];
+      //      debug(0,"%i %i %i %i %i\n",k,i,t,1+k*2+2*250*i+2*250*3*t,perchannelped[1+k*2+2*250*i+2*250*3*t]);
+      // printf ("channels per ped %i %i %i %i %i\n",t,i,k,k*2+2*250*i+2*250*3*t,perchannelped[k*2+2*250*i+2*250*3*t]);
+    }
+}
+
+void Det_LumiGEM::subtractonlyBin2Bin(int t,int i)
+{
+  for (int k=0;k<250;k++)
+    {
+      //printf("read before average (only)ped at startup %d %d %d %d %d\n ",t,i,k,xdat[k],ydat[k]);
+      xdat[k]-=avg_pedonly_x[i][k];
+      ydat[k]-=avg_pedonly_y[i][k];
+    
+      //printf("read after average (only)ped at startup %d %d %d %d %d\n ",t,i,k,xdat[k],ydat[k]);
+      //      printf("read average (only)ped at startup %d %d %d %d %d\n ",t,i,k,avg_pedonly_x[i][k],avg_pedonly_y[i][k]);
+// printf ("channels per ped %i %i %i %i %i\n",t,i,k,k*2+2*250*i+2*250*3*t,perchannelped[k*2+2*250*i+2*250*3*t]);
+    }
+}
+
+void Det_LumiGEM::dobaselinesub(int t, int i)
+{
+  if (verbose>1)
+	    printf(" %d x samples, %d y samples\n", nx, ny);
+	  
+	    hitfinder->SetPreProcessMethod(cHitFinder::ppRemoveLinearBaseline);
+	   // //hitfinder->SetPreProcessMethod(cHitFinder::ppDoNothing);	    
+	   hitfinder->RemoveLinearBaseline(GEM[t][i]->GetNXsamplesList(), xdat);
+	   hitfinder->RemoveLinearBaseline(GEM[t][i]->GetNYsamplesList(), ydat);
+}
+
+Long_t Det_LumiGEM::Channel_2_channel_gain_calib(int id, int tele, int gem, int strip, int dir, double calibc)
+{
+  CalibConsts[1500*tele+500*gem+2*strip+dir]=calibc;
+  //printf(" Calibration Constants %d %d %d %d %8.5lf\n",tele,gem,strip,dir,CalibConsts[1500*tele+500*gem+2*strip+dir]);
+  return ok;
+}
+*/
+//////////////////////////////////////////////////////////////
+
+
+
+//////////////////////////////
+void Det_LumiGEM::findClustersASCII(int t, int i)
+{
+    double MSoffset[2]={0.0,-0.558}; // Setup GEM offsets {x,y} 0.23 mm ....0.23/0.4=0.58
+  // double MSoffset[2]={0.0,0.0}; // Setup GEM offsets {x,y} 0.23 mm ....0.23/0.4=0.58
+  // find clusters:
+  if (verbose>1)
+    printf(" %d x samples, %d y samples\n", nx, ny);
+	  
+  // copy data to use  later:
+  memcpy(xdatraw, xdat, nx*sizeof(xdat[0]));
+  memcpy(ydatraw, ydat, ny*sizeof(ydat[0]));
+
+  hitfinder->GaussFilter(nx, xdat, valLMGaussFilterSigma, tmpdat);
+  hitfinder->GaussFilter(ny, ydat, valLMGaussFilterSigma, tmpdat);
+
+
+  ////////////////////////Start the new hitfinder using newhitfinder.cpp//////////////
+  
+  std::vector<double> bxdat, bydat;
+  for (int k=0;k<250;k++) bxdat.push_back(xdat[k]);
+  for (int k=0;k<250;k++) bydat.push_back(ydat[k]);
+
+    // for (int k=0;k<250;k++) {
+    //  printf("x/y data %d %d %5.2lf %5.2lf\n",i,k,bxdat[k],bydat[k]);
+    // };
+
+  std::vector<unsigned int> xmax = localMax(bxdat, cmcthx[i]); 
+  std::vector<unsigned int> ymax = localMax(bydat, cmcthy[i]);
+  
+   for (int k=0;k<250;k++) {
+      if (bxdat[k]==-100000) bxdat[k]=0;
+      if (bydat[k]==-100000) bydat[k]=0;
+    };
+
+  // Create a padded image of the summed ADC data
+  std::vector<double> row(260,0);
+  std::vector< std::vector<double> > immat(260,row);
+  for (unsigned int r=5; r<255; r++)
+    for (unsigned int c=5; c<255; c++){
+      // int k=c-5;
+      // int q=r-5;
+      //  if (deadchannels[k*2+2*250*i+2*250*3*t]>0) bxdat[deadchannels[k*2+2*250*i+2*250*3*t]]=0;
+      //  if (deadchannels[q*2+2*250*i+2*250*3*t+1]>0) bydat[deadchannels[q*2+2*250*i+2*250*3*t+1]]=0;
+      immat[r][c] += (bxdat[c-5]+bydat[r-5]);
+    };
+
+  std::vector<unsigned int> cx, cy;
+  std::vector<double> cp;
+  
+  // Loop over the combinations of maxima candidates
+  for (unsigned int q=0; q<xmax.size(); q++)
+    {
+      // x coordinate maximum candidate (shifted for the image padding)
+      unsigned int xm = xmax[q]+5;
+      for (unsigned int k=0; k<ymax.size(); k++)
+	{
+	  // y coordinate maximum candidate (shifted for the image padding)
+	  unsigned int ym = ymax[k]+5;
+	  cx.push_back(xmax[q]);
+	  cy.push_back(ymax[k]);
+
+	  // printf("test this %d %d %d %d\n",i,k,xmax[q],ymax[k]);
+	  // Compute the candidate score for this hit
+	  double prom = 0.0;
+	  for (int ps=1; ps<6; ps++){
+	    prom += (4*immat[ym][xm]-(immat[ym-ps][xm-ps]+immat[ym+ps][xm-ps]+immat[ym-ps][xm+ps]+immat[ym+ps][xm+ps]));
+	  };	    
+	  cp.push_back(prom);
+	}
+    } 
+       // Special handling for the 1D hit case to prevent rejection of multiple hits
+	 //   if (i==1)
+	 //     for (unsigned int q=0; q<cy.size(); q++)
+	 //       cy[q] = q;
+	 
+
+         // Evaluate the different hits
+  std::vector<bool> valid(cp.size(),true);
+  std::vector<unsigned int> hitind;
+
+  while (*max_element(valid.begin(),valid.end()))
+    {	   
+      unsigned int mind = maxind(cp,valid);
+      hitind.push_back(mind);
+      
+      for (unsigned int q=0; q<cp.size(); q++)
+	{
+	  if (q==mind)   
+	    valid[q] = false;
+	  else if ((cx[q]==cx[mind] || cy[q]==cy[mind]) && cp[q]<(0.75*cp[mind]))
+	    valid[q] = false;
+	}
+    }
+  // Reject nutzo noise events
+  if (hitind.size()>50)
+    hitind.clear();
+
+  // Decide which hits will be hits and which will be rejected
+  unsigned int hpushed = 0;
+  if (hitind.size())
+    {
+      bool done = false;
+      double lastscore = 0;
+      std::vector<bool> hmask(cp.size(),false);
+
+      for (unsigned int q=0; q<hitind.size(); q++) hmask[hitind[q]] = true;	 
+      while (!done)
+	{
+	  // Get the remaining hit with the maximum score	  
+	  unsigned int hcind = maxind(cp,hmask);	  
+	  hmask[hcind] = false;
+	  double cscore = cp[hcind];
+	  hitlist.clear();
+	  if (hpushed<7 || (cscore>0.9*lastscore))	       	     
+	    {	
+	      LumiGEMhit hit;	
+	      // hit.xl = meanHit(cx[hcind],bxdat,&hit)>0;
+	      if (meanHit(cx[hcind],bxdat,&hit)>0) {
+		hit.GEMid = i+t*3;
+		hit.quality = cp[hcind];
+		if ((hit.GEMid==1)||(hit.GEMid==4)) hit.xl = hit.xl+MSoffset[0];
+		else hit.xl = hit.xl;		
+
+		hitlist.push_back(hit);
+		H1(hit.ampl, Form("%sGEM%dAmplX", leftright[t], i), Form("%sGEM%dAmplX", leftright[t], i),
+		   250, 0., 2500.);
+		H1(hit.sigma, Form("%sGEM%dSigmaX", leftright[t], i), Form("%sGEM%dSigmaX", leftright[t], i),
+		   250, 0., 3.);
+		H2(hit.ampl, hit.sigma, Form("%sGEM%dSigmaVsAmplX", leftright[t], i),
+		   Form("%sGEM%dSigmaVsAmplX", leftright[t], i),
+		   250, 0., 2500., 250, 0., 3.);
+	      };	
+
+	      if (meanHit(cy[hcind],bydat,&hit)>0) {                  
+		hit.GEMid = i+t*3;
+		hit.quality = cp[hcind];
+		if ((hit.GEMid==1)||(hit.GEMid==4)) hit.yl = hit.xl+MSoffset[1];
+		else hit.yl = hit.xl;
+		hit.ylerr = hit.xlerr;
+		hit.xl = -1;     hit.xlerr = 0.;
+
+		hitlist.push_back(hit);
+		H1(hit.ampl, Form("%sGEM%dAmplY", leftright[t], i), Form("%sGEM%dAmplY", leftright[t], i),
+		   250, 0., 2500.);
+		H1(hit.sigma, Form("%sGEM%dSigmaY", leftright[t], i), Form("%sGEM%dSigmaY", leftright[t], i),
+		   250, 0., 3.);
+		H2(hit.ampl, hit.sigma, Form("%sGEM%dSigmaVsAmplY", leftright[t], i),
+		   Form("%sGEM%dSigmaVsAmplY", leftright[t], i),
+		   250, 0., 2500., 250, 0., 3.);
+	      }
+       	
+	      hpushed++;
+	      lastscore=cscore;
+	      hitfinder->ChargeSharing(hitlist, &(gemo->hits));
+	    }
+	  else
+	    done = true;
+	  if (!(*max_element(hmask.begin(),hmask.end())))
+	    done = true;
+	}
+    }
+  
+  	 
+ /////////////////////////////////// old hit finder/////////////////////////////////
+  /////////////////////////////////////////////////
+  /* 	 
+  int xlist[16], ylist[16];
+  //printf("x local maxima \n");
+  int nlmx = hitfinder->FindLocalMaxima(nx, xdat, xlist, valLMMaximumNLM, valLMMinimumDistance, valLMMinimumAmplitude);
+  // printf("y local maxima \n");
+  int nlmy = hitfinder->FindLocalMaxima(ny, ydat, ylist, valLMMaximumNLM, valLMMinimumDistance, valLMMinimumAmplitude);
+*/
+
+  //  if (verbose>1)
+  //      printf(" %d LM in x and %d LM in y\n", nlmx, nlmy);
+ 
+  	 
+  // 	   if (valrepairbrokenstrips)
+  //	     {
+  //	         /*int brokenstripsx =*/ hitfinder->RepairBrokenStrips(nx, xdatraw);
+  //  	         /*int brokenstripsy =*/ hitfinder->RepairBrokenStrips(ny, ydatraw);
+  //	       };
+
+
+  /*	   	   	  
+  // go through the list of local maxima and check if they belong to clusters:
+  LumiGEMhit  hit;
+  hitlist.clear();
+  xclustercnt[i]=0;
+  for (int j=0; xlist[j]>=0; j++)
+    {
+      if (hitfinder->CheckClusterCandidate(xlist[j], valCFMinimumAmplitude, xdat, xdatraw, nx, &hit)>0)
+	{	 
+	  if (verbose>1)
+	    printf(" ====> X CLUSTER: @%d <====\n", xlist[j]);
+	  // push hit into vector:
+	  hit.GEMid = i+t*3;
+	  if (valmake1dhits) 
+	    gemo->hits.push_back(hit);
+	  else
+	    hitlist.push_back(hit);
+	  H1(hit.ampl, Form("%sGEM%dAmplX", leftright[t], i), Form("%sGEM%dAmplX", leftright[t], i),
+	     250, 0., 2500.);
+	  H1(hit.sigma, Form("%sGEM%dSigmaX", leftright[t], i), Form("%sGEM%dSigmaX", leftright[t], i),
+	     250, 0., 3.);
+	  H2(hit.ampl, hit.sigma, Form("%sGEM%dSigmaVsAmplX", leftright[t], i),
+	     Form("%sGEM%dSigmaVsAmplX", leftright[t], i),
+	     250, 0., 2500., 250, 0., 3.);
+	  xclustercnt[i]++;
+	};
+    };
+ 
+  estlumicounter += xclustercnt[i];
+  //  hitlist.clear();
+  yclustercnt[i]=0;
+  for (int j=0; ylist[j]>=0; j++)
+    {
+      if (hitfinder->CheckClusterCandidate(ylist[j], valCFMinimumAmplitude, ydat, ydatraw, ny, &hit)>0)
+	{
+	  if (verbose>1)
+	    printf(" ====> Y CLUSTER: @%d <====\n", ylist[j]);
+	  // push hit into vector:
+	  hit.GEMid = i+t*3;
+	  hit.yl = hit.xl; hit.ylerr = hit.xlerr;
+	  hit.xl = -1;     hit.xlerr = 0.;
+	  if (valmake1dhits) {
+	    gemo->hits.push_back(hit); }
+	  else {
+	    hitlist.push_back(hit);
+	    H1(hit.ampl, Form("%sGEM%dAmplY", leftright[t], i), Form("%sGEM%dAmplY", leftright[t], i),
+	       250, 0., 2500.);
+	    H1(hit.sigma, Form("%sGEM%dSigmaY", leftright[t], i), Form("%sGEM%dSigmaY", leftright[t], i),
+	       250, 0., 3.);
+	    H2(hit.ampl, hit.sigma, Form("%sGEM%dSigmaVsAmplY", leftright[t], i),
+	       Form("%sGEM%dSigmaVsAmplY", leftright[t], i),
+	       250, 0., 2500., 250, 0., 3.);
+	    yclustercnt[i]++; }
+	};
+    };
+  estlumicounter += yclustercnt[i];
+
+
+  
+  // Charge sharing (if wanted by user):
+  if (valmake1dhits==0)
+    {
+      // we need to treat the left sector middle GEM separately:
+      if ( (t==0)&&(i==1) && false) //this is disabled because they seem to work!
+	// 'ChargeFaking' will produce a "fake" cluster in y with sigma=99.9 
+	//  in the center of the detector. In track fitting the yerr of this GEM
+	//  should be set to something like ±100mm or so to make sure it doesn't
+	//  affect tracking at all.
+	hitfinder->ChargeFaking(hitlist, &(gemo->hits));
+      else
+	//printf("go through charge sharing\n");
+	hitfinder->ChargeSharing(hitlist, &(gemo->hits));
+
+    };
+	 
+*/
+  /////////////////////////////////// old  hit finder/////////////////////////////////
+
+}
+
+////////////////////////////////////////////////////////////////////
+
+ 
+Long_t Det_LumiGEM::process_ASCII()
+{
+  gemo->hits.clear();
+  gemo->eval.clear();
+  int xclustercnt[3], yclustercnt[3];
+ int triggerpattern=0xffff;
+  int t=0;
+  if (verbose>1) printf(" processing LUMI[%d]:\n", t);
+  ReadTelescopeData(t);
+  // terminate when end of ascii file reached:
+  if (feof(asciifile))
+    {
+      out->Write();
+      for (int i=0; i<3; i++)
+	rmshisto[0][i]->Write();
+      return -1;
+    };
+
+  /*
+  if (LUMI[t]==NULL){continue;}
+      lumibankcounter[t]++;
+      //  if (verbose>1) printf(" processing LUMI[%d]:\n", t);
+      for (int i=0; i<3; i++)
+	GEM[t][i]->ClearAPVs();
+      if (ReadTelescopeData(t)==0) { // is there any lumi data for this event?
+	continue;}
+*/
+
+  // analyze data:
+  for (int i=0; i<3; i++)// three GEMs per telescope
+    {
+	  if (common_process_innerASCII(t,i)) continue;
+
+	  int xraw[250],yraw[250];	 
+	  for (int k=0; k<250; k++) 		      
+	    {
+	      xraw[k]=xdat[k];
+	      yraw[k]=ydat[k];	   
+	    };    
+	  /*   
+	  /////////////////////////////////////////////////////
+	  cmodeinfo_apv cminfo_apv=findCMode_apv(t,i);
+	  if (someSpecHist)
+	  {
+	    h1adcspec_cmode_x_apv1[t][i]->Fill(cminfo_apv.x_event_apv1);
+	    h1adcspec_cmode_y_apv1[t][i]->Fill(cminfo_apv.y_event_apv1);	  
+	    h1adcspec_cmode_x_apv2[t][i]->Fill(cminfo_apv.x_event_apv2);
+	    h1adcspec_cmode_y_apv2[t][i]->Fill(cminfo_apv.y_event_apv2);	  
+	  };
+
+	  //	  if (allSpecHist)
+	  //    {
+	  //      h2maxxADCb4cm[t][i]->Fill(cminfo.maxchx,cminfo.maxx);
+	  //      h2maxyADCb4cm[t][i]->Fill(cminfo.maxchy,cminfo.maxy);
+	  //    };
+
+	 
+	  /////////////////// Total "raw" ADC vs strip #.  (before applying common-mode noise, bin-2-bin pedestals or polynomial fit baseline subtractions.////////////////////////////
+
+	  if (allSpecHist)
+	    for (int k=0; k<250; k++)		      
+	      {
+		h2adcspec_x[t][i]->Fill(k,xdat[k]);
+		h2adcspec_y[t][i]->Fill(k,ydat[k]);
+		//Get the total X/Y ADCs and # of events on each strip excluding the maximum ADC strip # +/- 2 for each event
+		if (((k<apvx1)&&((k<=cminfo_apv.maxchx_apv1-2)||(k>=cminfo_apv.maxchx_apv1+2)))||((k>apvx1-1)&&((k<=cminfo_apv.maxchx_apv2-2)||(k>=cminfo_apv.maxchx_apv2+2)))) {		       
+		  h2adcspec_nopk_x[t][i]->Fill(k,xdat[k]);
+		  dattotx_nopk_ent[i][k]=dattotx_nopk_ent[i][k]+1;
+		};
+		if (((k<apvy1)&&((k<=cminfo_apv.maxchy_apv1-2)||(k>=cminfo_apv.maxchy_apv1+2)))||((k>apvy1-1)&&((k<=cminfo_apv.maxchy_apv2-2)||(k>=cminfo_apv.maxchy_apv2+2)))) {
+		  h2adcspec_nopk_y[t][i]->Fill(k,ydat[k]);
+		  dattoty_nopk_ent[i][k]=dattoty_nopk_ent[i][k]+1;
+		};
+
+		h2evespec_nopk_x[t][i]->Fill(k,dattotx_nopk_ent[i][k]);
+		h2evespec_nopk_y[t][i]->Fill(k,dattoty_nopk_ent[i][k]);
+	      };
+
+	  ////////////////////////// Only bin-2-bin pedestal subtraction//////////////////////////////////////
+	  ////If you need to check the effects only when the bin to bin subtractions, you should turn ON the flag "onlybin2binsub". 
+	  ////However, because all these bin-2-bin pedestals are determined only after common mode subtraction, then you have to 
+	  ////turn OFF the "doSubtractcmode" flag on Long_t Det_LumiGEM::startup_findPedestal() doSubtractcmode=false; or just commented out the flag.
+	  //cmodeinfo_apv cminfo_apv_onlyb2b=findCMode_apv(t,i);
+	  //printf("before subtractBin2Bin  \n");
+
+	  if (onlybin2binsub){
+ 
+	    if (someSpecHist)
+	      for (int k=0; k<250; k++)		      
+		{
+		  if (((k<apvx1)&&((k<=cminfo_apv.maxchx_apv1-2)||(k>=cminfo_apv.maxchx_apv1+2)))||((k>apvx1-1)&&((k<=cminfo_apv.maxchx_apv2-2)||(k>=cminfo_apv.maxchx_apv2+2)))) {
+		    // h2adcspec_pedsub_nopk_x[t][i]->Fill(k,xdat[k]);
+		    gettotonlypedx[i][k] +=xdat[k];
+		    gettotonlypedxentries[i][k]=gettotonlypedxentries[i][k]+1;
+		  };
+		  if (((k<apvy1)&&((k<=cminfo_apv.maxchy_apv1-2)||(k>=cminfo_apv.maxchy_apv1+2)))||((k>apvy1-1)&&((k<=cminfo_apv.maxchy_apv2-2)||(k>=cminfo_apv.maxchy_apv2+2)))) {
+		    // h2adcspec_pedsub_nopk_y[t][i]->Fill(k,ydat[k]);
+		    gettotonlypedy[i][k] +=ydat[k];
+		    gettotonlypedyentries[i][k]=gettotonlypedyentries[i][k]+1;
+		  };
+
+		  //	printf("get ped %d %d %d %d %d \n",k,gettotonlypedx[i][k],gettotonlypedxentries[i][k],gettotonlypedy[i][k],gettotonlypedyentries[i][k]);
+		};
+
+
+
+	    if (doSubtractonlyped) subtractonlyBin2Bin(t,i);
+	    cmodeinfo_apv cminfo_apv_onlyb2b=findCMode_apv(t,i);
+	    if (allSpecHist) {
+	      for (int k=0; k<250; k++)		      
+	  	{
+		  if (((k<apvx1)&&((k<=cminfo_apv_onlyb2b.maxchx_apv1-2)||(k>=cminfo_apv_onlyb2b.maxchx_apv1+2)))||((k>apvx1-1)&&((k<=cminfo_apv_onlyb2b.maxchx_apv2-2)||(k>=cminfo_apv_onlyb2b.maxchx_apv2+2)))) 
+		  h2adcspec_pedsub_nopk_x[t][i]->Fill(k,xdat[k]);
+
+		  if (((k<apvy1)&&((k<=cminfo_apv_onlyb2b.maxchy_apv1-2)||(k>=cminfo_apv_onlyb2b.maxchy_apv1+2)))||((k>apvy1-1)&&((k<=cminfo_apv_onlyb2b.maxchy_apv2-2)||(k>=cminfo_apv_onlyb2b.maxchy_apv2+2)))) 
+		   h2adcspec_pedsub_nopk_y[t][i]->Fill(k,ydat[k]);
+
+		  // printf("get ped %d %d %d %d %d \n",k,cminfo_apv_onlyb2b.maxchx_apv1,cminfo_apv_onlyb2b.maxchx_apv2,cminfo_apv_onlyb2b.maxchy_apv1,cminfo_apv_onlyb2b.maxchy_apv2);
+	  	};
+	     
+	    };
+	  };  
+
+	  for (int k=0; k<250; k++)		      
+	    {
+	      xdat[k]=xraw[k];
+	      ydat[k]=yraw[k];
+	    };
+
+	  //////////////////////////////////////////////////////////////////////////////////////////
+	
+	  if (doSubtractcmode) subtractCMode(t,i,cminfo_apv); //////Subtract common mode
+	  cmodeinfo_apv cminfo_apv_cm=findCMode_apv(t,i);
+	  if (allSpecHist)
+	    {
+	      //   h2maxxADCcm[t][i]->Fill(cminfo.maxchx,cminfo.maxx);
+	      //   h2maxyADCcm[t][i]->Fill(cminfo.maxchy,cminfo.maxy);
+	    }
+	  if (someSpecHist)
+	    for (int k=0; k<250; k++)		      
+	      {
+		if (allSpecHist)
+		  {
+		    h2adcspec_cmode_x[t][i]->Fill(k,xdat[k]);
+		    h2adcspec_cmode_y[t][i]->Fill(k,ydat[k]);
+		  }
+		if (((k<apvx1)&&((k<=cminfo_apv_cm.maxchx_apv1-2)||(k>=cminfo_apv_cm.maxchx_apv1+2)))||((k>apvx1-1)&&((k<=cminfo_apv_cm.maxchx_apv2-2)||(k>=cminfo_apv_cm.maxchx_apv2+2)))) {
+		  h2adcspec_cmode_nopk_x[t][i]->Fill(k,xdat[k]);
+		  gettotpedx[i][k] +=xdat[k];
+		  gettotpedxentries[i][k]=gettotpedxentries[i][k]+1;
+		};
+		if (((k<apvy1)&&((k<=cminfo_apv_cm.maxchy_apv1-2)||(k>=cminfo_apv_cm.maxchy_apv1+2)))||((k>apvy1-1)&&((k<=cminfo_apv_cm.maxchy_apv2-2)||(k>=cminfo_apv_cm.maxchy_apv2+2)))) {
+		  h2adcspec_cmode_nopk_y[t][i]->Fill(k,ydat[k]);
+		  gettotpedy[i][k] +=ydat[k];
+		  gettotpedyentries[i][k]=gettotpedyentries[i][k]+1;
+		};
+		//	printf("get ped %d %d %d %d %d \n",k,gettotpedx[i][k],gettotpedxentries[i][k],gettotpedy[i][k],gettotpedyentries[i][k]);
+	      };	    
+	
+	  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	  if (doSubtractped) subtractBin2Bin(t,i);  //////Subtract bin-to-bin pedestals (after common mode)
+	  // if (doSubtractped) printf("get ped \n");
+	  cmodeinfo_apv cminfo_apv_b2b=findCMode_apv(t,i);
+	  if (someSpecHist) {
+	    for (int k=0; k<250; k++)		      
+	      {
+	
+		if (allSpecHist)
+		  {		  
+		    h2adcspec_cm_pedsub_x[t][i]->Fill(k,xdat[k]);
+		    h2adcspec_cm_pedsub_y[t][i]->Fill(k,ydat[k]);
+		  }
+		//	if (someSpecHist) {
+		if (((k<apvx1)&&((k<=cminfo_apv_b2b.maxchx_apv1-2)||(k>=cminfo_apv_b2b.maxchx_apv1+2)))||((k>apvx1-1)&&((k<=cminfo_apv_b2b.maxchx_apv2-2)||(k>=cminfo_apv_b2b.maxchx_apv2+2))))
+		  h2adcspec_cm_pedsub_nopk_x[t][i]->Fill(k,xdat[k]);
+	
+		if (((k<apvx1)&&((k>cminfo_apv_b2b.maxchx_apv1-2)&&(k<cminfo_apv_b2b.maxchx_apv1+2)))||((k>apvx1-1)&&((k>cminfo_apv_b2b.maxchx_apv2-2)&&(k<cminfo_apv_b2b.maxchx_apv2+2)))&&(xdat[k]>0)) 
+		  h2adcspec_cm_pedsub_peak_x[t][i]->Fill(k,xdat[k]);
+
+		if (((k<apvy1)&&((k<=cminfo_apv_b2b.maxchy_apv1-2)||(k>=cminfo_apv_b2b.maxchy_apv1+2)))||((k>apvy1-1)&&((k<=cminfo_apv_b2b.maxchy_apv2-2)||(k>=cminfo_apv_b2b.maxchy_apv2+2))))
+		  h2adcspec_cm_pedsub_nopk_y[t][i]->Fill(k,ydat[k]);
+
+		if (((k<apvy1)&&((k>cminfo_apv_b2b.maxchy_apv1-2)&&(k<cminfo_apv_b2b.maxchy_apv1+2)))||((k>apvy1-1)&&((k>cminfo_apv_b2b.maxchy_apv2-2)&&(k<cminfo_apv_b2b.maxchy_apv2+2)))&&(ydat[k]>0)) 
+		  h2adcspec_cm_pedsub_peak_y[t][i]->Fill(k,ydat[k]);
+
+		//printf("get ped %d %d %d %d %d \n",k,cminfo_apv_b2b.maxchx_apv1,cminfo_apv_b2b.maxchx_apv2,cminfo_apv_b2b.maxchy_apv1,cminfo_apv_b2b.maxchy_apv2);
+
+	      };
+	  };
+	   
+	  ////////////////////////////////////
+	  if (preproc)
+	    {
+	      for ( int k=0; k<250; k++)
+		{
+		  if (((k<apvx1)&&((k<=cminfo_apv_b2b.maxchx_apv1-2)||(k>=cminfo_apv_b2b.maxchx_apv1+2)))||((k>apvx1-1)&&((k<=cminfo_apv_b2b.maxchx_apv2-2)||(k>=cminfo_apv_b2b.maxchx_apv2+2))))
+		    xcm_ped[t][i]->Fill(k,xdat[k]);
+		 
+		  if (((k<apvy1)&&((k<=cminfo_apv_b2b.maxchy_apv1-2)||(k>=cminfo_apv_b2b.maxchy_apv1+2)))||((k>apvy1-1)&&((k<=cminfo_apv_b2b.maxchy_apv2-2)||(k>=cminfo_apv_b2b.maxchy_apv2+2))))
+		    ycm_ped[t][i]->Fill(k,ydat[k]);
+		};
+	      continue;
+	    };
+	  //////////////////////////////////////
+
+	  //////////////////// check common-mode noise after both cmode and bin-2-bin pedestal subtraction ////////////
+	  cmodeinfo_apv cminfo_after=findCMode_apv(t,i);
+	  if (allSpecHist)
+	    {
+	      //  h2maxxADCcmped[t][i]->Fill(cminfo_after.maxchx,cminfo_after.maxx);
+	      // h2maxyADCcmped[t][i]->Fill(cminfo_after.maxchy,cminfo_after.maxy);
+	    };
+	    
+	  //////////////////////////////////////////////////////////////////////////////////////////////////////////
+	  if (doSubtractbaseline) {	 
+	    /// This is only to check the baseline subtraction effets without common-mode or bin-2-bin pedestal subtractions. So, the raw data is using.//////
+	    for (int k=0; k<250; k++)		      
+	      {
+		xdat[k]=xraw[k];
+		ydat[k]=yraw[k];
+	      };
+	    
+	    dobaselinesub(t,i);
+	    cmodeinfo cminfo_base=findCMode(t,i);
+	    if (allSpecHist)
+	      for (int k=0; k<250; k++)		      
+		{
+		  h2adcspec_base_x[t][i]->Fill(k,xdat[k]);
+		  h2adcspec_base_y[t][i]->Fill(k,ydat[k]);
+		  
+		  if ((k<=cminfo_base.maxchx-2)||(k>=cminfo_base.maxchx+2)) 
+		    h2adcspec_base_nopk_x[t][i]->Fill(k,xdat[k]);
+		  if ((k<=cminfo_base.maxchy-2)||(k>=cminfo_base.maxchy+2)) 
+		    h2adcspec_base_nopk_y[t][i]->Fill(k,ydat[k]);
+		};
+	  }
+	  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	  totent[t][i]=totent[t][i]+1;
+	  if (allSpecHist) totentries[t][i]->Fill(totent[t][i]);
+	  for (int ky=0; ky<250; ky++)		      
+	    {
+	      int amply  = ydat[ky];
+	      if (amply>300) {
+		//	totampy[t][i][ky]=totampy[t][i][ky]+amply;
+		//	totampenty[t][i][ky]=totampenty[t][i][ky]+1;
+		for (int kx=0; kx<250; kx++)		      
+		  {
+		    int amplx  = xdat[kx];	   
+		    if (amplx>300){
+		      totampy[t][i][ky]=totampy[t][i][ky]+amply;
+		      totampenty[t][i][ky]=totampenty[t][i][ky]+1;
+
+		      totampx[t][i][kx]=totampx[t][i][kx]+amplx;
+		      totampentx[t][i][kx]=totampentx[t][i][kx]+1;
+	     
+		      if (allSpecHist) {
+			h2amplmapsx[t][i]->Fill(kx,ky,amplx);
+			h2amplmapsy[t][i]->Fill(kx,ky,amply);   		
+			h2hitmaps[t][i]->Fill(kx,ky);
+			H_hitampx[t][i]->Fill(amplx);
+			H_hitampy[t][i]->Fill(amply);
+		      };
+		      //printf("process  xdat ydat %d %d %d %d %d %d \n",kx,ky,totampx[kx][ky],amplx,totampy[kx][ky],amply);
+		    }; 
+		  };
+	      };
+	    };
+	  
+ /////////////////////////////////////////Dead Channels Masking /////////////////////////////////////////
+	  if (dead_ch_masking) {   
+	    for (int k=0; k<250; k++)
+	      {
+		if (deadchannels[k*2+2*250*i+2*250*3*t]>0) {
+		  //	printf ("X channels per ped %i %i %i %i %i %i\n",t,i,k,k*2+2*250*i+2*250*3*t,deadchannels[k*2+2*250*i+2*250*3*t],xdat[deadchannels[k*2+2*250*i+2*250*3*t]]);   
+		  xdat[deadchannels[k*2+2*250*i+2*250*3*t]]=-100000;
+		};
+		if (deadchannels[k*2+2*250*i+2*250*3*t+1]>0) {
+		  //	printf ("Y channels per ped %i %i %i %i %i %i\n",t,i,k,k*2+2*250*i+2*250*3*t,deadchannels[k*2+2*250*i+2*250*3*t],xdat[deadchannels[k*2+2*250*i+2*250*3*t]]);   
+		  ydat[deadchannels[k*2+2*250*i+2*250*3*t+1]]=-100000;	
+		};
+
+		for (int ky=0; ky<250; ky++)
+		  {
+		    if ((deadchannels[k*2+2*250*i+2*250*3*t]>0)||(deadchannels[ky*2+2*250*i+2*250*3*t+1]>0)) {
+		      if (someSpecHist) {
+			deadchmap[t][i]->Fill(k,ky);
+		      };
+		    };
+		  };
+	      };
+	  };
+    
+ ///////////////////////Do APV Channel-2-channel gain calibration//////////////////////////////////////
+	 
+	  if (use_gainmatch) { /// Use APV channel-to-channel gain match//////
+	    for (int k=0; k<250; k++)
+	      {    
+		//	if ((k==34)||(k==42)||(k==66)) printf ("Calibration Constants before %i %i %i %i %i \n",t,i,k,xdat[k],ydat[k]);
+
+		//	if (deadchannels[k*2+2*250*i+2*250*3*t]>0) xdat[deadchannels[k*2+2*250*i+2*250*3*t]]=-100000;
+		//	else {
+		  if (xdat[k]>0) xdat[k]=xdat[k]*CalibConsts[1500*t+500*i+2*k];
+		  else  xdat[k]=xdat[k]-xdat[k]*CalibConsts[1500*t+500*i+2*k];
+		  //	};
+
+		  //	if (deadchannels[k*2+2*250*i+2*250*3*t+1]>0) ydat[deadchannels[k*2+2*250*i+2*250*3*t+1]]=-100000; 
+		  //	else {
+		  if (ydat[k]>0) ydat[k]=ydat[k]*CalibConsts[1500*t+500*i+2*k+1];
+		  else ydat[k]=ydat[k]-ydat[k]*CalibConsts[1500*t+500*i+2*k+1];
+		  //	};
+		//  printf ("Calibration Constants after %i %i %i %i %i \n",t,i,k,xdat[k],ydat[k]); 
+
+		//	if ((k==34)||(k==42)||(k==66)) printf ("Calibration Constants after %i %i %i %i %i \n",t,i,k,xdat[k],ydat[k]); 
+	      };
+	  };
+       
+/////////////////////////////////// APV channel-to-channel gain calibration ////////////////////////
+	   if (doAPVcalib) callib_apvchannels(t,i); /// Determine the  APV channel-to-channel gain calibration constants//////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+*/
+
+	  if (doFindClusters)
+	    findClustersASCII(t,i);
+	
+	}; // for i (GEMs)
+/*
+
+    }; // for t (telescopes)
+
+  // check if any GEM had bad raw data:
+  if (zeroFLAG)
+    APVzeroSamplesCNT++; // count this as a zerosamples event
+  if (outofsyncFLAG)
+    APVoutOfSyncCNT++; // count this as an outofsync event
+
+
+
+  // loop over all hits found in all GEMs to make
+  // correlation plots like x vs x and y vs y:
+  std::vector <LumiGEMhit> xyhits[2][3]; // need xy cluster list for each GEM element!
+  for (unsigned int j=0; j<gemo->hits.size(); j++)
+    {
+      int GEMid = gemo->hits[j].GEMid;
+      int t = GEMid/3; // which telescope
+      int g = GEMid%3;
+      // create temporary GEMhit to push it to vector of hits:
+      LumiGEMhit ahit;
+      ahit.xl = gemo->hits[j].xl;
+      ahit.yl = gemo->hits[j].yl;
+      xyhits[t][g].push_back(ahit);
+      // fill 2d hitmaps:
+      //printf("after charge sharing %d %5.2lf %5.2lf %5.2lf %5.2lf\n",g,gemo->hits[j].xl,gemo->hits[j].yl,gemo->hits[j].ampl,gemo->hits[j].charge);
+      // printf("old clusters %d %5.2lf %5.2lf\n",gemo->hits[j].GEMid,0.4*gemo->hits[j].xl-50,0.4*gemo->hits[j].yl-50);
+
+      H_hitmap2d[t][g]->Fill(gemo->hits[j].xl, gemo->hits[j].yl);
+      //  hm2d[t][g]->Fill(0.4*gemo->hits[j].xl-50,0.4*gemo->hits[j].yl-50);
+      if (allSpecHist) H_amplmap2d[t][g]->Fill(gemo->hits[j].xl, gemo->hits[j].yl, gemo->hits[j].ampl);
+    };
+*/
+  /*
+  // cut on MI GEM:
+  bool good=true;
+  for (unsigned int i=0; i<xyhits[0][0].size(); i++)
+  {
+  // double yl=xyhits[0][1][i].yl;
+  // if ( (yl<120.)||(yl>130.) )
+  // 	{
+  // 	  good=false;
+  // 	  break;
+  // 	};
+  double yl=xyhits[0][0][i].yl;
+  if ( (yl<125.)||(yl>135.) )
+  {
+  good=false;
+  break;
+  };
+  };
+  */
+  /*
+  // now we have all clusters in xyhits:
+  // nested loop over all GEMs to fill correlation plots:
+  //    if (good)
+  for (int  t=0; t<2; t++)
+    for (int i=0; i<3; i++)
+      for (int j=0; j<3; j++)
+	{
+	  if (i==j) continue;
+	  for (unsigned int ihit=0; ihit<xyhits[t][i].size(); ihit++)
+	    for (unsigned int jhit=0; jhit<xyhits[t][j].size(); jhit++)
+	      {
+		H_XvsX[t][i][j]->Fill(xyhits[t][i][ihit].xl,
+				      xyhits[t][j][jhit].xl);
+		H_YvsY[t][i][j]->Fill(xyhits[t][i][ihit].yl,
+				      xyhits[t][j][jhit].yl);
+	      };
+	};
+*/
+ 
+
+  if (viscotab)
+    {
+      //printf(" %8d: triggerpattern = 0x%x\n", eventid, triggerpattern);
+      //      LumiGUI->FillHitMaps();
+      LumiGUI->DrawRawData();
+      LumiGUI->SimpleTracking();
+    };
+  //   };// we need the SiPM TDC
+
+  return ok;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/*
+Long_t Det_LumiGEM::showTraces()
+{
+  if (viscotab==NULL)
+    return ok;
+  return LumiGUI->showTraces();
+}
+*/
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+Long_t Det_LumiGEM::done_ASCII()
+{
+  fclose(asciifile);
+  cleanup();
+  return 0;
+}
+
+/*
+Long_t Det_LumiGEM::getmean_cmode()
+{
+  if (doSubtractcmode)
+    debug(0,"***************\nWarning: common mode has been subtracted! Please deactivate the 'doSubtractcmode' \n**************\n");
+
+   ofstream outf("event_avg_cmode.dat");
+  //  int id=0;
+  for (int t=0;t<2;t++)
+    for (int i=0;i<3;i++)
+      {
+	//Get the mean of common mode spectra histogram:
+
+	double meancm_x_apv1=h1adcspec_cmode_x_apv1[t][i]->GetMean();
+	double meancm_y_apv1=h1adcspec_cmode_y_apv1[t][i]->GetMean();
+
+	double meancm_x_apv2=h1adcspec_cmode_x_apv2[t][i]->GetMean();
+	double meancm_y_apv2=h1adcspec_cmode_y_apv2[t][i]->GetMean();
+
+		printf(" get cmode mean %d %d %5.2lf %5.2lf %5.2lf %5.2lf\n", t,i, meancm_x_apv1, meancm_x_apv2, meancm_y_apv1, meancm_y_apv2);
+	
+		outf<< t<<"\t"<<i<<"\t"<<meancm_x_apv1<<"\t"<<meancm_x_apv2<<"\t"<<meancm_y_apv1<<"\t"<<meancm_y_apv2<<std::endl;    
+      }    
+   outf.close();
+
+   debug(0,"****************\nCreated avg_cmode.dat in current directory for further use\n**************");
+
+  return ok;
+}
+
+
+Long_t Det_LumiGEM::dumpPedestals()
+{
+  if (doSubtractped)
+    debug(0,"***************\nWarning: Pedestals have been subtracted: Exported Pedestals are difference only!\n**************\n");
+
+  ofstream myfile;
+  myfile.open("bin_2_bin_pedestals.dat");
+
+  // ofstream outf("ped.xml");
+  //int id=0;
+  for (int t=0;t<2;t++)
+    for (int i=0;i<3;i++)
+      {
+	//	TProfile  *xprof=h2adcspec_cmode_nopk_x[t][i]->ProfileX();
+	//	TProfile  *yprof=h2adcspec_cmode_nopk_y[t][i]->ProfileX();
+	for (int k=0;k<250;k++)
+	  {
+	    // find average of cm and peak suppressed spectra histogram:
+	    // if (((int)xprof->GetBinContent(k+1))!=0)
+	    //  outf<<"<PerChannelPed id="<<'"'<<id<<'"'<<">"<< t<<","<<i<<","<<k<<",0,"<<(int) xprof->GetBinContent(k+1)<<"</PerChannelPed>"<<std::endl;
+	    // id++;
+	    // if (((int)yprof->GetBinContent(k+1))!=0)
+	    //   outf<<"<PerChannelPed id="<<'"'<<id<<'"'<<">"<< t<<","<<i<<","<<k<<",1,"<<(int) yprof->GetBinContent(k+1)<<"</PerChannelPed>"<<std::endl;
+	    // id++;
+	   
+	    // get the average pedestals on each bin
+	    if (gettotpedxentries[i][k]>0) getavgpedx[i][k]=gettotpedx[i][k]/gettotpedxentries[i][k];
+	    else getavgpedx[i][k]=10000;
+	    if ((getavgpedx[i][k]==1)||(getavgpedx[i][k]==0)) getavgpedx[i][k]=10000;
+	    if (gettotpedyentries[i][k]>0) getavgpedy[i][k]=gettotpedy[i][k]/gettotpedyentries[i][k];
+	    else getavgpedy[i][k]=10000;
+	    if ((getavgpedy[i][k]==1)||(getavgpedy[i][k]==0)) getavgpedy[i][k]=10000;
+	    myfile <<i<<"\t"<<k<<"\t"<<getavgpedx[i][k]<<"\t"<<getavgpedy[i][k]<< endl;
+	    //  printf("process  xdat ydat %d %d %d %d %d %d \n",i,k,getavgpedx[i][k],getavgpedy[i][k]);
+	  }    
+      }
+  myfile.close();
+  //      outf.close();
+
+  //  debug(0,"****************\nCreated bin_2_bin_pedestals.txt in current directory. Please paste contents into gem init xml with appropriate time tag\n**************");
+  debug(0,"****************\nCreated bin_2_bin_pedestals.dat in current directory. \n**************");
+  return ok;
+}
+
+Long_t Det_LumiGEM::dumponlyPedestals()
+{
+   if (onlybin2binsub)
+    debug(0,"***************\nWarning: Only Pedestals have been subtracted: Exported Pedestals are difference only!\n**************\n");
+
+  ofstream onlypedfile;
+  onlypedfile.open("only_bin_2_bin_pedestals.dat");
+
+  for (int t=0;t<2;t++)
+    for (int i=0;i<3;i++)
+      {
+	for (int k=0;k<250;k++)
+	  {  
+	    // get the average pedestals on each bin
+	    if (gettotonlypedxentries[i][k]>0) getavgonlypedx[i][k]=gettotonlypedx[i][k]/gettotonlypedxentries[i][k];
+	    else getavgonlypedx[i][k]=10000;
+	    if ((getavgonlypedx[i][k]==1)||(getavgonlypedx[i][k]==0)) getavgonlypedx[i][k]=10000;
+	    if (gettotonlypedyentries[i][k]>0) getavgonlypedy[i][k]=gettotonlypedy[i][k]/gettotonlypedyentries[i][k];
+	    else getavgonlypedy[i][k]=10000;
+	    if ((getavgonlypedy[i][k]==1)||(getavgonlypedy[i][k]==0)) getavgonlypedy[i][k]=10000;
+	    onlypedfile <<i<<"\t"<<k<<"\t"<<getavgonlypedx[i][k]<<"\t"<<getavgonlypedy[i][k]<< endl;
+	    printf("process  xdat ydat %d %d %d %d %d %d \n",i,k,getavgonlypedx[i][k],getavgonlypedy[i][k]);
+	  }    
+      }
+  onlypedfile.close();
+debug(0,"****************\nCreated only_bin_2_bin_pedestals.dat in current directory. \n**************");
+
+  return ok;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+Long_t Det_LumiGEM::done_APVcalib()
+{
+   if (doAPVcalib)
+     debug(0,"***************\nWarning: If you really don't want to perform APV channel-to-channel gain calibrations, then please deactivate the 'doAPVcalib' \n**************\n");
+
+   ofstream myxcalibfile,myycalibfile;
+  myxcalibfile.open("do_APV_Xcalib.dat");
+ myycalibfile.open("do_APV_Ycalib.dat");
+
+double avgmaxADC_x[3][250],avgmaxADC_y[3][250];
+double xmaxdata[3][250],ymaxdata[3][250];
+
+
+  for (int t=1;t<2;t++)
+    for (int i=0;i<3;i++)
+      {
+
+
+ int count_x,count_y;
+ count_x=0;
+ count_y=0;
+ int index_x[250],index_y[250];
+
+ for (int k=0;k<250;k++)
+   {
+	//Get the mean of maximum ADCs on each APV channel (After common mode and Pedestal subtraction)	   
+     if ((gettotx_adc_e[i][k]>0)){
+       avgmaxADC_x[i][k]=gettotx_adc[i][k]/gettotx_adc_e[i][k];
+       count_x=count_x+1;
+       index_x[count_x]=k;
+       xmaxdata[i][k]=avgmaxADC_x[i][k];
+       //printf(" get avg. max. X ADC %d %d %d %d %d %d %10.2lf\n", t,i, k,count_x, gettotx_adc[i][k],gettotx_adc_e[i][k], avgmaxADC_x[i][k]);
+     }
+	    //  else avgmaxADC_x[i][k]=-10000;
+     else xmaxdata[i][k]=-100000;
+
+     if ((gettoty_adc_e[i][k]>0)) {
+       avgmaxADC_y[i][k]=gettoty_adc[i][k]/gettoty_adc_e[i][k];
+	      //  if (avgmaxADC_y[i][k]>1000) {
+       count_y=count_y+1;
+       index_y[count_y]=k;
+		  //  ymaxdata[i][k]=avgmaxADC_y[i][k];
+       ymaxdata[i][k]=avgmaxADC_y[i][k];
+		  //	};
+     }
+     else ymaxdata[i][k]=-100000;
+	    //	printf(" get avg. max. X ADC %d %d %d %d %10.2lf %d %10.2lf  \n", t,i, k,count_x,gettotx_adc[i][k],gettotx_adc_e[i][k],avgmaxADC_x[i][k]);
+
+	    //printf(" get avg. max. X ADC %d %d %d %d %d  %10.2lf %d %d %d %10.2lf %d\n", t,i, k, gettotx_adc[i][k],gettotx_adc_e[i][k],avgmaxADC_x[i][k],count_x[i], gettoty_adc[i][k],gettoty_adc_e[i][k],avgmaxADC_y[i][k],count_y[i]);
+	   
+   }; 
+
+	double index[count_x];
+	double xdata[count_x];
+	for (int n=1;n<count_x+1;n++)
+	  {
+	    index[n] = index_x[n];
+	    xdata[n]=avgmaxADC_x[i][index_x[n]];
+	    //	    xdata[n]=avgmaxADC_x[i][index_x[n]];	
+	    //printf(" get avg. max. X ADC %d %d %d %d %10.2lf %10.2lf %10.2lf\n", t,i,n,index_x[n],index[n],avgmaxADC_x[i][index_x[n]],xdata[n]);
+	    myxcalibfile <<t<<"\t"<<i<<"\t"<<n<<"\t"<<index[n]<<"\t"<<xdata[n]<< endl;
+	  };
+
+	double yindex[count_y];
+	double ydata[count_y];
+	for (int ny=1;ny<count_y+1;ny++)
+	  {
+	    yindex[ny] = index_y[ny];
+	    ydata[ny]=avgmaxADC_y[i][index_y[ny]];
+	    //	    ydata[ny]=avgmaxADC_y[i][index_y[ny]];	
+		//	printf(" get avg. max. X ADC %d %d %d %d %10.2lf %10.2lf %10.2lf\n", t,i,n,index_x[n],index[n],avgmaxADC_x[i][index_x[n]],xdata[n]);
+	    myycalibfile <<t<<"\t"<<i<<"\t"<<ny<<"\t"<<yindex[ny]<<"\t"<<ydata[ny]<< endl;
+	  };
+
+
+	//	TGraph *gtmp  = new TGraph(count_x, index, xdata);
+      }    
+    myxcalibfile.close();
+    myycalibfile.close();
+gettotx_adc.clear();
+gettoty_adc.clear();
+gettotx_adc_e.clear();
+gettoty_adc_e.clear();
+    debug(0,"****************\nCreated do_APV_X(Y)calib.dat in the current directory. Use it for linear fit and do the gain calibrations accordingly.\n**************");
+
+  return ok;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////
+*/
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+Long_t Det_LumiGEM::cmdline(char *cmd)
+{
+  char *aux=NULL;
+  cout << "LumiGEM: Got commandline: >" << cmd << "<" << endl;
+  ///////////////////////////////////////////////////////
+  // check for verbosity:
+  if (strstr(cmd, "-v"))
+    verbose=1;
+  if (strstr(cmd, "-vv"))
+    verbose=2;
+  if (strstr(cmd, "-vvv"))
+    verbose=3;
+  printf(" verbosity %d\n", verbose);
+  ///////////////////////////////////////////////////////
+  // check if only DetectorFlag should be processed:
+  if (strstr(cmd, "--detectorflagonly"))
+    ProcessDetectorFlagOnly = true;
+  ///////////////////////////////////////////////////////
+
+  return 0;
+}
+*/
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Det_LumiGEM::cleanupASCII()
+{
+  cout << "LumiGEM: deleting GEM objects..." << endl;
+  
+  delete[] xdat;
+  delete[] ydat;
+  delete[] xdatraw;
+  delete[] ydatraw;
+
+  delete gemo;
+  //  delete[] hitfinder;
+  //  delete[] LumiGUI;
+  delete[] tmpdat;
+
+  for (int t=0; t<2; t++)  // two telescopes
+    for (int i=0; i<3; i++)// three GEMs per telescope
+      {
+	delete GEM[t][i];
+	//	delete H_hitmap2d[t][i];
+
+      };
+  /*
+dattotx_nopk_ent.clear();
+dattoty_nopk_ent.clear();
+
+gettotpedx.clear();
+gettotpedy.clear();
+gettotpedxentries.clear();
+gettotpedyentries.clear();
+gettotonlypedx.clear();
+gettotonlypedy.clear();
+gettotonlypedxentries.clear();
+gettotonlypedyentries.clear();
+
+
+totent.clear();
+//totampx.clear();
+//totampy.clear();
+
+
+
+//avgmaxADC_x.clear();
+//avgmaxADC_y.clear();
+*/
+}
+
+
+extern "C"{
+  Plugin *factory(TTree *in, TTree *out, TFile *inf_, TFile *outf_, TObject *p)
+  {
+    return (Plugin *) new Det_LumiGEM(in, out, inf_, outf_, p);
+  }
+}
+
+
+ClassImp(Det_LumiGEM);

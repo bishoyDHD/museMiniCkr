@@ -1,0 +1,1756 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+ 
+
+<mapper>
+    <config>
+        <scifi>addSciFiChannel</scifi>
+        <scifirefclock>addSciFiReferenceClock</scifirefclock>
+        <tdc>addTestBeamTDC</tdc>
+        <trb>addTestBeamTRB</trb>
+        <adc>addTestBeamADC</adc>
+        <SiPMtdc>addSiPMTDC</SiPMtdc>
+        <SiPMadc>addSiPMADC</SiPMadc>
+        <SiPMtrb>addSiPMTRB</SiPMtrb>
+        <SiPMref>addSiPMReferenceClock</SiPMref>
+        <SiPMmqdc>addSiPM_MQDC</SiPMmqdc> <!--  03/15/17 multiple MQDC mapper  for SiPM-->
+        <SiPMtrig>addSiPMTrigger</SiPMtrig>
+
+        <SPSadc>addSPSADC</SPSadc>
+        <SPStdc>addSPSTDC</SPStdc>
+        <SPStrb>addSPSTRB</SPStrb>
+        <SPSref>addSPSReferenceClock</SPSref>
+        <SPSmqdc> addSPS_MQDC</SPSmqdc>  <!-- -3/15/17 multiple MQDC  mapper for SPS-->
+        <SPStrig>addSPSTrigger</SPStrig>
+
+        <PbGlassadc>addPbGlassADC</PbGlassadc>
+        <PbGlasstdc>addPbGlassTDC</PbGlasstdc>
+        <PbGlasstrb>addPbGlassTRB</PbGlasstrb>
+        <PbGlassref>addPbGlassReferenceClock</PbGlassref>
+        <PbGlasstrig>addPbGlassTrigger</PbGlasstrig>
+        
+        <stt>addStrawChannel</stt>
+        <sttrefclock>addStrawReferenceClock</sttrefclock>
+
+        <cmd>cmdline</cmd>
+    </config>
+
+
+ <!-- THIS IS A tEST FOR STT -->
+<!--   <run nr="2217">
+    <stt id="0,2">0x1373,1</stt>  --> 
+    <!-- <sttrefclock> 0x1370,8 </sttrefclock>  --><!-- that would be  RF time for reference--> 
+<!-- </run> -->
+  
+
+<!-- This is the channel mapping for .mid files from June 2015-->
+<!--  <run nr="2749">
+    <tdc id="0">0,0,"trig"</tdc>--> <!-- type 0=v1190,TDC0, channel 0 is trig -->
+<!--     <tdc id="1">0,1,"rf"</tdc>
+    <tdc id="2">0,2,"sbr"</tdc>
+    <tdc id="3">0,3,"sbl"</tdc>
+    <tdc id="4">0,4,"sipm1"</tdc>
+    <tdc id="5">0,5,"sipm2"</tdc>
+    <tdc id="6">0,6,"bc"</tdc>
+    
+    <trb id="0">0x4200,3,"trig"</trb>
+    <trb id="1">0x4200,2,"trig2"</trb>
+    <trb id="2">0x4200,5,"rf"</trb>
+    <trb id="3">0x4200,8,"bc"</trb>
+    <trb id="4">0x4200,6,"sbr"</trb>
+    <trb id="5">0x4200,7,"sbl"</trb>
+    
+    <adc id="0">0,0,"sbr"</adc>
+    <adc id="1">0,1,"sbl"</adc>
+    <adc id="2">0,2,"sipm1"</adc>
+    <adc id="3">0,3,"sipm2"</adc>
+    <adc id="4">0,4,"nai1"</adc>
+    <adc id="5">0,5,"nai2"</adc>
+    <adc id="6">0,6,"BC"</adc> -->
+    
+    <!-- Remove these, no longer used -->
+<!--     <tdc id="7">-1,5,"twobytwo"</tdc>
+    <tdc id="20">-1,0,"trig"</tdc>
+    <tdc id="21">-1,1,"rf"</tdc>
+    <tdc id="22">-1,2,"sau"</tdc>
+    <tdc id="23">-1,3,"sad"</tdc>
+    <tdc id="24">-1,6,"bc"</tdc>    
+  </run>  
+  
+  <run nr="2795">
+    <adc id="4">1,0,"nai1"</adc>
+    <adc id="5">1,1,"nai2"</adc>
+  </run>
+  
+  <run nr="2803">
+    <adc id="7">0,4,"twobytwo"</adc>
+  </run>
+  
+  <run nr="2825">
+    <adc id="6">0,5,"BC"</adc>
+  </run>
+
+  <run nr="2847">
+    <trb id="0">0x4200,16,"trig"</trb>
+    <trb id="1">0x4200,10,"trig2"</trb>
+  </run> -->
+
+
+<!-- This is the channel mapping for .mid files from July 2015-->
+  <!-- v1190 the same as June-->
+  <!-- v792 the same as June -->
+  <!-- MQDC new -->
+  <!-- TRB FPGA and channels new -->
+<!--   <run nr="3113">
+ -->    <!-- <adc id="4">-1,0,"nai1"</adc> remove
+    <adc id="5">-1,1,"nai2"</adc> --> <!-- remove -->
+<!--     <adc id="10">1,0,"sbr"</adc>
+    <adc id="11">1,1,"sbl"</adc>
+    <adc id="12">1,2,"sipm1"</adc>
+    <adc id="13">1,3,"sipm2"</adc>
+    <adc id="17">1,4,"twobytwo"</adc>
+    <adc id="16">1,5,"BC"</adc>
+
+
+    <trb id="0">0x1160,16,"trig"</trb>
+    <trb id="1">0x1160,10,"trig2"</trb>
+    <trb id="2">0x1160,8,"rf"</trb>
+    <trb id="3">0x1160,5,"bc"</trb>
+    <trb id="4">0x1160,2,"sbr"</trb>
+    <trb id="5">0x1160,3,"sbl"</trb> -->
+
+<!-- SciFi  mapper for July 2015 -->
+
+   <!--  <scifi id="0">0x1372,1,0,0,13</scifi>  --><!-- bank 0x1372, channel 1, is u plane (0), right (0), fiber 13 -->
+   <!--  <scifi id="1">0x1372,2,0,0,14</scifi> --> <!-- bank 0x1372, channel 2, is u plane (0), right (0), fiber 14 -->
+<!--     <scifi id="2">0x1372,3,0,0,15</scifi>
+    <scifi id="3">0x1372,4,0,0,16</scifi>
+    <scifi id="4">0x1372,5,0,0,17</scifi>
+    <scifi id="5">0x1372,6,0,0,18</scifi>
+    <scifi id="6">0x1372,7,0,0,19</scifi>
+    <scifi id="7">0x1372,8,0,0,20</scifi>
+    <scifi id="8">0x1372,9,0,0,21</scifi>
+    <scifi id="9">0x1372,10,0,0,22</scifi>
+    <scifi id="10">0x1372,11,0,0,23</scifi>
+    <scifi id="11">0x1372,12,0,0,24</scifi>
+    <scifi id="12">0x1372,13,0,0,25</scifi>
+    <scifi id="13">0x1372,14,0,0,26</scifi>
+    <scifi id="14">0x1372,15,0,0,27</scifi>
+    <scifi id="15">0x1372,16,0,0,28</scifi> -->
+        
+    <!-- <scifi id="16">0x1372,17,0,1,13</scifi> --> <!-- bank 0x1372, channel 16, is u plane (0), left (1), fiber 13 -->
+    <!-- <scifi id="17">0x1372,18,0,1,14</scifi> --> <!-- bank 0x1372, channel 17, is u plane (0), left (1), fiber 14 -->
+<!--     <scifi id="18">0x1372,19,0,1,15</scifi>
+    <scifi id="19">0x1372,20,0,1,16</scifi>
+    <scifi id="20">0x1372,21,0,1,17</scifi>
+    <scifi id="21">0x1372,22,0,1,18</scifi>
+    <scifi id="22">0x1372,23,0,1,19</scifi>
+    <scifi id="23">0x1372,24,0,1,20</scifi>
+    <scifi id="24">0x1372,25,0,1,21</scifi>
+    <scifi id="25">0x1372,26,0,1,22</scifi>
+    <scifi id="26">0x1372,27,0,1,23</scifi>
+    <scifi id="27">0x1372,28,0,1,24</scifi>
+    <scifi id="28">0x1372,29,0,1,25</scifi>
+    <scifi id="29">0x1372,30,0,1,26</scifi>
+    <scifi id="30">0x1372,31,0,1,27</scifi>
+    <scifi id="31">0x1372,32,0,1,28</scifi> -->
+        
+
+    <!-- <scifi id="32">0x1373,1,1,0,13</scifi>  --><!-- bank 0x1373, channel 1, is v plane (1), right (0), fiber 13 -->
+ <!--    <scifi id="33">0x1373,2,1,0,14</scifi> --> <!-- bank 0x1373, channel 2, is v plane (1), right (0), fiber 14 -->
+<!--     <scifi id="34">0x1373,3,1,0,15</scifi>
+    <scifi id="35">0x1373,4,1,0,16</scifi>
+    <scifi id="36">0x1373,5,1,0,17</scifi>
+    <scifi id="37">0x1373,6,1,0,18</scifi>
+    <scifi id="38">0x1373,7,1,0,19</scifi>
+    <scifi id="39">0x1373,8,1,0,20</scifi>
+    <scifi id="40">0x1373,9,1,0,21</scifi>
+    <scifi id="41">0x1373,10,1,0,22</scifi>
+    <scifi id="42">0x1373,11,1,0,23</scifi>
+    <scifi id="43">0x1373,12,1,0,24</scifi>
+    <scifi id="44">0x1373,13,1,0,25</scifi>
+    <scifi id="45">0x1373,14,1,0,26</scifi>
+    <scifi id="46">0x1373,15,1,0,27</scifi>
+    <scifi id="47">0x1373,16,1,0,28</scifi> -->
+
+<!--     <scifi id="48">0x1373,17,1,1,13</scifi> --> <!-- bank 0x1373, channel 16, is v plane (1), left (1), fiber 13 -->
+<!--     <scifi id="49">0x1373,18,1,1,14</scifi> --> <!-- bank 0x1373, channel 17, is v plane (1), left (1), fiber 14 -->
+<!--     <scifi id="50">0x1373,19,1,1,15</scifi>
+    <scifi id="51">0x1373,20,1,1,16</scifi>
+    <scifi id="52">0x1373,21,1,1,17</scifi>
+    <scifi id="53">0x1373,22,1,1,18</scifi>
+    <scifi id="54">0x1373,23,1,1,19</scifi>
+    <scifi id="55">0x1373,24,1,1,20</scifi>
+    <scifi id="56">0x1373,25,1,1,21</scifi>
+    <scifi id="57">0x1373,26,1,1,22</scifi>
+    <scifi id="58">0x1373,27,1,1,23</scifi>
+    <scifi id="59">0x1373,28,1,1,24</scifi>
+    <scifi id="60">0x1373,29,1,1,25</scifi>
+    <scifi id="61">0x1373,30,1,1,26</scifi>
+    <scifi id="62">0x1373,31,1,1,27</scifi>
+    <scifi id="63">0x1373,32,1,1,28</scifi> -->
+
+   <!--  <scifirefclock id="0">0x1370,8</scifirefclock> --> <!-- RF time for reference-->
+
+    <!-- alternate mapping from anusha's repo: -->
+
+        <!-- <scifi id="0">0x1372,15,0,0,13</scifi> -->
+        <!-- <scifi id="1">0x1372,13,0,0,14</scifi> -->
+        <!-- <scifi id="2">0x1372,11,0,0,15</scifi> -->
+        <!-- <scifi id="3">0x1372,9,0,0,16</scifi> -->
+        <!-- <scifi id="4">0x1372,7,0,0,17</scifi> -->
+        <!-- <scifi id="5">0x1372,5,0,0,18</scifi> -->
+        <!-- <scifi id="6">0x1372,3,0,0,19</scifi> -->
+        <!-- <scifi id="7">0x1372,1,0,0,20</scifi> -->
+        <!-- <scifi id="8">0x1372,16,0,0,21</scifi> -->
+        <!-- <scifi id="9">0x1372,14,0,0,22</scifi> -->
+        <!-- <scifi id="10">0x1372,12,0,0,23</scifi> -->
+        <!-- <scifi id="11">0x1372,10,0,0,24</scifi> -->
+        <!-- <scifi id="12">0x1372,8,0,0,25</scifi> -->
+        <!-- <scifi id="13">0x1372,6,0,0,26</scifi> -->
+        <!-- <scifi id="14">0x1372,4,0,0,27</scifi> -->
+        <!-- <scifi id="15">0x1372,2,0,0,28</scifi> -->
+        
+        <!-- <scifi id="16">0x1372,31,0,1,13</scifi> -->
+        <!-- <scifi id="17">0x1372,29,0,1,14</scifi> -->
+        <!-- <scifi id="18">0x1372,27,0,1,15</scifi> -->
+        <!-- <scifi id="19">0x1372,25,0,1,16</scifi> -->
+        <!-- <scifi id="20">0x1372,23,0,1,17</scifi> -->
+        <!-- <scifi id="21">0x1372,21,0,1,18</scifi> -->
+        <!-- <scifi id="22">0x1372,19,0,1,19</scifi> -->
+        <!-- <scifi id="23">0x1372,17,0,1,20</scifi> -->
+        <!-- <scifi id="24">0x1372,32,0,1,21</scifi> -->
+        <!-- <scifi id="25">0x1372,30,0,1,22</scifi> -->
+        <!-- <scifi id="26">0x1372,28,0,1,23</scifi> -->
+        <!-- <scifi id="27">0x1372,26,0,1,24</scifi> -->
+        <!-- <scifi id="28">0x1372,24,0,1,25</scifi> -->
+        <!-- <scifi id="29">0x1372,22,0,1,26</scifi> -->
+        <!-- <scifi id="30">0x1372,20,0,1,27</scifi> -->
+        <!-- <scifi id="31">0x1372,18,0,1,28</scifi> -->
+
+
+        <!-- <scifi id="32">0x1373,15,1,0,13</scifi> -->
+        <!-- <scifi id="33">0x1373,13,1,0,14</scifi> -->
+        <!-- <scifi id="34">0x1373,11,1,0,15</scifi> -->
+        <!-- <scifi id="35">0x1373,9,1,0,16</scifi> -->
+        <!-- <scifi id="36">0x1373,7,1,0,17</scifi> -->
+        <!-- <scifi id="37">0x1373,5,1,0,18</scifi> -->
+        <!-- <scifi id="38">0x1373,3,1,0,19</scifi> -->
+        <!-- <scifi id="39">0x1373,1,1,0,20</scifi> -->
+        <!-- <scifi id="40">0x1373,16,1,0,21</scifi> -->
+        <!-- <scifi id="41">0x1373,14,1,0,22</scifi> -->
+        <!-- <scifi id="42">0x1373,12,1,0,23</scifi> -->
+        <!-- <scifi id="43">0x1373,10,1,0,24</scifi> -->
+        <!-- <scifi id="44">0x1373,8,1,0,25</scifi> -->
+        <!-- <scifi id="45">0x1373,6,1,0,26</scifi> -->
+        <!-- <scifi id="46">0x1373,4,1,0,27</scifi> -->
+        <!-- <scifi id="47">0x1373,2,1,0,28</scifi> -->
+        
+        <!-- <scifi id="48">0x1373,31,1,1,13</scifi> -->
+        <!-- <scifi id="49">0x1373,29,1,1,14</scifi> -->
+        <!-- <scifi id="50">0x1373,27,1,1,15</scifi> -->
+        <!-- <scifi id="51">0x1373,25,1,1,16</scifi> -->
+        <!-- <scifi id="52">0x1373,23,1,1,17</scifi> -->
+        <!-- <scifi id="53">0x1373,21,1,1,18</scifi> -->
+        <!-- <scifi id="54">0x1373,19,1,1,19</scifi> -->
+        <!-- <scifi id="55">0x1373,17,1,1,20</scifi> -->
+        <!-- <scifi id="56">0x1373,32,1,1,21</scifi> -->
+        <!-- <scifi id="57">0x1373,30,1,1,22</scifi> -->
+        <!-- <scifi id="58">0x1373,28,1,1,23</scifi> -->
+        <!-- <scifi id="59">0x1373,26,1,1,24</scifi> -->
+        <!-- <scifi id="60">0x1373,24,1,1,25</scifi> -->
+        <!-- <scifi id="61">0x1373,22,1,1,26</scifi> -->
+        <!-- <scifi id="62">0x1373,20,1,1,27</scifi> -->
+        <!-- <scifi id="63">0x1373,18,1,1,28</scifi> -->
+        
+        <!-- <scifirefclock id="0">0x1370,8</scifirefclock> -->
+        <!-- <scifirefclock id="1">0x1370,16</scifirefclock> -->
+
+    
+<!--   </run>
+
+  <run nr="3160">
+    <trb id="0">0x1370,16,"trig"</trb>
+    <trb id="1">0x1370,10,"trig2"</trb>
+    <trb id="2">0x1370,8,"rf"</trb>
+    <trb id="3">0x1370,5,"bc"</trb>
+    <trb id="4">0x1370,2,"sbr"</trb>
+    <trb id="5">0x1370,3,"sbl"</trb>
+  </run>
+
+  <run nr="3172">
+    <adc id="7">-1,4,"twobytwo"</adc> remove from v792 -->
+<!--     <trb id="3">-1,5,"bc"</trb>  remove-->
+<!--     <trb id="6">0x1370,5,"twobytwo"</trb>
+  </run> --> 
+
+
+
+
+
+<!--this is the TDC V1190 map for the run 3285 and beyond.....-->
+<!--   <run nr="3285">  
+   <tdc id="0">0,0,"trig"</tdc> type 0=v1190,TDC0, channel 0 is trig
+    <tdc id="1">0,1,"rf"</tdc>
+    <tdc id="2">0,2,"sbr"</tdc>
+    <tdc id="3">0,3,"sbl"</tdc>
+    <tdc id="4">0,4,"sipm1"</tdc>
+    <tdc id="5">0,5,"sipm2"</tdc>
+    <tdc id="6">0,8,"bc"</tdc>
+    <tdc id="7">0,7,"twobytwo"</tdc> 
+
+    <trb id="0"> 0x1160,16,"trig"</trb>
+    <trb id="1"> 0x1160,10,"trig2"</trb>
+    <trb id="2"> 0x1160,8,"rf"</trb>
+    <trb id="3"> 0x1160,5,"twobytwo"</trb>
+    <trb id="4"> 0x1160,2,"sbr"</trb>
+    <trb id="5"> 0x1160,3,"sbl"</trb>
+    <trb id="6"> 0x1160, 11, "sipm1"</trb>
+    <trb id="7"> 0x1160, 12, "sipm2"</trb>
+  </run> -->
+    
+    
+    <run nr="5120">
+        <cmd>""</cmd>
+        <tdc id="&quot;trig&quot;">0,0</tdc> <!-- type 0=v1190,TDC0, channel 0 is trig -->
+        <tdc id="&quot;rf&quot;">0,1</tdc>
+        <tdc id="&quot;sau&quot;">0,2</tdc>
+        <tdc id="&quot;sad&quot;">0,3</tdc>
+        <tdc id="&quot;sbl&quot;">0,15,</tdc>
+        
+        <tdc id="&quot;trig&quot;">1,0</tdc> <!-- type 1=v1290,TDC1, channel 0 is also trig -->
+        <tdc id="&quot;rf&quot;">1,1</tdc>
+        <tdc id="&quot;sau&quot;">1,2</tdc>
+        <tdc id="&quot;sad&quot;">1,3</tdc>
+        <!--<tdc id="35">1,15,"&quot;sbl"</tdc>-->
+        
+
+
+        <tdc id="&quot;5Hr&quot;">1,6</tdc>    <!-- SciSi bars with Hamamatsu SiPMs, right side  -->
+        <tdc id="&quot;5Hl&quot;">1,7</tdc>
+        <tdc id="&quot;5Ur&quot;">1,8</tdc>    <!-- SciSi bar 5mm wide, Upstream, right side -->
+        <tdc id="&quot;5Ul&quot;">1,9</tdc>    <!-- SciSi bar 5mm wide, Upstream, left side -->
+        <tdc id="&quot;5Dr&quot;">1,10</tdc>   <!-- SciSi bar 5mm wide, Downstream, right side -->
+        <tdc id="&quot;5Dl&quot;">1,11</tdc>
+        <tdc id="&quot;12Ur&quot;">1,12</tdc>
+        <tdc id="&quot;12Ul&quot;">1,13</tdc>
+        <tdc id="&quot;12Dr&quot;">1,14</tdc>
+        <tdc id="&quot;12Dl&quot;">1,15</tdc>
+
+        <adc id="&quot;sau&quot;">0,1</adc>
+        <adc id="&quot;sad&quot;">0,2</adc>
+
+        <!--<trb id="1">0x1341,1,"&quot;SAD"</trb>
+        <trb id="2">0x1341,16,"&quot;rftime"</trb>
+        <trb id="40">0x1341,15,"&quot;5Hr"</trb>    
+        <trb id="41">0x1341,14,"&quot;5Hl"</trb>    Original mapping, likely incorrect
+        <trb id="42">0x1341,13,"&quot;5Ur"</trb>   
+        <trb id="43">0x1341,5,"&quot;5Ul"</trb>    
+        <trb id="44">0x1341,8,"&quot;5Dr"</trb>   
+        <trb id="45">0x1341,7,"&quot;5Dl"</trb>
+        <trb id="46">0x1341,12,"&quot;12Ur"</trb>
+        <trb id="47">0x1341,11,"&quot;12Ul"</trb>
+        <trb id="48">0x1341,10,"&quot;trig"</trb>-->
+
+        <trb id="&quot;rftime&quot;">0x1341,16</trb>
+        <trb id="&quot;5Hr&quot;">0x1341,14</trb>    
+        <trb id="&quot;5Hl&quot;">0x1341,12</trb>
+        <trb id="&quot;5Ur&quot;">0x1341,10</trb>   
+        <trb id="&quot;5Ul&quot;">0x1341,9</trb>    
+        <!--<trb id="44">0x1341,8,"&quot;5Dr"</trb>   
+        <trb id="45">0x1341,7,"&quot;5Dl"</trb>-->
+        <trb id="&quot;12Dr&quot;">0x1341,15</trb>
+        <trb id="&quot;12Dl&quot;">0x1341,13</trb>
+        <trb id="&quot;12Ur&quot;">0x1341,8</trb>
+        <trb id="&quot;12Ul&quot;">0x1341,6</trb>
+        <trb id="&quot;trig&quot;">0x1341,4</trb>
+
+
+
+
+<stt id="3,0,1" > 0x1353,1 </stt>
+<stt id="3,0,2" > 0x1353,2 </stt>
+<stt id="3,0,3" > 0x1353,3 </stt>
+<stt id="3,0,4" > 0x1353,4 </stt>
+<stt id="3,0,5" > 0x1353,5 </stt>
+<stt id="3,0,6" > 0x1353,6 </stt>
+<stt id="3,0,7" > 0x1353,7 </stt>
+<stt id="3,0,8" > 0x1353,8 </stt>  
+<stt id="3,0,9" > 0x1353,9 </stt>
+<stt id="3,0,10" > 0x1353,10 </stt>
+<stt id="3,0,11" > 0x1353,11 </stt>
+<stt id="3,0,12" > 0x1353,12 </stt>
+<stt id="3,0,13" > 0x1353,13 </stt>
+<stt id="3,0,14" > 0x1353,14 </stt>
+<stt id="3,0,15" > 0x1353,15 </stt>
+<sttrefclock id="0"> 0x1353,6 </sttrefclock> <!-- that would be RF time for reference--> 
+
+
+        <!--<trb id="48">0x1341,14,"&quot;12Dr"</trb>
+        <trb id="49">0x1341,15,"&quot;12Dl"</trb>-->
+    </run>
+
+    <run nr="5160">
+    <tdc id="&quot;Straw&quot;">1,0</tdc>
+
+    <adc id="&quot;QDC5HL&quot;">1,15</adc>
+    <adc id="&quot;QDC5HR&quot;">1,14</adc>
+    <adc id="&quot;QDCsau&quot;">1,0</adc>
+    <adc id="&quot;QDCsad&quot;">1,1</adc>
+    </run>
+
+    <run nr="5189">
+        <tdc id="&quot;Straw2&quot;">1,6</tdc>    
+        <tdc id="&quot;Straw3&quot;">1,7</tdc>
+        <tdc id="&quot;Straw4&quot;">1,8</tdc>    
+        <tdc id="&quot;Straw5&quot;">1,9</tdc>    
+        <tdc id="&quot;Straw6&quot;">1,10</tdc>   
+        <tdc id="&quot;Straw7&quot;">1,11</tdc>
+        <tdc id="&quot;Straw8&quot;">1,12</tdc>
+        <tdc id="&quot;Straw9&quot;">1,13</tdc>
+        <tdc id="&quot;Straw10&quot;">1,14</tdc>
+        <tdc id="&quot;Straw11&quot;">1,15</tdc>
+        <!--<tdc id="40">1,6,"&quot;5Hr"</tdc>-->    
+        <!--<tdc id="41">1,7,"&quot;5Hl"</tdc>
+        <tdc id="42">1,8,"&quot;5Ur"</tdc>    
+        <tdc id="43">1,9,"&quot;5Ul"</tdc>    
+        <tdc id="44">1,10,"&quot;5Dr"</tdc>   
+        <tdc id="45">1,11,"&quot;5Dl"</tdc>
+        <tdc id="46">1,12,"&quot;12Ur"</tdc>
+        <tdc id="47">1,13,"&quot;12Ul"</tdc>
+        <tdc id="48">1,14,"&quot;12Dr"</tdc>
+        <tdc id="49">1,15,"&quot;12Dl"</tdc>-->
+    </run>
+
+    <run nr="5193">
+        <tdc id="&quot;5Hr&quot;">1,6</tdc>
+        <tdc id="&quot;5Hl&quot;">1,7</tdc>
+        <tdc id="&quot;5Ur&quot;">1,8</tdc>
+        <tdc id="&quot;5Ul&quot;">1,9</tdc>
+        <tdc id="&quot;5Dr&quot;">1,10</tdc>
+        <tdc id="&quot;5Dl&quot;">1,11</tdc>
+
+        <trb id="&quot;5Hr&quot;">0x1341,3</trb>
+        <trb id="&quot;5Hl&quot;">0x1341,5</trb>
+        <trb id="&quot;5Ur&quot;">0x1341,7</trb>
+        <trb id="&quot;5Ul&quot;">0x1341,8</trb>
+        <trb id="&quot;5Dr&quot;">0x1341,2</trb>
+        <trb id="&quot;5Dl&quot;">0x1341,5</trb>
+    </run>
+
+    <run nr="5200">
+    <trb id="&quot;Straw&quot;">0x1350,31</trb>
+
+    <!--<stt id="1" > 0x1350,15,1 </stt>
+    <stt id="2" > 0x1350,14,2 </stt>
+    <stt id="3" > 0x1350,13,3 </stt>
+    <stt id="4" > 0x1350,12,4 </stt>
+    <stt id="5" > 0x1350,11,5 </stt>
+    <stt id="6" > 0x1350,10,6 </stt>
+    <stt id="7" > 0x1350,9,7 </stt>
+    <stt id="8" > 0x1350,8,8 </stt>  
+    <stt id="9" > 0x1350,7,9 </stt>
+    <stt id="10" > 0x1350,6,10 </stt>
+    <stt id="11" > 0x1350,5,11 </stt>
+    <stt id="12" > 0x1350,4,12 </stt>
+    <stt id="13" > 0x1350,3,13 </stt>
+    <stt id="14" > 0x1350,2,14 </stt>
+    <stt id="15" > 0x1350,1,15 </stt>
+    <stt id="16" > 0x1350,16,16 </stt>
+
+    <stt id="17" > 0x1350,17,17 </stt>
+    <stt id="18" > 0x1350,18,18 </stt>
+    <stt id="19" > 0x1350,19,19 </stt>
+    <stt id="20" > 0x1350,20,20 </stt>
+    <stt id="21" > 0x1350,21,21 </stt>
+    <stt id="22" > 0x1350,22,22 </stt>
+    <stt id="23" > 0x1350,23,23 </stt>  
+    <stt id="24" > 0x1350,24,24 </stt>
+    <stt id="25" > 0x1350,25,25 </stt>
+    <stt id="26" > 0x1350,26,26 </stt>
+    <stt id="27" > 0x1350,27,27 </stt>
+    <stt id="28" > 0x1350,28,28 </stt>
+    <stt id="29" > 0x1350,29,29 </stt>
+    <stt id="30" > 0x1350,30,30 </stt>
+    <stt id="31" > 0x1350,31,31 </stt>
+    <stt id="32" > 0x1350,32,32 </stt>-->
+
+    <tdc id="&quot;bc&quot;"> 1,4</tdc>
+    <adc id="&quot;bcqdc&quot;">1,4</adc>
+    </run>
+
+    <run nr="5270">
+    <!--<stt id="1" > 0x1351,15,1 </stt>
+    <stt id="2" > 0x1351,14,2 </stt>
+    <stt id="3" > 0x1351,13,3 </stt>
+    <stt id="4" > 0x1351,12,4 </stt>
+    <stt id="5" > 0x1351,11,5 </stt>
+    <stt id="6" > 0x1351,10,6 </stt>
+    <stt id="7" > 0x1351,9,7 </stt>
+    <stt id="8" > 0x1351,8,8 </stt>  
+    <stt id="9" > 0x1351,7,9 </stt>
+    <stt id="10" > 0x1351,6,10 </stt>
+    <stt id="11" > 0x1351,5,11 </stt>
+    <stt id="12" > 0x1351,4,12 </stt>
+    <stt id="13" > 0x1351,3,13 </stt>
+    <stt id="14" > 0x1351,2,14 </stt>
+    <stt id="15" > 0x1351,1,15 </stt>
+    <stt id="16" > 0x1351,16,16 </stt>
+
+    <stt id="17" > 0x1351,17,17 </stt>
+    <stt id="18" > 0x1351,18,18 </stt>
+    <stt id="19" > 0x1351,19,19 </stt>
+    <stt id="20" > 0x1351,20,20 </stt>
+    <stt id="21" > 0x1351,21,21 </stt>
+    <stt id="22" > 0x1351,22,22 </stt>
+    <stt id="23" > 0x1351,23,23 </stt>  
+    <stt id="24" > 0x1351,24,24 </stt>
+    <stt id="25" > 0x1351,25,25 </stt>
+    <stt id="26" > 0x1351,26,26 </stt>
+    <stt id="27" > 0x1351,27,27 </stt>
+    <stt id="28" > 0x1351,28,28 </stt>
+    <stt id="29" > 0x1351,29,29 </stt>
+    <stt id="30" > 0x1351,30,30 </stt>
+    <stt id="31" > 0x1351,31,31 </stt>
+    <stt id="32" > 0x1351,32,32 </stt>-->
+
+
+    </run>
+
+    <run nr="5279">
+    <adc id="&quot;QDC5HL&quot;">0,15</adc>
+    <adc id="&quot;QDC5HR&quot;">0,14</adc>
+    <adc id="&quot;QDC5HL&quot;">0,0</adc>
+    <adc id="&quot;QDC5HR&quot;">0,1</adc>
+
+    </run>
+
+    <run nr="5430">
+
+    <!--<stt id="33" > 0x1370,1,0 </stt>
+    <stt id="34" > 0x1370,2,1 </stt>
+    <stt id="35" > 0x1370,3,2 </stt>
+    <stt id="36" > 0x1370,4,3 </stt>
+    <stt id="37" > 0x1370,5,4 </stt>
+    <stt id="38" > 0x1370,6,5 </stt>
+    <stt id="39" > 0x1370,7,6 </stt>
+    <stt id="40" > 0x1370,8,7 </stt>  
+    <stt id="41" > 0x1370,9,8 </stt>
+    <stt id="42" > 0x1370,10,9 </stt>
+    <stt id="43" > 0x1370,11,10 </stt>
+    <stt id="44" > 0x1370,12,11 </stt>
+    <stt id="45" > 0x1370,13,12 </stt>
+    <stt id="46" > 0x1370,14,13 </stt>
+    <stt id="47" > 0x1370,15,14 </stt>
+    <stt id="48" > 0x1370,16,15 </stt>
+
+    <stt id="49" > 0x1370,17,31 </stt>
+    <stt id="50" > 0x1370,18,29 </stt>
+    <stt id="51" > 0x1370,19,17 </stt>
+    <stt id="52" > 0x1370,20,30 </stt>
+    <stt id="53" > 0x1370,21,18 </stt>
+    <stt id="54" > 0x1370,22,24 </stt>
+    <stt id="55" > 0x1370,23,27 </stt>
+    <stt id="56" > 0x1370,24,23 </stt>  
+    <stt id="57" > 0x1370,25,22 </stt>
+    <stt id="58" > 0x1370,26,26 </stt>
+    <stt id="59" > 0x1370,27,19 </stt>
+    <stt id="60" > 0x1370,28,28 </stt>
+    <stt id="61" > 0x1370,29,16 </stt>
+    <stt id="62" > 0x1370,30,21 </stt>
+    <stt id="63" > 0x1370,31,25 </stt>
+    <stt id="64" > 0x1370,32,20 </stt>-->
+
+    <!--<trb id="56">0x1341,12,"&quot;5Dr"</trb>
+    <trb id="57">0x1341,13,"&quot;5Dl"</trb>-->
+
+    <tdc id="&quot;sbu&quot;">0,12</tdc>
+    <tdc id="&quot;sbd&quot;">0,13</tdc>
+
+    </run>
+
+    <run nr="5460">
+        <sttrefclock id="0"> 0x1370,15 </sttrefclock> <!-- that would be RF time for reference--> 
+        <trb id="&quot;trig&quot;">0x1370,15</trb>
+        <tdc id="&quot;trig&quot;">0,0</tdc>
+        <tdc id="&quot;rf&quot;">0,1</tdc>
+        <tdc id="&quot;sbu&quot;">0,10</tdc>
+        <tdc id="&quot;sbd&quot;">0,11</tdc>
+        <tdc id="&quot;twobytwo&quot;">0,14</tdc>
+        <tdc id="&quot;pulser&quot;">0,15</tdc>
+    </run>
+
+    <run nr="5472">
+        <sttrefclock id="1"> 0x1371,9 </sttrefclock> <!-- that would be RF time for reference--> 
+        <!--<trb id="999">0x1371,9,"&quot;trig"</trb>-->
+    </run>
+    
+
+    <run nr="5467">
+
+    </run>
+
+    <run nr="5500">
+
+    </run>
+
+    <run nr="5700">
+
+    </run>
+
+    <run nr="5720">
+
+
+    <tdc id="&quot;trig&quot;">1,29</tdc> <!-- type 1=v1290,TDC1, channel 0 is also trig -->
+    <tdc id="&quot;rf&quot;">1,24</tdc>
+    <tdc id="&quot;sau&quot;">1,26</tdc>
+    <tdc id="&quot;sad&quot;">1,27</tdc>
+
+    <tdc id="&quot;Right50&quot;">1,16</tdc>
+    <tdc id="&quot;Left50&quot;">1,17</tdc>
+    <tdc id="&quot;Right51&quot;">1,18</tdc>
+    <tdc id="&quot;Left51&quot;">1,19</tdc>
+    <tdc id="&quot;Right52&quot;">1,20</tdc>
+    <tdc id="&quot;Left52&quot;">1,21</tdc>
+    <tdc id="&quot;Right53&quot;">1,22</tdc>
+    <tdc id="&quot;Left53&quot;">1,23</tdc>
+    <SPStdc id="3,0,1">1,22</SPStdc><!-- put in later-->
+    <SPStdc id="3,0,0">1,23</SPStdc><!-- put in later-->
+
+
+    <tdc id="&quot;twobytwo&quot;">1,28</tdc>
+
+    <tdc id="&quot;5Hr&quot;">1,30</tdc>
+    <tdc id="&quot;5Hl&quot;">1,31</tdc>
+    </run>
+
+    <run nr="5825">
+        <tdc id="&quot;rf&quot;">1,25</tdc>
+    </run>
+
+    <run nr="5830">
+        <tdc id="&quot;sau&quot;">1,30</tdc>
+        <tdc id="&quot;rf&quot;">1,24</tdc>
+        <tdc id="&quot;sad&quot;">1,31</tdc>
+    </run>
+
+   <run nr="5845">
+
+    <!-- <SPStdc id="&quot;twobytwo&quot;">1,28</SPStdc>
+
+    <SPStdc id="&quot;5Hr&quot;">1,30</SPStdc>
+    <SPStdc id="&quot;5Hl&quot;">1,31</SPStdc> -->
+    </run>
+
+    <run nr="5845">
+        <tdc id="&quot;trig&quot;">0,0</tdc> <!-- type 0=v1190,TDC0, channel 0 is trig -->
+        <tdc id="&quot;rf&quot;">0,1</tdc>
+        <tdc id="&quot;sau&quot;">0,2</tdc>
+        <tdc id="&quot;sad&quot;">0,3,</tdc>
+    </run>
+
+    <run nr="5871">
+        <tdc id="&quot;sau&quot;">1,26</tdc>
+        <tdc id="&quot;rf&quot;">1,24</tdc>
+        <tdc id="&quot;sad&quot;">1,27</tdc>
+    </run>
+
+    <run nr="5872">
+        <tdc id="&quot;rf&quot;">1,16</tdc>
+        <tdc id="&quot;5Hr&quot;">1,24</tdc>
+        <tdc id="&quot;5Hl&quot;">1,25</tdc>
+        <tdc id="&quot;trig&quot;">1,26</tdc>
+
+        <trb id="&quot;rftime&quot;">0x1341,16</trb>
+        <trb id="&quot;5Hr&quot;">0x1341,14</trb>    
+        <trb id="&quot;5Hl&quot;">0x1341,12</trb>
+        <trb id="&quot;trig&quot;">0x1341,10</trb>   
+    </run>
+
+  <run nr="5874">
+    
+    <SPStdc id="0,0,0">1,16</SPStdc><!-- wall, bar, up, tdc, channel-->
+    <SPStdc id="0,1,0">1,17</SPStdc>
+    <SPStdc id="0,2,0">1,18</SPStdc>
+    <SPStdc id="0,3,0">1,19</SPStdc>
+    <SPStdc id="0,4,0">1,21</SPStdc>
+    <SPStdc id="0,5,0">1,22</SPStdc>
+    <SPStdc id="0,0,1">1,26</SPStdc>
+    <SPStdc id="0,1,1">1,27</SPStdc>
+    <SPStdc id="0,2,1">1,28</SPStdc>
+    <SPStdc id="0,3,1">1,29</SPStdc>
+    <SPStdc id="0,4,1">1,30</SPStdc>
+    <SPStdc id="0,5,1">1,31</SPStdc>
+
+    <SPStdc id="0,6,0">1,24</SPStdc><!--rf time-->
+    <SPStdc id="0,6,1">1,25</SPStdc><!--trigger-->
+
+
+    <SPStrb id="0,6,0">0x1340,1</SPStrb>
+    <SPStrb id="0,6,1">0x1340,2</SPStrb>
+
+    <SPStrb id="0,0,1">0x1340,3</SPStrb>
+    <SPStrb id="0,1,1">0x1340,4</SPStrb>
+    <SPStrb id="0,2,1">0x1340,5</SPStrb>
+    <SPStrb id="0,3,1">0x1340,6</SPStrb>
+    <SPStrb id="0,4,1">0x1340,7</SPStrb>
+    <SPStrb id="0,5,1">0x1340,8</SPStrb>
+    <SPStrb id="0,0,0">0x1340,10</SPStrb>
+    <SPStrb id="0,1,0">0x1340,11</SPStrb>
+    <SPStrb id="0,2,0">0x1340,12</SPStrb>
+    <SPStrb id="0,3,0">0x1340,13</SPStrb>
+    <SPStrb id="0,4,0">0x1340,15</SPStrb>
+    <SPStrb id="0,5,0">0x1340,16</SPStrb>
+
+
+    <SPSadc id="0,0,1">1,0</SPSadc>
+    <SPSadc id="0,1,1">1,1</SPSadc>
+    <SPSadc id="0,2,1">1,2</SPSadc>
+    <SPSadc id="0,3,1">1,3</SPSadc>
+    <SPSadc id="0,4,1">1,4</SPSadc>
+    <SPSadc id="0,5,1">1,5</SPSadc>
+    <SPSadc id="0,0,0">1,6</SPSadc>
+    <SPSadc id="0,1,0">1,7</SPSadc>
+    <SPSadc id="0,2,0">1,8</SPSadc>
+    <SPSadc id="0,3,0">1,9</SPSadc>
+    <SPSadc id="0,4,0">1,10</SPSadc>
+    <SPSadc id="0,5,0">1,11</SPSadc>
+
+    <SPSref id="0">1,25</SPSref>
+
+    </run>
+
+
+    <run nr="5948">
+        <SPStrb id="0,4,1">0x1340,5</SPStrb>
+        <SPStrb id="0,4,0">0x1340,10</SPStrb>
+
+        <SPStrb id="0,7,1">0x1340,8</SPStrb><!--7 is just a copy of 4 which is SC202-->
+        <SPStrb id="0,7,0">0x1340,15</SPStrb>
+    </run>
+
+        <run nr="5963">
+        <SPStrb id="0,4,1">0x1340,3</SPStrb><!--SC202 from MCFD-->
+        <SPStrb id="0,4,0">0x1340,4</SPStrb>
+        <SPStrb id="0,10,1">0x1340,9</SPStrb><!--bar 10 is a copy of SC202 from PSI CFD-->
+        <SPStrb id="0,10,0">0x1340,10</SPStrb>
+
+        <SPStdc id="0,4,0">1,18</SPStdc><!--SC202 PSI CFD-->
+        <SPStdc id="0,4,1">1,19</SPStdc> 
+
+        <SPStdc id="0,6,0">1,16</SPStdc><!--rf time-->
+        <SPStdc id="0,6,1">1,17</SPStdc><!--trigger-->
+        <SPStrb id="0,6,0">0x1340,1</SPStrb><!--rf time-->
+        <SPStrb id="0,6,1">0x1340,2</SPStrb><!--trigger-->
+
+
+        <SPStrb id="0,8,1">0x1340,5</SPStrb><!--8 is the SiPM 50, 1 is L, 0 is R-->
+        <SPStrb id="0,8,0">0x1340,6</SPStrb>
+
+        <SPStdc id="0,8,0">1,25</SPStdc>
+        <SPStdc id="0,8,1">1,24</SPStdc>
+
+        <SPStrb id="0,9,1">0x1340,7</SPStrb><!--9 is the SiPM 51, 1 is L, 0 is R-->
+        <SPStrb id="0,9,0">0x1340,8</SPStrb>
+
+        <SPStdc id="0,9,0">1,27</SPStdc>
+        <SPStdc id="0,9,1">1,26</SPStdc>
+
+        <SPSref id="0">1,17</SPSref>
+    </run>
+
+    <run nr="6000">
+        <SPStrb id="0,7,1">0x1340,9</SPStrb>
+        <SPStrb id="0,7,0">0x1340,10</SPStrb>
+    </run>
+
+    <run nr="6009"> <!--bad mapping but here everything is different. We are testing SiPMs and my SiPM code isn't ready so I am mapping SiPMs as SPSs to get it done quickly. SPS202 is still in as bar 4. Will go back and change this to SiPM tag when SiPM class is ready. -->
+        <SPStdc id="1,0,0">1,0</SPStdc><!--SiPM 50 from MCFD -->
+        <SPStdc id="1,0,1">1,1</SPStdc>
+
+        <SPStdc id="1,1,0">1,16</SPStdc><!-- SiPM 50 from PSI CFD -->
+        <SPStdc id="1,1,1">1,17</SPStdc>
+        <SPStrb id="1,1,0">0x1340,5</SPStrb>
+        <SPStrb id="1,1,1">0x1340,6</SPStrb>
+
+        <SPStdc id="1,2,0">1,18</SPStdc><!-- SiPM 51-->
+        <SPStdc id="1,2,1">1,19</SPStdc>
+        <SPStdc id="1,3,0">1,20</SPStdc><!-- SiPM 52--><!--20-->
+        <SPStdc id="1,3,1">1,21</SPStdc><!--21-->
+
+
+        <SPStdc id="1,5,0">1,22</SPStdc><!-- SiPM 51LU -->
+        <SPStdc id="1,5,1">1,23</SPStdc>
+
+        <SPStdc id="1,6,0">1,24</SPStdc><!-- RF-->
+        <SPStdc id="1,6,1">1,29</SPStdc><!-- trigger -->
+        <SPSref id="0">1,29</SPSref>
+
+        <SPStdc id="1,7,0">1,27</SPStdc><!--SA Down-->
+        <SPStdc id="1,7,1">1,26</SPStdc>
+        <SPStrb id="1,7,0">0x1340,7</SPStrb><!--SA Down-->
+        <SPStrb id="1,7,1">0x1340,8</SPStrb>
+
+        <SPStdc id="1,8,0">1,30</SPStdc><!-- SiPM 51 LD-->
+        <SPStdc id="1,8,1">1,31</SPStdc>
+
+    </run>
+
+    <run nr="6115">
+        <SPStdc id="1,4,0">1,2</SPStdc><!-- SiPM 52 in MCFD-->
+        <SPStdc id="1,4,1">1,3</SPStdc>
+    </run>
+
+    <run nr="6131">
+        <SPStrb id="0,6,0">0x1340,1</SPStrb><!--rf time-->
+        <SPStrb id="0,6,1">0x1340,2</SPStrb><!--trigger-->
+        <SPStrb id="0,4,1">0x1340,3</SPStrb><!--SC202 Analog-->
+        <SPStrb id="0,4,0">0x1340,4</SPStrb>
+
+        <SPStrb id="0,10,1">0x1340,9</SPStrb><!--bar 10 is a copy of SC202-->
+        <SPStrb id="0,10,0">0x1340,10</SPStrb>
+
+        <SPStrb id="0,8,1">0x1340,5</SPStrb><!--8 is the SiPM 50, 1 is L, 0 is R-->
+        <SPStrb id="0,8,0">0x1340,6</SPStrb>
+
+        <SPStdc id="0,8,0">1,16</SPStdc><!--8 is SiPM 50-->
+        <SPStdc id="0,8,1">1,17</SPStdc>
+
+        <SPStdc id="0,9,0">1,18</SPStdc><!--9 is SiPM 51-->
+        <SPStdc id="0,9,1">1,19</SPStdc>
+
+        <SPStrb id="0,9,1">0x1340,7</SPStrb><!--9 is the SiPM 51, 1 is L, 0 is R-->
+        <SPStrb id="0,9,0">0x1340,8</SPStrb>
+
+        <SPStdc id="0,6,0">1,24</SPStdc><!--rf time-->
+        <SPStdc id="0,6,1">1,29</SPStdc><!--trigger-->
+
+        <SPStdc id="0,4,0">1,30</SPStdc><!--SC202 PSI CFD-->
+        <SPStdc id="0,4,1">1,31</SPStdc> 
+
+    </run>
+
+    <run nr="6151"> 
+    <!--50L-R MCFD-16 --> 
+   <SPStdc id="0,0,0">1,0</SPStdc> 
+   <SPStdc id="0,0,1">1,1</SPStdc> 
+
+   <!--50L-R PSI CFD --> 
+   <SPStdc id="0,1,0">1,16</SPStdc> 
+   <SPStdc id="0,1,1">1,17</SPStdc>
+    
+    <!--51L-R PSI CFD --> 
+   <SPStdc id="0,2,0">1,18</SPStdc> 
+   <SPStdc id="0,2,1">1,19</SPStdc> 
+
+    <!--52L-R PSI CFD --> 
+   <SPStdc id="0,3,0">1,20</SPStdc> 
+   <SPStdc id="0,3,1">1,21</SPStdc>  
+
+       <!--SAu and d --> 
+   <SPStdc id="0,4,0">1,26</SPStdc> 
+   <SPStdc id="0,4,1">1,27</SPStdc> 
+
+   <!-- 50L-R PADIWA --> 
+   <SPStrb id="0,0,0">0x1340,1</SPStrb> 
+   <SPStrb id="0,0,1">0x1340,2</SPStrb> 
+
+
+   <SPSadc id="0,0,1">1,1</SPSadc> 
+   <SPSadc id="0,1,1">1,2</SPSadc> 
+
+   <SPSref id="0">1,24</SPSref> <!--RF time -->
+    </run>
+
+
+
+    <run nr="6155">
+        <!--50L-R MCFD-16 -->
+        <SPStdc id="1,0,0">1,0</SPStdc>
+        <SPStdc id="1,0,1">1,1</SPStdc>
+        <!--50L-R PSI-CFD -->
+        <SPStdc id="0,0,0">1,22</SPStdc>
+        <SPStdc id="0,0,1">1,23</SPStdc>
+        
+        <!--51L-R PSI-CFD -->
+        <SPStdc id="1,1,0">1,18</SPStdc>
+        <SPStdc id="1,1,1">1,19</SPStdc>
+        <!--52L-R PSI-CFD -->
+        <SPStdc id="1,2,0">1,20</SPStdc>
+        <SPStdc id="1,2,1">1,21</SPStdc>
+
+        <!--SA Up and SA Down PSI-CFD -->
+        <SPStdc id="1,3,0">1,26</SPStdc>
+        <SPStdc id="1,3,1">1,27</SPStdc>
+
+        <!--50L-R PADIWA -->
+        <SPStrb id="0,0,0">0x1340,1</SPStrb>
+        <SPStrb id="0,0,1">0x1340,2</SPStrb>
+        <!--RF clock-->
+        <SPSref id="0">1,24</SPSref>
+
+
+
+        <!--50L-R MCFD-16 -->
+        <SiPMtdc id="1,0,0">1,0</SiPMtdc>
+        <SiPMtdc id="1,0,1">1,1</SiPMtdc>
+        <!--50L-R PSI-CFD -->
+        <SiPMtdc id="0,0,0">1,22</SiPMtdc>
+        <SiPMtdc id="0,0,1">1,23</SiPMtdc>
+        
+        <!--51L-R PSI-CFD -->
+        <SiPMtdc id="0,1,0">1,18</SiPMtdc>
+        <SiPMtdc id="0,1,1">1,19</SiPMtdc>
+        <!--52L-R PSI-CFD -->
+        <SiPMtdc id="0,2,0">1,20</SiPMtdc>
+        <SiPMtdc id="0,2,1">1,21</SiPMtdc>
+
+        <!--SA Up and SA Down PSI-CFD -->
+        <SiPMtdc id="0,3,0">1,26</SiPMtdc>
+        <SiPMtdc id="0,3,1">1,27</SiPMtdc>
+
+        <!--50L-R PADIWA -->
+        <SiPMtrb id="0,0,0">0x1340,1</SiPMtrb>
+        <SiPMtrb id="0,0,1">0x1340,2</SiPMtrb>
+        <!--RF-->
+        <SiPMtdc id="0,14,0">1,24</SiPMtdc>
+        <!--RF clock-->
+        <SiPMref id="0">1,24</SiPMref>
+        <!--TRB3 2x2mm Signal-->
+        <SiPMtrb id="0,10,0">0x1340,3</SiPMtrb>
+        <!--v1290 trigger-->
+        <SiPMtdc id="0,15,0">1,29</SiPMtdc>
+
+    </run>
+
+    <run nr="6254">
+
+    <!--50-->
+    <SPSadc id="0,0,1">1,0</SPSadc>
+    <SPSadc id="0,0,0">1,1</SPSadc>
+    <!--51-->
+    <SPSadc id="0,1,1">1,2</SPSadc>
+    <SPSadc id="0,1,0">1,3</SPSadc>
+    <!--52-->
+    <SPSadc id="0,2,1">1,4</SPSadc>
+    <SPSadc id="0,2,0">1,5</SPSadc>
+    <!--SA-->
+    <SPSadc id="0,3,1">1,6</SPSadc>
+    <SPSadc id="0,3,0">1,7</SPSadc>
+
+    <!--50-->
+    <SiPMadc id="0,0,1">1,0</SiPMadc>
+    <SiPMadc id="0,0,0">1,1</SiPMadc>
+    <!--51-->
+    <SiPMadc id="0,1,1">1,2</SiPMadc>
+    <SiPMadc id="0,1,0">1,3</SiPMadc>
+    <!--52-->
+    <SiPMadc id="0,2,1">1,4</SiPMadc>
+    <SiPMadc id="0,2,0">1,5</SiPMadc>
+    <!--SA-->
+    <SiPMadc id="0,3,1">1,6</SiPMadc>
+    <SiPMadc id="0,3,0">1,7</SiPMadc>
+
+
+    </run>
+
+    <run nr="6285">
+        <!--51L-R TRB -->
+        <SiPMtrb id="0,1,0">0x1340,4</SiPMtrb>
+        <SiPMtrb id="0,1,1">0x1340,5</SiPMtrb>
+        <!--52L-R TRB -->
+        <SiPMtrb id="0,2,0">0x1340,6</SiPMtrb>
+        <SiPMtrb id="0,2,1">0x1340,7</SiPMtrb>
+
+        <SiPMtrb id="0,15,0">0x1340,15</SiPMtrb>
+    </run>
+
+    <run nr="6331">
+        <!--SA Up and SA Down-->
+        <SiPMtrb id="0,3,0">0x1340,8</SiPMtrb>
+        <SiPMtrb id="0,3,1">0x1340,9</SiPMtrb>
+
+    </run>
+
+    <run nr="6364">
+        <!--RF-->
+        <SiPMtrb id="0,14,0">0x1340,14</SiPMtrb>
+        <SiPMtrb id="0,15,0">0x1340,15</SiPMtrb>
+
+    </run>
+
+    <run nr="6428">
+        <!--RF-->
+        <SiPMtrb id="0,14,0">0x1342,14</SiPMtrb>
+        <SiPMtrb id="0,15,0">0x1342,15</SiPMtrb>
+               <!--51L-R TRB -->
+        <SiPMtrb id="0,1,0">0x1342,4</SiPMtrb>
+        <SiPMtrb id="0,1,1">0x1342,5</SiPMtrb>
+        <!--52L-R TRB -->
+        <SiPMtrb id="0,2,0">0x1342,6</SiPMtrb>
+        <SiPMtrb id="0,2,1">0x1342,7</SiPMtrb>
+
+        <SiPMtrb id="0,0,0">0x1342,1</SiPMtrb>
+        <SiPMtrb id="0,0,1">0x1342,2</SiPMtrb>
+
+        <SiPMtrb id="0,3,0">0x1342,8</SiPMtrb>
+        <SiPMtrb id="0,3,1">0x1342,9</SiPMtrb>
+
+        <SiPMtrb id="0,10,0">0x1342,3</SiPMtrb>
+
+    </run>
+
+    <run nr="6430">
+        <!--RF-->
+        <SiPMtrb id="0,14,0">0x1340,14</SiPMtrb>
+        <SiPMtrb id="0,15,0">0x1340,15</SiPMtrb>
+               <!--51L-R TRB -->
+        <SiPMtrb id="0,1,0">0x1340,4</SiPMtrb>
+        <SiPMtrb id="0,1,1">0x1340,5</SiPMtrb>
+        <!--52L-R TRB -->
+        <SiPMtrb id="0,2,0">0x1340,6</SiPMtrb>
+        <SiPMtrb id="0,2,1">0x1340,7</SiPMtrb>
+
+        <SiPMtrb id="0,0,0">0x1340,1</SiPMtrb>
+        <SiPMtrb id="0,0,1">0x1340,2</SiPMtrb>
+
+        <SiPMtrb id="0,3,0">0x1340,8</SiPMtrb>
+        <SiPMtrb id="0,3,1">0x1340,9</SiPMtrb>
+
+        <SiPMtrb id="0,10,0">0x1340,3</SiPMtrb>
+
+    </run>
+
+    <run nr="6431">
+        <!--RF-->
+        <SiPMtrb id="1,14,0">0x0420,3</SiPMtrb>
+ 
+        <SiPMtrb id="1,0,0">0x0420,1</SiPMtrb>
+        <SiPMtrb id="1,0,1">0x0420,2</SiPMtrb>
+    </run>
+
+    <run nr="6493">   <!-- Ievgen's contriobution :-)   -->
+        <!--51LU-RU PSI-CFD -->
+        <SiPMtdc id="0,5,0">1,16</SiPMtdc>
+        <SiPMtdc id="0,5,1">1,17</SiPMtdc>
+       <!--51LD-RD PSI-CFD -->
+        <SiPMtdc id="0,6,0">1,30</SiPMtdc>
+        <SiPMtdc id="0,6,1">1,31</SiPMtdc>
+    </run>
+
+    <run nr="6500">
+        <!--Latch in MCFD-->
+        <SiPMtdc id="0,11,1">1,2</SiPMtdc>
+        <SiPMtrb id="0,11,1">0x1340,16</SiPMtrb>
+        <SiPMtrb id="0,14,1">0x1340,10</SiPMtrb>
+
+        <!--50 L rising - falling-->
+        <SiPMtrb id="1,0,0">0x0420,1</SiPMtrb>
+        <SiPMtrb id="1,0,1">0x0420,2</SiPMtrb>
+        <!--50 R rising-falling-->
+        <SiPMtrb id="1,1,0">0x0420,3</SiPMtrb>
+        <SiPMtrb id="1,1,1">0x0420,4</SiPMtrb>
+
+        <!--2x2 rising - falling-->
+        <SiPMtrb id="1,2,0">0x0420,5</SiPMtrb>
+        <SiPMtrb id="1,2,1">0x0420,6</SiPMtrb>
+
+        <!--51L rising - falling-->
+        <SiPMtrb id="1,3,0">0x0420,7</SiPMtrb>
+        <SiPMtrb id="1,3,1">0x0420,8</SiPMtrb>
+
+        <!--51R rising - falling-->
+        <SiPMtrb id="1,4,0">0x0420,9</SiPMtrb>
+        <SiPMtrb id="1,4,1">0x0420,10</SiPMtrb>
+
+        <!--52L rising - falling-->
+        <SiPMtrb id="1,5,0">0x0420,11</SiPMtrb>
+        <SiPMtrb id="1,5,1">0x0420,12</SiPMtrb>
+
+        <!--52R rising - falling-->
+        <SiPMtrb id="1,6,0">0x0420,13</SiPMtrb>
+        <SiPMtrb id="1,6,1">0x0420,14</SiPMtrb>
+
+        <!--SAU rising - falling-->
+        <SiPMtrb id="1,7,0">0x0420,15</SiPMtrb>
+        <SiPMtrb id="1,7,1">0x0420,16</SiPMtrb>
+
+        <!--SAD rising - falling-->
+        <SiPMtrb id="1,8,0">0x0420,17</SiPMtrb>
+        <SiPMtrb id="1,8,1">0x0420,18</SiPMtrb>
+
+        <!--RF Prescale rising - falling-->
+        <SiPMtrb id="1,9,0">0x0420,19</SiPMtrb>
+        <SiPMtrb id="1,9,1">0x0420,20</SiPMtrb>
+
+        <!--RF rising - falling-->
+        <SiPMtrb id="1,10,0">0x0420,27</SiPMtrb>
+        <SiPMtrb id="1,10,1">0x0420,28</SiPMtrb>
+
+        <!--trigger rising - falling-->
+       <SiPMtrb id="1,11,0">0x0420,29</SiPMtrb>
+       <SiPMtrb id="1,11,1">0x0420,30</SiPMtrb>
+        <!--Latch rising - falling-->
+       <SiPMtrb id="1,12,0">0x0420,31</SiPMtrb>
+       <SiPMtrb id="1,12,1">0x0420,32</SiPMtrb>
+
+    </run>
+
+    <run nr="6507">
+        <SiPMtdc id="0,11,1">1,25</SiPMtdc>
+    </run>
+
+    <run nr="6554">   <!-- Ievgen's contriobution :-)   -->
+        <!--51LU-RU PSI-CFD -->
+        <SiPMtdc id="0,5,0">1,25</SiPMtdc>
+        <SiPMtdc id="0,5,1">1,17</SiPMtdc>
+       <!--51LD-RD PSI-CFD -->
+        <SiPMtdc id="0,6,0">1,30</SiPMtdc>
+        <SiPMtdc id="0,6,1">1,31</SiPMtdc>
+    </run>
+
+    <run nr="6579">
+        <SPSadc id="0,0,0">1,0</SPSadc>
+        <SPSadc id="0,1,0">1,1</SPSadc>
+        <SPSadc id="0,2,0">1,2</SPSadc>
+        <SPSadc id="0,3,0">1,3</SPSadc>
+        <SPSadc id="0,4,0">1,4</SPSadc>
+        <SPSadc id="0,5,0">1,5</SPSadc>
+        <SPSadc id="0,6,0">1,6</SPSadc>
+        <SPSadc id="0,7,0">1,7</SPSadc>
+        <SPSadc id="0,8,0">1,8</SPSadc>
+        <SPSadc id="0,9,0">1,9</SPSadc>
+        <SPSadc id="0,10,0">1,10</SPSadc>
+        <SPSadc id="0,11,0">1,11</SPSadc>
+        <SPSadc id="0,12,0">1,12</SPSadc>
+        <SPSadc id="0,13,0">1,13</SPSadc>
+        <SPSadc id="0,14,0">1,14</SPSadc>
+        <SPSadc id="0,15,0">1,15</SPSadc>
+
+    </run>
+
+
+    <run nr="6608">
+        <!--50L and 50R-->
+        <SiPMtdc id="0,0,0">1,16</SiPMtdc>
+        <SiPMtdc id="0,0,1">1,17</SiPMtdc>
+        <!--51L and R-->
+        <SiPMtdc id="0,1,0">1,18</SiPMtdc>
+        <SiPMtdc id="0,1,1">1,19</SiPMtdc>
+        <!--51L and R -->
+        <SiPMtdc id="0,2,0">1,20</SiPMtdc>
+        <SiPMtdc id="0,2,1">1,21</SiPMtdc>
+        <!--RF-->
+        <SiPMtdc id="1,14,0">1,24</SiPMtdc>
+        <SiPMref id="0">1,24  </SiPMref>
+        <!--SAU and SAD-->
+        <SiPMtdc id="0,3,0">1,26</SiPMtdc>
+        <SiPMtdc id="0,3,1">1,27</SiPMtdc>
+        <!--2x2mm-->
+        <SiPMtdc id="0,10,0">1,28</SiPMtdc>
+        <!--Trigger-->
+        <SiPMtdc id="0,11,0">1,29</SiPMtdc>
+        
+
+        <!--50L and 50R-->
+        <SiPMtrb id="0,0,0">0x1340,1</SiPMtrb>
+        <SiPMtrb id="0,0,1">0x1340,2</SiPMtrb>
+        <!--51L and R-->
+        <SiPMtrb id="0,1,0">0x1340,4</SiPMtrb>
+        <SiPMtrb id="0,1,1">0x1340,5</SiPMtrb>
+        <!--51L and R -->
+        <SiPMtrb id="0,2,0">0x1340,6</SiPMtrb>
+        <SiPMtrb id="0,2,1">0x1340,7</SiPMtrb>
+        <!--RF-->
+        <SiPMtrb id="1,14,0">0x1340,14</SiPMtrb>
+        <!--SAU and SAD-->
+        <SiPMtrb id="0,3,0">0x1340,8</SiPMtrb>
+        <SiPMtrb id="0,3,1">0x1340,9</SiPMtrb>
+        <!--2x2mm-->
+        <SiPMtrb id="0,10,0">0x1340,3</SiPMtrb>
+        <!--Trigger-->
+        <SiPMtrb id="0,11,0">0x1340,15</SiPMtrb>
+    </run>
+
+    <run nr="6618">
+        <!--50L and 50R-->
+        <SiPMtdc id="0,0,0">1,22</SiPMtdc>
+        <SiPMtdc id="0,0,1">1,23</SiPMtdc>
+    </run>
+
+    <run nr="6693">
+        <!--Delayed Gating Test-->
+        <SiPMadc id="0,0,1">1,1</SiPMadc>
+        <SiPMadc id="0,0,0">1,0</SiPMadc>
+    </run>
+
+    <run nr="6963">
+        <sttrefclock id="0"> 0x0420,27 </sttrefclock> <!-- that would be RF time for reference--> 
+        <trb id="&quot;trig&quot;">0x0420,29</trb>
+
+
+<!--Plane 1 (padiwa 1) - 16 stt -->
+        <stt id="3,0,2" > 0x1350,2 </stt>
+        <stt id="3,0,3" > 0x1350,3 </stt>
+        <stt id="3,0,4" > 0x1350,4 </stt>
+        <stt id="3,0,5" > 0x1350,5 </stt>
+        <stt id="3,0,6" > 0x1350,6 </stt>
+        <stt id="3,0,7" > 0x1350,7 </stt>
+        <stt id="3,0,8" > 0x1350,8 </stt>  
+        <stt id="3,0,9" > 0x1350,9 </stt>
+        <stt id="3,0,10" > 0x1350,10 </stt>
+        <stt id="3,0,11" > 0x1350,11 </stt>
+        <stt id="3,0,12" > 0x1350,12 </stt>
+        <stt id="3,0,13" > 0x1350,13 </stt>
+        <stt id="3,0,14" > 0x1350,14 </stt>
+        <stt id="3,0,15" > 0x1350,15 </stt>
+        <stt id="3,0,16" > 0x1350,16 </stt>
+<!--Plane 2 (padiwa 2) - 15 stt -->
+        <stt id="3,0,71" > 0x1350,17 </stt> <!-- fpga name, stt number , padiwa number -->
+        <stt id="3,0,36" > 0x1350,18 </stt>
+        <stt id="3,0,37" > 0x1350,19 </stt>
+        <stt id="3,0,19" > 0x1350,20 </stt>
+        <stt id="3,0,20" > 0x1350,21 </stt>
+        <stt id="3,0,21" > 0x1350,22 </stt>
+        <stt id="3,0,22" > 0x1350,23 </stt>
+        <stt id="3,0,23" > 0x1350,24 </stt>  
+        <stt id="3,0,25" > 0x1350,25 </stt>
+        <stt id="3,0,27" > 0x1350,26 </stt>
+        <stt id="3,0,28" > 0x1350,27 </stt>
+        <stt id="3,0,29" > 0x1350,28 </stt>
+        <stt id="3,0,30" > 0x1350,29 </stt>
+        <stt id="3,0,31" > 0x1350,30 </stt>
+        <stt id="3,0,33" > 0x1350,31 </stt>
+        <stt id="3,0,35" > 0x1350,32 </stt>
+        <!-- stt 32 does not exist in the frame -->
+<!--Plane 3(padiwa 3) - 16 stt -->
+        <stt id="3,0,38" > 0x1350,33 </stt> <!-- fpga name, stt number, padiwa channel -->
+        <stt id="3,0,39" > 0x1350,34 </stt>
+        <stt id="3,0,40" > 0x1350,35 </stt>
+        <stt id="3,0,41" > 0x1350,36 </stt>
+        <stt id="3,0,42" > 0x1350,37 </stt>
+        <stt id="3,0,43" > 0x1350,38 </stt>
+        <stt id="3,0,44" > 0x1350,39 </stt>
+        <stt id="3,0,45" > 0x1350,40 </stt>  
+        <stt id="3,0,46" > 0x1350,41 </stt>
+        <stt id="3,0,47" > 0x1350,42 </stt>
+        <stt id="3,0,48" > 0x1350,43 </stt>
+        <stt id="3,0,49" > 0x1350,44 </stt>
+        <stt id="3,0,50" > 0x1350,45 </stt>
+        <stt id="3,0,51" > 0x1350,46 </stt>
+        <stt id="3,0,52" > 0x1350,47 </stt>
+        <stt id="3,0,53" > 0x1350,48 </stt>
+
+    <!--Plane 4 (padiwa 4) - 15 stt -->
+        <stt id="3,0,49" > 0x1351,72,1 </stt><!-- fpga name, stt numbber, Padiwa channel -->
+        <stt id="3,0,50" > 0x1351,54,2 </stt>
+        <stt id="3,0,51" > 0x1351,55,3</stt>
+        <stt id="3,0,52" > 0x1351,56,4 </stt>
+        <stt id="3,0,53" > 0x1351,57,5 </stt>
+        <stt id="3,0,54" > 0x1351,58,6 </stt>
+        <stt id="3,0,55" > 0x1351,59,7 </stt>
+        <stt id="3,0,56" > 0x1351,60,8 </stt> 
+        <stt id="3,0,57" > 0x1351,61,9 </stt>
+        <stt id="3,0,58" > 0x1351,62,10 </stt>
+        <stt id="3,0,59" > 0x1351,63,11 </stt>
+        <stt id="3,0,60" > 0x1351,64,12 </stt>
+        <stt id="3,0,61" > 0x1351,65,13 </stt>
+        <stt id="3,0,62" > 0x1351,66,14 </stt>
+        <stt id="3,0,63" > 0x1351,68,15 </stt>
+        <stt id="3,0,64" > 0x1351,70,16 </stt>
+       <!-- <stt id="3,0,64" > 0x1351,16,64 </stt>  -->
+<!--Plane 5 (padiwa 5) - 16 stt -->
+        <stt id="3,0,73" > 0x1351,17 </stt> <!-- fpga name, stt number, padiwa number -->
+        <stt id="3,0,74" > 0x1351,18 </stt>
+        <stt id="3,0,75" > 0x1351,19 </stt>
+        <stt id="3,0,76" > 0x1351,20 </stt>
+        <stt id="3,0,77" > 0x1351,21 </stt>
+        <stt id="3,0,78" > 0x1351,22 </stt>
+        <stt id="3,0,79" > 0x1351,23 </stt>
+        <stt id="3,0,80" > 0x1351,24 </stt>  
+        <stt id="3,0,81" > 0x1351,25 </stt>
+        <stt id="3,0,82" > 0x1351,26 </stt>
+        <stt id="3,0,83" > 0x1351,27 </stt>
+        <stt id="3,0,84" > 0x1351,28 </stt>
+        <stt id="3,0,85" > 0x1351,29 </stt>
+        <stt id="3,0,86" > 0x1351,30 </stt>
+        <stt id="3,0,87" > 0x1351,31 </stt> 
+        <stt id="3,0,88" > 0x1351,32 </stt>
+        
+    </run>
+
+    <run nr="7046"><!--Only using one PADIWA, without an amplifier-->
+        <stt id="3,0,0" > -1,0 </stt> <!-- unmap all stts -->
+        <stt id="3,0,1" > -1,0 </stt> 
+        <stt id="3,0,2" > -1,0 </stt> 
+        <stt id="3,0,3" > -1,0 </stt> 
+        <stt id="3,0,4" > -1,0 </stt> 
+        <stt id="3,0,5" > -1,0 </stt> 
+        <stt id="3,0,6" > -1,0 </stt> 
+        <stt id="3,0,7" > -1,0 </stt> 
+        <stt id="3,0,8" > -1,0 </stt> 
+        <stt id="3,0,9" > -1,0 </stt> 
+
+        <stt id="3,0,10" > -1,0 </stt> <!-- unmap all stts -->
+        <stt id="3,0,11" > -1,0 </stt> 
+        <stt id="3,0,12" > -1,0 </stt> 
+        <stt id="3,0,13" > -1,0 </stt> 
+        <stt id="3,0,14" > -1,0 </stt> 
+        <stt id="3,0,15" > -1,0 </stt> 
+        <stt id="3,0,16" > -1,0 </stt> 
+        <stt id="3,0,17" > -1,0 </stt> 
+        <stt id="3,0,18" > -1,0 </stt> 
+        <stt id="3,0,19" > -1,0 </stt> 
+
+        <stt id="3,0,20" > -1,0 </stt> <!-- unmap all stts -->
+        <stt id="3,0,21" > -1,0 </stt> 
+        <stt id="3,0,22" > -1,0 </stt> 
+        <stt id="3,0,23" > -1,0 </stt> 
+        <stt id="3,0,24" > -1,0 </stt> 
+        <stt id="3,0,25" > -1,0 </stt> 
+        <stt id="3,0,26" > -1,0 </stt> 
+        <stt id="3,0,27" > -1,0 </stt> 
+        <stt id="3,0,28" > -1,0 </stt> 
+        <stt id="3,0,29" > -1,0 </stt> 
+
+        <stt id="3,0,30" > -1,0 </stt> <!-- unmap all stts -->
+        <stt id="3,0,31" > -1,0 </stt> 
+        <stt id="3,0,32" > -1,0 </stt> 
+        <stt id="3,0,33" > -1,0 </stt> 
+        <stt id="3,0,34" > -1,0 </stt> 
+        <stt id="3,0,35" > -1,0 </stt> 
+        <stt id="3,0,36" > -1,0 </stt> 
+        <stt id="3,0,37" > -1,0 </stt> 
+        <stt id="3,0,38" > -1,0 </stt> 
+        <stt id="3,0,39" > -1,0 </stt> 
+
+        <stt id="3,0,40" > -1,0 </stt> <!-- unmap all stts -->
+        <stt id="3,0,41" > -1,0 </stt> 
+        <stt id="3,0,42" > -1,0 </stt> 
+        <stt id="3,0,43" > -1,0 </stt> 
+        <stt id="3,0,44" > -1,0 </stt> 
+        <stt id="3,0,45" > -1,0 </stt> 
+        <stt id="3,0,46" > -1,0 </stt> 
+        <stt id="3,0,47" > -1,0 </stt> 
+        <stt id="3,0,48" > -1,0 </stt> 
+        <stt id="3,0,49" > -1,0 </stt> 
+
+        <stt id="3,0,50" > -1,0 </stt> <!-- unmap all stts -->
+        <stt id="3,0,51" > -1,0 </stt> 
+        <stt id="3,0,52" > -1,0 </stt> 
+        <stt id="3,0,53" > -1,0 </stt> 
+        <stt id="3,0,54" > -1,0 </stt> 
+        <stt id="3,0,55" > -1,0 </stt> 
+        <stt id="3,0,56" > -1,0 </stt> 
+        <stt id="3,0,57" > -1,0 </stt> 
+        <stt id="3,0,58" > -1,0 </stt> 
+        <stt id="3,0,59" > -1,0 </stt> 
+
+        <stt id="3,0,60" > -1,0 </stt> <!-- unmap all stts -->
+        <stt id="3,0,61" > -1,0 </stt> 
+        <stt id="3,0,62" > -1,0 </stt> 
+        <stt id="3,0,63" > -1,0 </stt> 
+        <stt id="3,0,64" > -1,0 </stt> 
+        <stt id="3,0,65" > -1,0 </stt> 
+        <stt id="3,0,66" > -1,0 </stt> 
+        <stt id="3,0,67" > -1,0 </stt> 
+        <stt id="3,0,68" > -1,0 </stt> 
+        <stt id="3,0,69" > -1,0 </stt> 
+
+        <stt id="3,0,70" > -1,0 </stt> <!-- unmap all stts -->
+        <stt id="3,0,71" > -1,0 </stt> 
+        <stt id="3,0,72" > -1,0 </stt> 
+        <stt id="3,0,73" > -1,0 </stt> 
+        <stt id="3,0,74" > -1,0 </stt> 
+        <stt id="3,0,75" > -1,0 </stt> 
+        <stt id="3,0,76" > -1,0 </stt> 
+        <stt id="3,0,77" > -1,0 </stt> 
+        <stt id="3,0,78" > -1,0 </stt> 
+        <stt id="3,0,79" > -1,0 </stt> 
+
+        <stt id="3,0,80" > -1,0 </stt> <!-- unmap all stts -->
+        <stt id="3,0,81" > -1,0 </stt> 
+        <stt id="3,0,82" > -1,0 </stt> 
+        <stt id="3,0,83" > -1,0 </stt> 
+        <stt id="3,0,84" > -1,0 </stt> 
+        <stt id="3,0,85" > -1,0 </stt> 
+        <stt id="3,0,86" > -1,0 </stt> 
+        <stt id="3,0,87" > -1,0 </stt> 
+        <stt id="3,0,88" > -1,0 </stt> 
+        <stt id="3,0,89" > -1,0 </stt> 
+
+        <stt id="2,2,0" > 0x1351,17 </stt> <!--side, plane, straw in plane, fpga name, padiwa channel -->
+        <stt id="2,4,9" > 0x1351,18 </stt>
+        <stt id="2,4,10" > 0x1351,19 </stt>
+        <stt id="2,4,11" > 0x1351,20 </stt>
+        <stt id="2,3,9" > 0x1351,21 </stt>
+        <stt id="2,3,10" > 0x1351,22 </stt>
+        <stt id="2,3,11" > 0x1351,23 </stt>
+        <stt id="2,2,9" > 0x1351,24 </stt>  
+        <stt id="2,2,10" > 0x1351,25 </stt>
+        <stt id="2,2,11" > 0x1351,26 </stt>
+        <stt id="2,1,9" > 0x1351,27 </stt>
+        <stt id="2,1,10" > 0x1351,28 </stt>
+        <stt id="2,1,11" > 0x1351,29 </stt>
+        <stt id="2,0,9" > 0x1351,30 </stt>
+        <stt id="2,0,10" > 0x1351,31 </stt> 
+        <stt id="2,0,11" > 0x1351,32 </stt>
+    </run>
+
+    <run nr="7084">
+        <stt id="2,4,6" > 0x1351,1 </stt><!-- fpga name, stt numbber, Padiwa channel -->
+        <stt id="2,4,7" > 0x1351,2 </stt>
+        <stt id="2,4,8" > 0x1351,3</stt>
+        <stt id="2,3,6" > 0x1351,4 </stt>
+        <stt id="2,3,7" > 0x1351,5 </stt>
+        <stt id="2,3,8" > 0x1351,6 </stt>
+        <stt id="2,2,6" > 0x1351,7 </stt>
+        <stt id="2,2,7" > 0x1351,8 </stt> 
+        <stt id="2,2,8" > 0x1351,9 </stt>
+        <stt id="2,1,6" > 0x1351,10 </stt>
+        <stt id="2,1,8" > 0x1351,11 </stt>
+        <stt id="2,0,6" > 0x1351,12 </stt>
+        <stt id="2,0,7" > 0x1351,13 </stt>
+        <stt id="2,0,8" > 0x1351,14 </stt>
+        <stt id="2,3,5" > 0x1351,15 </stt>
+        <stt id="2,2,17" > 0x1351,16 </stt>
+    </run>
+
+    <run nr="7150">
+        <SiPMadc id="0,1,0">1,0</SiPMadc><!--Delayed gating test on SiPM51 for Ievgen-->
+        <SiPMadc id="0,1,1">1,1</SiPMadc>
+    </run>
+
+
+
+   <run nr="7155">
+
+
+
+				<!-- STT mapping -->
+
+<stt id="2,0,0" > 0x1350,17 </stt>
+<stt id="2,0,1" > 0x1350,18 </stt>
+<stt id="2,0,2" > 0x1350,19 </stt>
+<stt id="2,0,3" > 0x1350,20 </stt>
+<stt id="2,0,4" > 0x1350,21 </stt>
+<stt id="2,0,5" > 0x1350,22 </stt>
+<stt id="2,0,6" > 0x1350,23 </stt>
+<stt id="2,0,7" > 0x1350,24 </stt>
+<stt id="2,0,8" > 0x1350,25 </stt>
+<stt id="2,0,9" > 0x1350,26 </stt>
+<stt id="2,0,10" > 0x1350,27 </stt>
+<stt id="2,0,11" > 0x1350,28 </stt>
+<stt id="2,0,12" > 0x1350,29 </stt>
+<stt id="2,0,13" > 0x1350,30 </stt>
+<stt id="2,0,14" > 0x1350,31 </stt>
+<stt id="2,0,15" > 0x1350,32 </stt>
+<stt id="2,0,16" > 0x1350,1 </stt>
+<stt id="2,0,17" > 0x1350,2 </stt>
+<stt id="2,1,0" > 0x1350,33 </stt>
+<stt id="2,1,1" > 0x1350,34 </stt>
+<stt id="2,1,2" > 0x1350,35 </stt>
+<stt id="2,1,3" > 0x1350,36 </stt>
+<stt id="2,1,4" > 0x1350,37 </stt>
+<stt id="2,1,5" > 0x1350,38 </stt>
+<stt id="2,1,6" > 0x1350,39 </stt>
+<stt id="2,1,7" > 0x1350,40 </stt>
+<stt id="2,1,8" > 0x1350,41 </stt>
+<stt id="2,1,9" > 0x1350,42 </stt>
+<stt id="2,1,10" > 0x1350,43 </stt>
+<stt id="2,1,11" > 0x1350,44 </stt>
+<stt id="2,1,12" > 0x1350,45 </stt>
+<stt id="2,1,13" > 0x1350,46 </stt>
+<stt id="2,1,14" > 0x1350,47 </stt>
+<stt id="2,1,15" > 0x1350,48 </stt>
+<stt id="2,1,16" > 0x1350,3 </stt>
+<stt id="2,2,0" > 0x1351,1 </stt>
+<stt id="2,2,1" > 0x1351,2 </stt>
+<stt id="2,2,2" > 0x1351,3 </stt>
+<stt id="2,2,3" > 0x1351,4 </stt>
+<stt id="2,2,4" > 0x1351,5 </stt>
+<stt id="2,2,5" > 0x1351,6 </stt>
+<stt id="2,2,6" > 0x1351,7 </stt>
+<stt id="2,2,7" > 0x1351,8 </stt>
+<stt id="2,2,8" > 0x1351,9 </stt>
+<stt id="2,2,9" > 0x1351,10 </stt>
+<stt id="2,2,10" > 0x1351,11 </stt>
+<stt id="2,2,11" > 0x1351,12 </stt>
+<stt id="2,2,12" > 0x1351,13 </stt>
+<stt id="2,2,13" > 0x1351,14 </stt>
+<stt id="2,2,14" > 0x1351,15 </stt>
+<stt id="2,2,15" > 0x1351,16 </stt>
+<stt id="2,2,16" > 0x1350,4 </stt>
+<stt id="2,2,17" > 0x1350,5 </stt>
+<stt id="2,3,0" > 0x1351,17 </stt>
+<stt id="2,3,1" > 0x1351,18 </stt>
+<stt id="2,3,2" > 0x1351,19 </stt>
+<stt id="2,3,3" > 0x1351,20 </stt>
+<stt id="2,3,4" > 0x1351,21 </stt>
+<stt id="2,3,5" > 0x1351,22 </stt>
+<stt id="2,3,6" > 0x1351,23 </stt>
+<stt id="2,3,7" > 0x1351,24 </stt>
+<stt id="2,3,8" > 0x1351,25 </stt>
+<stt id="2,3,9" > 0x1351,26 </stt>
+<stt id="2,3,10" > 0x1351,27 </stt>
+<stt id="2,3,11" > 0x1351,28 </stt>
+<stt id="2,3,12" > 0x1351,29 </stt>
+<stt id="2,3,13" > 0x1351,30 </stt>
+<stt id="2,3,14" > 0x1351,31 </stt>
+<stt id="2,3,15" > 0x1351,32 </stt>
+<stt id="2,3,16" > 0x1350,6 </stt>
+<stt id="2,4,0" > 0x1351,33 </stt>
+<stt id="2,4,1" > 0x1351,34 </stt>
+<stt id="2,4,2" > 0x1351,35 </stt>
+<stt id="2,4,3" > 0x1351,36 </stt>
+<stt id="2,4,4" > 0x1351,37 </stt>
+<stt id="2,4,5" > 0x1351,38 </stt>
+<stt id="2,4,6" > 0x1351,39 </stt>
+<stt id="2,4,7" > 0x1351,40 </stt>
+<stt id="2,4,8" > 0x1351,41 </stt>
+<stt id="2,4,9" > 0x1351,42 </stt>
+<stt id="2,4,10" > 0x1351,43 </stt>
+<stt id="2,4,11" > 0x1351,44 </stt>
+<stt id="2,4,12" > 0x1351,45 </stt>
+<stt id="2,4,13" > 0x1351,46 </stt>
+<stt id="2,4,14" > 0x1351,47 </stt>
+<stt id="2,4,15 " > 0x1351,48 </stt>
+<stt id="2,4,16" > 0x1350,7 </stt>
+<stt id="2,4,17" > 0x1350,8 </stt>
+
+
+				<!-- SiPM mapping -->
+<!--50-->
+        <SiPMadc id="0,0,1">1,0</SiPMadc>
+        <SiPMadc id="0,0,0">1,1</SiPMadc>
+
+<!--52-->
+        <SiPMadc id="0,2,1">1,2</SiPMadc>
+        <SiPMadc id="0,2,0">1,3</SiPMadc>
+
+
+
+<!-- Unmap everything for SPS-->
+        <SPStdc id="0,1,0">-1,-1</SPStdc>
+        <SPStdc id="0,1,1">-1,-1</SPStdc>
+        <SPStdc id="0,2,0">-1,-1</SPStdc>
+        <SPStdc id="0,2,1">-1,-1</SPStdc>
+        <SPStdc id="0,3,0">-1,-1</SPStdc>
+        <SPStdc id="0,3,1">-1,-1</SPStdc>
+        <SPStdc id="0,4,0">-1,-1</SPStdc>
+        <SPStdc id="0,4,1">-1,-1</SPStdc>
+        <SPStdc id="0,5,0">-1,-1</SPStdc>
+        <SPStdc id="0,5,1">-1,-1</SPStdc>
+        <SPStdc id="0,6,0">-1,-1</SPStdc>
+        <SPStdc id="0,6,1">-1,-1</SPStdc>
+        <SPStdc id="0,8,0">-1,-1</SPStdc>
+        <SPStdc id="0,8,1">-1,-1</SPStdc>
+        <SPStdc id="0,9,0">-1,-1</SPStdc>
+        <SPStdc id="0,9,1">-1,-1</SPStdc>
+        <SPStdc id="1,0,0">-1,-1</SPStdc>
+        <SPStdc id="1,0,1">-1,-1</SPStdc>
+        <SPStdc id="1,1,0">-1,-1</SPStdc>
+        <SPStdc id="1,1,1">-1,-1</SPStdc>
+        <SPStdc id="1,2,0">-1,-1</SPStdc>
+        <SPStdc id="1,2,1">-1,-1</SPStdc>
+        <SPStdc id="1,3,0">-1,-1</SPStdc>
+        <SPStdc id="1,3,1">-1,-1</SPStdc>
+        <SPStdc id="1,4,0">-1,-1</SPStdc>
+        <SPStdc id="1,4,1">-1,-1</SPStdc>
+        <SPStdc id="1,5,0">-1,-1</SPStdc>
+        <SPStdc id="1,5,1">-1,-1</SPStdc>
+        <SPStdc id="1,6,0">-1,-1</SPStdc>
+        <SPStdc id="1,6,1">-1,-1</SPStdc>
+        <SPStdc id="1,7,0">-1,-1</SPStdc>
+        <SPStdc id="1,7,1">-1,-1</SPStdc>
+        <SPStdc id="1,8,0">-1,-1</SPStdc>
+        <SPStdc id="1,8,1">-1,-1</SPStdc>
+        <SPStdc id="3,0,0">-1,-1</SPStdc>
+        <SPStdc id="3,0,1">-1,-1</SPStdc>
+
+
+
+
+
+        <SPStrb id="0,10,0">-1,-1</SPStrb>
+        <SPStrb id="0,10,1">-1,-1</SPStrb>
+        <SPStrb id="0,3,0">-1,-1</SPStrb>
+        <SPStrb id="0,3,1">-1,-1</SPStrb>
+        <SPStrb id="0,4,0">-1,-1</SPStrb>
+        <SPStrb id="0,4,1">-1,-1</SPStrb>
+        <SPStrb id="0,5,0">-1,-1</SPStrb>
+        <SPStrb id="0,5,1">-1,-1</SPStrb>
+        <SPStrb id="0,6,0">-1,-1</SPStrb>
+        <SPStrb id="0,6,1">-1,-1</SPStrb>
+        <SPStrb id="0,7,0">-1,-1</SPStrb>
+        <SPStrb id="0,7,1">-1,-1</SPStrb>
+        <SPStrb id="0,8,0">-1,-1</SPStrb>
+        <SPStrb id="0,83,1">-1,-1</SPStrb>
+        <SPStrb id="0,9,0">-1,-1</SPStrb>
+        <SPStrb id="0,9,1">-1,-1</SPStrb>
+        <SPStrb id="1,1,0">-1,-1</SPStrb>
+        <SPStrb id="1,1,1">-1,-1</SPStrb>
+        <SPStrb id="1,7,0">-1,-1</SPStrb>
+        <SPStrb id="1,7,1">-1,-1</SPStrb>
+        <SPStrb id="0,8,1">-1,-1</SPStrb>
+
+
+	<SPSadc id="0,1,0">-1,-1</SPSadc>
+	<SPSadc id="0,1,1">-1,-1</SPSadc>
+	<SPSadc id="0,10,0">-1,-1</SPSadc>
+	<SPSadc id="0,11,0">-1,-1</SPSadc>
+	<SPSadc id="0,12,0">-1,-1</SPSadc>
+	<SPSadc id="0,13,0">-1,-1</SPSadc>
+	<SPSadc id="0,14,0">-1,-1</SPSadc>
+	<SPSadc id="0,15,0">-1,-1</SPSadc>
+	<SPSadc id="0,2,0">-1,-1</SPSadc>
+	<SPSadc id="0,2,1">-1,-1</SPSadc>
+	<SPSadc id="0,3,0">-1,-1</SPSadc>
+	<SPSadc id="0,3,1">-1,-1</SPSadc>
+	<SPSadc id="0,4,0">-1,-1</SPSadc>
+	<SPSadc id="0,4,1">-1,-1</SPSadc>
+	<SPSadc id="0,5,0">-1,-1</SPSadc>
+	<SPSadc id="0,5,1">-1,-1</SPSadc>
+	<SPSadc id="0,6,0">-1,-1</SPSadc>
+	<SPSadc id="0,7,0">-1,-1</SPSadc>
+	<SPSadc id="0,8,0">-1,-1</SPSadc>
+	<SPSadc id="0,9,0">-1,-1</SPSadc>
+
+<!--SC202U/D conneced to channe 4 & 5 of v1290 via MCFD -->
+        <SPStdc id="0,0,1">1,4</SPStdc>
+        <SPStdc id="0,0,0">1,5</SPStdc>
+
+	
+<!--SC202U/D conneced to trb3 -->
+        <SPStrb id="0,0,1">0x1340,11</SPStrb>
+        <SPStrb id="0,0,0">0x1340,12</SPStrb>
+<!-- map same SC to TRB3 with ToT firmware -->
+
+        <SPStrb id="0,1,0">0x0420,21</SPStrb>   <!-- leading edge-->
+        <SPStrb id="0,1,1">0x0420,22</SPStrb>
+        <SPStrb id="0,2,0">0x0420,23</SPStrb>   <!-- leading edge-->
+        <SPStrb id="0,2,1">0x0420,24</SPStrb> 
+	<SPSref id="1">0x0420,27</SPSref>
+
+<!---SC202U/D conneced to MQDC -->
+        <SPSadc id="0,0,1">1,4</SPSadc>
+        <SPSadc id="0,0,0">1,5</SPSadc>
+
+	<SiPMref id="1">0x1340,14</SiPMref>
+
+
+    </run>
+
+   <run nr="7167"> <!-- test with 0x420 with normal firmware -->
+        <SPStrb id="0,1,0">0x0420,11</SPStrb> 
+        <SPStrb id="0,1,1">0x0420,11</SPStrb>
+        <SPStrb id="0,2,0">0x0420,12</SPStrb> 
+        <SPStrb id="0,2,1">0x0420,12</SPStrb> 
+ 	<SPSref id="1">0x0420,14</SPSref>
+  </run>
+
+  <run nr="7169"> <!-- back to ToT firmware -->
+        <SPStrb id="0,1,0">0x0420,21</SPStrb>   <!-- leading edge-->
+        <SPStrb id="0,1,1">0x0420,22</SPStrb>
+        <SPStrb id="0,2,0">0x0420,23</SPStrb>   <!-- leading edge-->
+        <SPStrb id="0,2,1">0x0420,24</SPStrb> 
+	<SPSref id="1">0x0420,27</SPSref>
+  </run>
+
+  <run nr="7204"> <!-- New Maping for STT -->
+<stt id="2,0,0" > 0x1350,1 </stt>
+<stt id="2,0,1" > 0x1350,2 </stt>
+<stt id="2,0,2" > 0x1350,3 </stt>
+<stt id="2,0,3" > 0x1350,4 </stt>
+<stt id="2,0,4" > 0x1350,5 </stt>
+<stt id="2,0,5" > 0x1350,6 </stt>
+<stt id="2,0,6" > 0x1350,7 </stt>
+<stt id="2,0,7" > 0x1350,8 </stt>
+<stt id="2,0,8" > 0x1350,9 </stt>
+<stt id="2,0,9" > 0x1350,10 </stt>
+<stt id="2,0,10" > 0x1350,11 </stt>
+<stt id="2,0,11" > 0x1350,12 </stt>
+<stt id="2,0,12" > 0x1350,13 </stt>
+<stt id="2,0,13" > 0x1350,14 </stt>
+<stt id="2,0,14" > 0x1350,15 </stt>
+<stt id="2,0,15" > 0x1350,16 </stt>
+<stt id="2,0,16" > 0x1351,39 </stt>
+<stt id="2,0,17" > 0x1351,40 </stt>
+<stt id="2,1,0" > 0x1350,17 </stt>
+<stt id="2,1,1" > 0x1350,18 </stt>
+<stt id="2,1,2" > 0x1350,19 </stt>
+<stt id="2,1,3" > 0x1350,20 </stt>
+<stt id="2,1,4" > 0x1350,21 </stt>
+<stt id="2,1,5" > 0x1350,22 </stt>
+<stt id="2,1,6" > 0x1350,23 </stt>
+<stt id="2,1,7" > 0x1350,24 </stt>
+<stt id="2,1,8" > 0x1350,25 </stt>
+<stt id="2,1,9" > 0x1350,26 </stt>
+<stt id="2,1,10" > 0x1350,27 </stt>
+<stt id="2,1,11" > 0x1350,28 </stt>
+<stt id="2,1,12" > 0x1350,29 </stt>
+<stt id="2,1,13" > 0x1350,30 </stt>
+<stt id="2,1,14" > 0x1350,31 </stt>
+<stt id="2,1,15" > 0x1350,32 </stt>
+<stt id="2,1,16" > 0x1351,38 </stt>
+<stt id="2,2,0" > 0x1350,33 </stt>
+<stt id="2,2,1" > 0x1350,34 </stt>
+<stt id="2,2,2" > 0x1350,35 </stt>
+<stt id="2,2,3" > 0x1350,36 </stt>
+<stt id="2,2,4" > 0x1350,37 </stt>
+<stt id="2,2,5" > 0x1350,38 </stt>
+<stt id="2,2,6" > 0x1350,39 </stt>
+<stt id="2,2,7" > 0x1350,40 </stt>
+<stt id="2,2,8" > 0x1350,41 </stt>
+<stt id="2,2,9" > 0x1350,42 </stt>
+<stt id="2,2,10" > 0x1350,43 </stt>
+<stt id="2,2,11" > 0x1350,44 </stt>
+<stt id="2,2,12" > 0x1350,45 </stt>
+<stt id="2,2,13" > 0x1350,46 </stt>
+<stt id="2,2,14" > 0x1350,47 </stt>
+<stt id="2,2,15" > 0x1350,48 </stt>
+<stt id="2,2,16" > 0x1351,36 </stt>
+<stt id="2,2,17" > 0x1351,37 </stt>
+<stt id="2,3,0" > 0x1351,1 </stt>
+<stt id="2,3,1" > 0x1351,2 </stt>
+<stt id="2,3,2" > 0x1351,3 </stt>
+<stt id="2,3,3" > 0x1351,4 </stt>
+<stt id="2,3,4" > 0x1351,5 </stt>
+<stt id="2,3,5" > 0x1351,6 </stt>
+<stt id="2,3,6" > 0x1351,7 </stt>
+<stt id="2,3,7" > 0x1351,8 </stt>
+<stt id="2,3,8" > 0x1351,9 </stt>
+<stt id="2,3,9" > 0x1351,10 </stt>
+<stt id="2,3,10" > 0x1351,11 </stt>
+<stt id="2,3,11" > 0x1351,12 </stt>
+<stt id="2,3,12" > 0x1351,13 </stt>
+<stt id="2,3,13" > 0x1351,14 </stt>
+<stt id="2,3,14" > 0x1351,15 </stt>
+<stt id="2,3,15" > 0x1351,16 </stt>
+<stt id="2,3,16" > 0x1351,35 </stt>
+<stt id="2,4,0" > 0x1351,17 </stt>
+<stt id="2,4,1" > 0x1351,18 </stt>
+<stt id="2,4,2" > 0x1351,19 </stt>
+<stt id="2,4,3" > 0x1351,20 </stt>
+<stt id="2,4,4" > 0x1351,21 </stt>
+<stt id="2,4,5" > 0x1351,22 </stt>
+<stt id="2,4,6" > 0x1351,23 </stt>
+<stt id="2,4,7" > 0x1351,24 </stt>
+<stt id="2,4,8" > 0x1351,25 </stt>
+<stt id="2,4,9" > 0x1351,26 </stt>
+<stt id="2,4,10" > 0x1351,27 </stt>
+<stt id="2,4,11" > 0x1351,28 </stt>
+<stt id="2,4,12" > 0x1351,29 </stt>
+<stt id="2,4,13" > 0x1351,30 </stt>
+<stt id="2,4,14" > 0x1351,31 </stt>
+<stt id="2,4,15" > 0x1351,32 </stt>
+<stt id="2,4,16" > 0x1351,33 </stt>
+<stt id="2,4,17" > 0x1351,34 </stt>
+  </run>
+
+  <run nr="7205">
+
+  </run>
+
+
+</mapper>

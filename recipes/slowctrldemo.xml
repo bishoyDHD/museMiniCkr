@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<muse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation='recipe.xsd'>
+
+<init>init/all.xml</init>
+
+<source>MMT</source> <!-- the source tree name-->
+<destination>slowctrl</destination> <!-- the destination tree name-->
+
+<plugins>
+
+
+  <plugin> 
+     <name>SlowCtrl</name>
+     <file>libSlowCtrl</file>
+  </plugin>
+
+  <plugin> 
+     <name>SlowCtrlDemo</name>
+     <file>libSlowCtrlDemo</file>
+  </plugin>
+
+</plugins>
+
+<!-- These functions will be called at the beginning --> 
+<startup>
+  <SlowCtrl>init</SlowCtrl>
+  <SlowCtrlDemo>startup</SlowCtrlDemo>
+</startup>
+
+<!-- These functions will be executed for every event, in order of appearance -->
+<execute>
+  <SlowCtrl>process</SlowCtrl>
+  <SlowCtrlDemo>process</SlowCtrlDemo>
+</execute>
+
+<!-- These functions will be called at the end of the file --> 
+<finalize>
+</finalize>
+
+</muse>

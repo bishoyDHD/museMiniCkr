@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gemControl>
+    <config>
+      <ADDAPV> associateApvToGem </ADDAPV> 
+      <TEST> testfun </TEST>    
+
+    </config>
+    <date time="2000-01-01T00:00:00">
+
+      <!-- Add APV below: format is gem_id, apv_id, axis type -->
+      <!-- Also, note that the gems are labeled from US to DS -->
+
+      <!-- AXIS must be specified as capital X or Y  -->
+
+<!-- I have no idea what the num is suppsoed to be I just took these from
+the old values, god knows what the actual readout is -->
+<!-- most upstream GEM US-IFP as of summer 2018 -->
+      <ADDAPV id=" 0"> 0, 23, X, 6</ADDAPV>
+      <ADDAPV id=" 1"> 0, 22, X, 0 </ADDAPV>
+      <ADDAPV id=" 2"> 0, 20, Y, 0 </ADDAPV>
+      <ADDAPV id=" 3"> 0, 21, Y, 6 </ADDAPV> 
+
+<!-- next upstream DS-IFP as of summer 2018 -->
+      <ADDAPV id= "4"> 1, 18, X, 0 </ADDAPVÃÃ>
+      <ADDAPV id=" 5"> 1, 19, X, 6 </ADDAPV>
+      <ADDAPV id=" 6"> 1, 16, Y, 0 </ADDAPV>
+      <ADDAPV id=" 7"> 1, 17, Y, 6 </ADDAPV>
+
+<!-- does anyone think this is important outside of labeling? -->
+      <ADDAPV id=" 8"> 2, 14, X, 0 </ADDAPV>
+      <ADDAPV id=" 9"> 2, 15, X, 6 </ADDAPV>
+      <ADDAPV id="10"> 2, 12, Y, 0 </ADDAPV>
+      <ADDAPV id="11"> 2, 13, Y, 6 </ADDAPV> 
+
+<!-- does anyone think this is important outside of labeling? -->
+      <ADDAPV id="12"> 3, 10, X, 0 </ADDAPV>
+      <ADDAPV id="13"> 3, 11, X, 6 </ADDAPV>
+      <ADDAPV id="14"> 3,  8, Y, 0 </ADDAPV>
+      <ADDAPV id="15"> 3,  9, Y, 6 </ADDAPV> 
+
+<!-- does anyone think this is important outside of labeling? -->
+      <ADDAPV id="16"> 4,  6, X, 0 </ADDAPV>
+      <ADDAPV id="17"> 4,  7, X, 6 </ADDAPV>
+      <ADDAPV id="18"> 4,  4, Y, 0 </ADDAPV>
+      <ADDAPV id="19"> 4,  5, Y, 6 </ADDAPV> 
+
+<!-- does anyone think this is important outside of labeling? -->
+      <ADDAPV id="20"> 5,  2, X, 0 </ADDAPV>
+      <ADDAPV id="21"> 5,  3, X, 6 </ADDAPV>
+      <ADDAPV id="22"> 5,  0, Y, 0 </ADDAPV>
+      <ADDAPV id="23"> 5,  1, Y, 6 </ADDAPV> 
+    </date>
+</gemControl>

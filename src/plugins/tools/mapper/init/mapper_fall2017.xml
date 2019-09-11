@@ -1,0 +1,873 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+ 
+
+<mapper>
+    <config>
+        <scifi>addSciFiChannel</scifi>
+        <scifirefclock>addSciFiReferenceClock</scifirefclock>
+        <trb_tdc_debug> addTRB_TDC_DebugChannel</trb_tdc_debug> <!--Ievgen 03/05/2018 -->
+        <tdc>addTestBeamTDC</tdc>
+        <trb>addTestBeamTRB</trb>
+        <adc>addTestBeamADC</adc>
+        <SiPMtdc>addSiPMTDC</SiPMtdc>
+        <SiPMadc>addSiPMADC</SiPMadc>
+        <SiPMtrb>addSiPMTRB</SiPMtrb>
+        <SiPMref>addSiPMReferenceClock</SiPMref>
+        <SiPMmqdc>addSiPM_MQDC</SiPMmqdc> <!--  03/15/17 multiple MQDC mapper  for SiPM-->
+        <SiPMtrig>addSiPMTrigger</SiPMtrig>
+
+        <SPSadc>addSPSADC</SPSadc>
+        <SPStdc>addSPSTDC</SPStdc>
+        <SPStrb>addSPSTRB</SPStrb>
+        <SPSref>addSPSReferenceClock</SPSref>
+        <SPSmqdc> addSPS_MQDC</SPSmqdc>  <!-- -3/15/17 multiple MQDC  mapper for SPS-->
+        <SPStrig>addSPSTrigger</SPStrig>
+
+        <PbGlassadc>addPbGlassADC</PbGlassadc>
+        <PbGlassmqdc>addPbGlass_MQDC</PbGlassmqdc>
+        <PbGlasstdc>addPbGlassTDC</PbGlasstdc>
+        <PbGlasstrb>addPbGlassTRB</PbGlasstrb>
+        <PbGlassref>addPbGlassReferenceClock</PbGlassref>
+        <PbGlasstrig>addPbGlassTrigger</PbGlasstrig>
+
+        <BMmqdc>addBM_MQDC</BMmqdc>
+        <BMtrb>addBMTRB</BMtrb>
+        <BMref>addBMReferenceClock</BMref>
+        <BMtrig>addBMTrigger</BMtrig>
+        
+        <stt>addStrawChannel</stt>
+        <sttrefclock>addStrawReferenceClock</sttrefclock>
+
+        <cmd>cmdline</cmd>
+    </config>
+
+
+<run nr="1">
+
+   <!-- Testing TRB_TDC_Debug -->
+    <trb_tdc_debug id = "0"> 0x0870</trb_tdc_debug>
+    <trb_tdc_debug id = "1"> 0x0871</trb_tdc_debug>
+    <trb_tdc_debug id = "2"> 0x0872</trb_tdc_debug>
+    <trb_tdc_debug id = "3"> 0x0873</trb_tdc_debug>
+
+
+    <!--Plane A Left-->
+    <SiPMtrb id="0,0,0"> 0x1162,1</SiPMtrb>
+    <SiPMtrb id="0,1,0"> 0x1162,2</SiPMtrb>
+    <SiPMtrb id="0,2,0"> 0x1162,3</SiPMtrb>
+    <SiPMtrb id="0,3,0"> 0x1162,4</SiPMtrb>
+    <SiPMtrb id="0,4,0"> 0x1162,5</SiPMtrb>
+    <SiPMtrb id="0,5,0"> 0x1162,6</SiPMtrb>
+    <SiPMtrb id="0,6,0"> 0x1162,7</SiPMtrb>
+    <SiPMtrb id="0,7,0"> 0x1162,8</SiPMtrb>
+    <SiPMtrb id="0,8,0"> 0x1162,9</SiPMtrb>
+    <SiPMtrb id="0,9,0"> 0x1162,10</SiPMtrb>
+    <SiPMtrb id="0,10,0">0x1162,11</SiPMtrb>
+    <SiPMtrb id="0,11,0">0x1162,12</SiPMtrb>
+    <SiPMtrb id="0,12,0">0x1162,13</SiPMtrb>
+    <SiPMtrb id="0,13,0">0x1162,14</SiPMtrb>
+    <SiPMtrb id="0,14,0">0x1162,15</SiPMtrb>
+    <SiPMtrb id="0,15,0">0x1162,16</SiPMtrb>
+    <!--Plane A Right-->
+    <SiPMtrb id="0,0,1"> 0x1162,17</SiPMtrb>
+    <SiPMtrb id="0,1,1"> 0x1162,18</SiPMtrb>
+    <SiPMtrb id="0,2,1"> 0x1162,19</SiPMtrb>
+    <SiPMtrb id="0,3,1"> 0x1162,20</SiPMtrb>
+    <SiPMtrb id="0,4,1"> 0x1162,21</SiPMtrb>
+    <SiPMtrb id="0,5,1"> 0x1162,22</SiPMtrb>
+    <SiPMtrb id="0,6,1"> 0x1162,23</SiPMtrb>
+    <SiPMtrb id="0,7,1"> 0x1162,24</SiPMtrb>
+    <SiPMtrb id="0,8,1"> 0x1162,25</SiPMtrb>
+    <SiPMtrb id="0,9,1"> 0x1162,26</SiPMtrb>
+    <SiPMtrb id="0,10,1">0x1162,27</SiPMtrb>
+    <SiPMtrb id="0,11,1">0x1162,28</SiPMtrb>
+    <SiPMtrb id="0,12,1">0x1162,29</SiPMtrb>
+    <SiPMtrb id="0,13,1">0x1162,30</SiPMtrb>
+    <SiPMtrb id="0,14,1">0x1162,31</SiPMtrb>
+    <SiPMtrb id="0,15,1">0x1162,32</SiPMtrb>
+    <!--Plane B Left-->
+    <SiPMtrb id="1,0,0"> 0x1163,1</SiPMtrb>
+    <SiPMtrb id="1,1,0"> 0x1163,2</SiPMtrb>
+    <SiPMtrb id="1,2,0"> 0x1163,3</SiPMtrb>
+    <SiPMtrb id="1,3,0"> 0x1163,4</SiPMtrb>
+    <SiPMtrb id="1,4,0"> 0x1163,5</SiPMtrb>
+    <SiPMtrb id="1,5,0"> 0x1163,6</SiPMtrb>
+    <SiPMtrb id="1,6,0"> 0x1163,7</SiPMtrb>
+    <SiPMtrb id="1,7,0"> 0x1163,8</SiPMtrb>
+    <SiPMtrb id="1,8,0"> 0x1163,9</SiPMtrb>
+    <SiPMtrb id="1,9,0"> 0x1163,10</SiPMtrb>
+    <SiPMtrb id="1,10,0">0x1163,11</SiPMtrb>
+    <SiPMtrb id="1,11,0">0x1163,12</SiPMtrb>
+    <SiPMtrb id="1,12,0">0x1163,13</SiPMtrb>
+    <SiPMtrb id="1,13,0">0x1163,14</SiPMtrb>
+    <SiPMtrb id="1,14,0">0x1163,15</SiPMtrb>
+    <SiPMtrb id="1,15,0">0x1163,16</SiPMtrb>
+    <!--Plane B Right-->
+    <SiPMtrb id="1,0,1"> 0x1163,17</SiPMtrb>
+    <SiPMtrb id="1,1,1"> 0x1163,18</SiPMtrb>
+    <SiPMtrb id="1,2,1"> 0x1163,19</SiPMtrb>
+    <SiPMtrb id="1,3,1"> 0x1163,20</SiPMtrb>
+    <SiPMtrb id="1,4,1"> 0x1163,21</SiPMtrb>
+    <SiPMtrb id="1,5,1"> 0x1163,22</SiPMtrb>
+    <SiPMtrb id="1,6,1"> 0x1163,23</SiPMtrb>
+    <SiPMtrb id="1,7,1"> 0x1163,24</SiPMtrb>
+    <SiPMtrb id="1,8,1"> 0x1163,25</SiPMtrb>
+    <SiPMtrb id="1,9,1"> 0x1163,26</SiPMtrb>
+    <SiPMtrb id="1,10,1">0x1163,27</SiPMtrb>
+    <SiPMtrb id="1,11,1">0x1163,28</SiPMtrb>
+    <SiPMtrb id="1,12,1">0x1163,29</SiPMtrb>
+    <SiPMtrb id="1,13,1">0x1163,30</SiPMtrb>
+    <SiPMtrb id="1,14,1">0x1163,31</SiPMtrb>
+    <SiPMtrb id="1,15,1">0x1163,32</SiPMtrb>
+
+    <!-- Everything below comes in through PADIWA-->
+
+    <SiPMref id="0">     0x1161,1</SiPMref> <!-- rf clock in TRB into PADIWA-->
+    <SiPMtrig id="0">    0x1161,2</SiPMtrig> <!-- trigger in TRB into  PADIWA-->
+
+
+    <!-- MQDC starts from 0 even though physical label starts from 1-->
+    <!--Plane A Left-->
+    <SiPMmqdc id="0,0,0"> 0,0</SiPMmqdc>
+    <SiPMmqdc id="0,1,0"> 0,1</SiPMmqdc>
+    <SiPMmqdc id="0,2,0"> 0,2</SiPMmqdc>
+    <SiPMmqdc id="0,3,0"> 0,3</SiPMmqdc>
+    <SiPMmqdc id="0,4,0"> 0,4</SiPMmqdc>
+    <SiPMmqdc id="0,5,0"> 0,5</SiPMmqdc>
+    <SiPMmqdc id="0,6,0"> 0,6</SiPMmqdc>
+    <SiPMmqdc id="0,7,0"> 0,7</SiPMmqdc>
+    <SiPMmqdc id="0,8,0"> 0,8</SiPMmqdc>
+    <SiPMmqdc id="0,9,0"> 0,9</SiPMmqdc>
+    <SiPMmqdc id="0,10,0">0,10</SiPMmqdc>
+    <SiPMmqdc id="0,11,0">0,11</SiPMmqdc>
+    <SiPMmqdc id="0,12,0">0,12</SiPMmqdc>
+    <SiPMmqdc id="0,13,0">0,13</SiPMmqdc>
+    <SiPMmqdc id="0,14,0">0,14</SiPMmqdc>
+    <SiPMmqdc id="0,15,0">0,15</SiPMmqdc>
+    <!--Plane A Right-->
+    <SiPMmqdc id="0,0,1"> 0,16</SiPMmqdc>
+    <SiPMmqdc id="0,1,1"> 0,17</SiPMmqdc>
+    <SiPMmqdc id="0,2,1"> 0,18</SiPMmqdc>
+    <SiPMmqdc id="0,3,1"> 0,19</SiPMmqdc>
+    <SiPMmqdc id="0,4,1"> 0,20</SiPMmqdc>
+    <SiPMmqdc id="0,5,1"> 0,21</SiPMmqdc>
+    <SiPMmqdc id="0,6,1"> 0,22</SiPMmqdc>
+    <SiPMmqdc id="0,7,1"> 0,23</SiPMmqdc>
+    <SiPMmqdc id="0,8,1"> 0,24</SiPMmqdc>
+    <SiPMmqdc id="0,9,1"> 0,25</SiPMmqdc>
+    <SiPMmqdc id="0,10,1">0,26</SiPMmqdc>
+    <SiPMmqdc id="0,11,1">0,27</SiPMmqdc>
+    <SiPMmqdc id="0,12,1">0,28</SiPMmqdc>
+    <SiPMmqdc id="0,13,1">0,29</SiPMmqdc>
+    <SiPMmqdc id="0,14,1">0,30</SiPMmqdc>
+    <SiPMmqdc id="0,15,1">0,31</SiPMmqdc>
+
+    <!--Plane B Left-->
+    <SiPMmqdc id="1,0,0"> 1,0</SiPMmqdc>
+    <SiPMmqdc id="1,1,0"> 1,1</SiPMmqdc>
+    <SiPMmqdc id="1,2,0"> 1,2</SiPMmqdc>
+    <SiPMmqdc id="1,3,0"> 1,3</SiPMmqdc>
+    <SiPMmqdc id="1,4,0"> 1,4</SiPMmqdc>
+    <SiPMmqdc id="1,5,0"> 1,5</SiPMmqdc>
+    <SiPMmqdc id="1,6,0"> 1,6</SiPMmqdc>
+    <SiPMmqdc id="1,7,0"> 1,7</SiPMmqdc>
+    <SiPMmqdc id="1,8,0"> 1,8</SiPMmqdc>
+    <SiPMmqdc id="1,9,0"> 1,9</SiPMmqdc>
+    <SiPMmqdc id="1,10,0">1,10</SiPMmqdc>
+    <SiPMmqdc id="1,11,0">1,11</SiPMmqdc>
+    <SiPMmqdc id="1,12,0">1,12</SiPMmqdc>
+    <SiPMmqdc id="1,13,0">1,13</SiPMmqdc>
+    <SiPMmqdc id="1,14,0">1,14</SiPMmqdc>
+    <SiPMmqdc id="1,15,0">1,15</SiPMmqdc>
+    <!--Plane B Right-->
+    <SiPMmqdc id="1,0,1"> 1,16</SiPMmqdc>
+    <SiPMmqdc id="1,1,1"> 1,17</SiPMmqdc>
+    <SiPMmqdc id="1,2,1"> 1,18</SiPMmqdc>
+    <SiPMmqdc id="1,3,1"> 1,19</SiPMmqdc>
+    <SiPMmqdc id="1,4,1"> 1,20</SiPMmqdc>
+    <SiPMmqdc id="1,5,1"> 1,21</SiPMmqdc>
+    <SiPMmqdc id="1,6,1"> 1,22</SiPMmqdc>
+    <SiPMmqdc id="1,7,1"> 1,23</SiPMmqdc>
+    <SiPMmqdc id="1,8,1"> 1,24</SiPMmqdc>
+    <SiPMmqdc id="1,9,1"> 1,25</SiPMmqdc>
+    <SiPMmqdc id="1,10,1">1,26</SiPMmqdc>
+    <SiPMmqdc id="1,11,1">1,27</SiPMmqdc>
+    <SiPMmqdc id="1,12,1">1,28</SiPMmqdc>
+    <SiPMmqdc id="1,13,1">1,29</SiPMmqdc>
+    <SiPMmqdc id="1,14,1">1,30</SiPMmqdc>
+    <SiPMmqdc id="1,15,1">1,31</SiPMmqdc>
+</run>
+
+<run nr="559">
+    <!--This is SA up and down for RF and TOF purposes-->
+    <SiPMtrb id="2,0,0">0x1161,3</SiPMtrb>
+    <SiPMtrb id="2,0,1">0x1161,4</SiPMtrb>
+</run>
+
+<!-- ###############################################   -->
+<!--                  Mapping for SPS                  -->
+<!-- ###############################################   -->
+
+<run nr="613">
+<!-- reference times -->
+<SPStrig id="3">0x1161,2</SPStrig>
+<SPSref id="4">0x1161, 1</SPSref>
+
+<!-- TDC channels: id= "plane (0,1,2,3), bar("0-17 for 0,1 planes" or "0-27 for 2,3 planes"), up/down = 1/0"  -->
+<!-- Down PMTs -->
+<SPStrb id="1,0,0">0x1752,1</SPStrb><!--small wall, bar 0, down-->
+<SPStrb id="1,1,0">0x1752,2</SPStrb><!--small wall, bar 1, down-->
+<SPStrb id="1,2,0">0x1752,3</SPStrb><!--small wall, bar 2, down-->
+<SPStrb id="1,3,0">0x1752,4</SPStrb><!--small wall, bar 3, down-->
+<SPStrb id="1,4,0">0x1752,5</SPStrb><!--small wall, bar 4, down-->
+<SPStrb id="1,5,0">0x1752,6</SPStrb><!--small wall, bar 5, down-->
+<SPStrb id="1,6,0">0x1752,7</SPStrb><!--small wall, bar 6, down-->
+<SPStrb id="1,7,0">0x1752,8</SPStrb><!--small wall, bar 7, down-->
+<SPStrb id="1,8,0">0x1752,9</SPStrb><!--small wall, bar 8, down-->
+<SPStrb id="1,9,0">0x1752,10</SPStrb><!--small wall, bar 9, down-->
+<SPStrb id="1,10,0">0x1752,11</SPStrb><!--small wall, bar 10, down-->
+<SPStrb id="1,11,0">0x1752,12</SPStrb><!--small wall, bar 11, down-->
+<SPStrb id="1,12,0">0x1752,13</SPStrb><!--small wall, bar 12, down-->
+<SPStrb id="1,13,0">0x1752,14</SPStrb><!--small wall, bar 13, down-->
+<SPStrb id="1,14,0">0x1752,15</SPStrb><!--small wall, bar 14, down-->
+<SPStrb id="1,15,0">0x1752,16</SPStrb><!--small wall, bar 15, down-->
+<SPStrb id="1,16,0">0x1752,17</SPStrb><!--small wall, bar 16, down-->
+<SPStrb id="1,17,0">0x1752,18</SPStrb><!--small wall, bar 17, down-->
+
+<SPStrb id="3,0,0">0x1752,19</SPStrb><!--big wall, bar 0, down-->
+<SPStrb id="3,1,0">0x1752,20</SPStrb><!--big wall, bar 1, down-->
+<SPStrb id="3,2,0">0x1752,21</SPStrb><!--big wall, bar 2, down-->
+<SPStrb id="3,3,0">0x1752,22</SPStrb><!--big wall, bar 3, down-->
+<SPStrb id="3,4,0">0x1752,23</SPStrb><!--big wall, bar 4, down-->
+<SPStrb id="3,5,0">0x1752,24</SPStrb><!--big wall, bar 5, down-->
+<SPStrb id="3,6,0">0x1752,25</SPStrb><!--big wall, bar 6, down-->
+<SPStrb id="3,7,0">0x1752,26</SPStrb><!--big wall, bar 7, down-->
+<SPStrb id="3,8,0">0x1752,27</SPStrb><!--big wall, bar 8, down-->
+<SPStrb id="3,9,0">0x1752,28</SPStrb><!--big wall, bar 9, down-->
+<SPStrb id="3,10,0">0x1752,29</SPStrb><!--big wall, bar 10, down-->
+<SPStrb id="3,11,0">0x1752,30</SPStrb><!--big wall, bar 11, down-->
+<SPStrb id="3,12,0">0x1752,31</SPStrb><!--big wall, bar 12, down-->
+<SPStrb id="3,13,0">0x1752,32</SPStrb><!--big wall, bar 13, down-->
+<SPStrb id="3,14,0">0x1752,33</SPStrb><!--big wall, bar 14, down-->
+<SPStrb id="3,15,0">0x1752,34</SPStrb><!--big wall, bar 15, down-->
+<SPStrb id="3,16,0">0x1752,35</SPStrb><!--big wall, bar 16, down-->
+<SPStrb id="3,17,0">0x1752,36</SPStrb><!--big wall, bar 17, down-->
+<SPStrb id="3,18,0">0x1752,37</SPStrb><!--big wall, bar 18, down-->
+<SPStrb id="3,19,0">0x1752,38</SPStrb><!--big wall, bar 19, down-->
+<SPStrb id="3,20,0">0x1752,39</SPStrb><!--big wall, bar 20, down-->
+<SPStrb id="3,21,0">0x1752,40</SPStrb><!--big wall, bar 21, down-->
+<SPStrb id="3,22,0">0x1752,41</SPStrb><!--big wall, bar 22, down-->
+<SPStrb id="3,23,0">0x1752,42</SPStrb><!--big wall, bar 23, down-->
+<SPStrb id="3,24,0">0x1752,43</SPStrb><!--big wall, bar 24, down-->
+<SPStrb id="3,25,0">0x1752,44</SPStrb><!--big wall, bar 25, down-->
+<SPStrb id="3,26,0">0x1752,45</SPStrb><!--big wall, bar 26, down-->
+<SPStrb id="3,27,0">0x1752,46</SPStrb><!--big wall, bar 27, down-->
+
+<!-- UP PMTs -->
+<SPStrb id="1,0,1">0x1753,1</SPStrb><!--small wall, bar 0, up -->
+<SPStrb id="1,1,1">0x1753,2</SPStrb><!--small wall, bar 1, up -->
+<SPStrb id="1,2,1">0x1753,3</SPStrb><!--small wall, bar 2, up -->
+<SPStrb id="1,3,1">0x1753,4</SPStrb><!--small wall, bar 3, up -->
+<SPStrb id="1,4,1">0x1753,5</SPStrb><!--small wall, bar 4, up -->
+<SPStrb id="1,5,1">0x1753,6</SPStrb><!--small wall, bar 5, up -->
+<SPStrb id="1,6,1">0x1753,7</SPStrb><!--small wall, bar 6, up -->
+<SPStrb id="1,7,1">0x1753,8</SPStrb><!--small wall, bar 7, up -->
+<SPStrb id="1,8,1">0x1753,9</SPStrb><!--small wall, bar 8, up -->
+<SPStrb id="1,9,1">0x1753,10</SPStrb><!--small wall, bar 9, up -->
+<SPStrb id="1,10,1">0x1753,11</SPStrb><!--small wall, bar 10, up -->
+<SPStrb id="1,11,1">0x1753,12</SPStrb><!--small wall, bar 11, up -->
+<SPStrb id="1,12,1">0x1753,13</SPStrb><!--small wall, bar 12, up -->
+<SPStrb id="1,13,1">0x1753,14</SPStrb><!--small wall, bar 13, up -->
+<SPStrb id="1,14,1">0x1753,15</SPStrb><!--small wall, bar 14, up -->
+<SPStrb id="1,15,1">0x1753,16</SPStrb><!--small wall, bar 15, up -->
+<SPStrb id="1,16,1">0x1753,17</SPStrb><!--small wall, bar 16, up -->
+<SPStrb id="1,17,1">0x1753,18</SPStrb><!--small wall, bar 17, up -->
+
+<SPStrb id="3,0,1">0x1753,19</SPStrb><!--big wall, bar 0, up -->
+<SPStrb id="3,1,1">0x1753,20</SPStrb><!--big wall, bar 1, up -->
+<SPStrb id="3,2,1">0x1753,21</SPStrb><!--big wall, bar 2, up -->
+<SPStrb id="3,3,1">0x1753,22</SPStrb><!--big wall, bar 3, up -->
+<SPStrb id="3,4,1">0x1753,23</SPStrb><!--big wall, bar 4, up -->
+<SPStrb id="3,5,1">0x1753,24</SPStrb><!--big wall, bar 5, up -->
+<SPStrb id="3,6,1">0x1753,25</SPStrb><!--big wall, bar 6, up -->
+<SPStrb id="3,7,1">0x1753,26</SPStrb><!--big wall, bar 7, up -->
+<SPStrb id="3,8,1">0x1753,27</SPStrb><!--big wall, bar 8, up -->
+<SPStrb id="3,9,1">0x1753,28</SPStrb><!--big wall, bar 9, up -->
+<SPStrb id="3,10,1">0x1753,29</SPStrb><!--big wall, bar 10, up -->
+<SPStrb id="3,11,1">0x1753,30</SPStrb><!--big wall, bar 11, up -->
+<SPStrb id="3,12,1">0x1753,31</SPStrb><!--big wall, bar 12, up -->
+<SPStrb id="3,13,1">0x1753,32</SPStrb><!--big wall, bar 13, up -->
+<SPStrb id="3,14,1">0x1753,33</SPStrb><!--big wall, bar 14, up -->
+<SPStrb id="3,15,1">0x1753,34</SPStrb><!--big wall, bar 15, up -->
+<SPStrb id="3,16,1">0x1753,35</SPStrb><!--big wall, bar 16, up -->
+<SPStrb id="3,17,1">0x1753,36</SPStrb><!--big wall, bar 17, up -->
+<SPStrb id="3,18,1">0x1753,37</SPStrb><!--big wall, bar 18, up -->
+<SPStrb id="3,19,1">0x1753,38</SPStrb><!--big wall, bar 19, up -->
+<SPStrb id="3,20,1">0x1753,39</SPStrb><!--big wall, bar 20, up -->
+<SPStrb id="3,21,1">0x1753,40</SPStrb><!--big wall, bar 21, up -->
+<SPStrb id="3,22,1">0x1753,41</SPStrb><!--big wall, bar 22, up -->
+<SPStrb id="3,23,1">0x1753,42</SPStrb><!--big wall, bar 23, up -->
+<SPStrb id="3,24,1">0x1753,43</SPStrb><!--big wall, bar 24, up -->
+<SPStrb id="3,25,1">0x1753,44</SPStrb><!--big wall, bar 25, up -->
+<SPStrb id="3,26,1">0x1753,45</SPStrb><!--big wall, bar 26, up -->
+<SPStrb id="3,27,1">0x1753,46</SPStrb><!--big wall, bar 27, up -->
+
+
+<!-- MQDC channels: id= "plane (0,1,2,3), bar("0-17 for 0,1 planes" or "0-27 for 2,3 planes"), up/down = 1/0"  -->
+<!-- Down PMTs -->
+<SPSmqdc id="1,0,0">2,0</SPSmqdc><!--small wall, bar 0, down-->
+<SPSmqdc id="1,1,0">2,1</SPSmqdc><!--small wall, bar 1, down-->
+<SPSmqdc id="1,2,0">2,2</SPSmqdc><!--small wall, bar 2, down-->
+<SPSmqdc id="1,3,0">2,3</SPSmqdc><!--small wall, bar 3, down-->
+<SPSmqdc id="1,4,0">2,4</SPSmqdc><!--small wall, bar 4, down-->
+<SPSmqdc id="1,5,0">2,5</SPSmqdc><!--small wall, bar 5, down-->
+<SPSmqdc id="1,6,0">2,6</SPSmqdc><!--small wall, bar 6, down-->
+<SPSmqdc id="1,7,0">2,7</SPSmqdc><!--small wall, bar 7, down-->
+<SPSmqdc id="1,8,0">2,8</SPSmqdc><!--small wall, bar 8, down-->
+<SPSmqdc id="1,9,0">2,9</SPSmqdc><!--small wall, bar 9, down-->
+<SPSmqdc id="1,10,0">2,10</SPSmqdc><!--small wall, bar 10, down-->
+<SPSmqdc id="1,11,0">2,11</SPSmqdc><!--small wall, bar 11, down-->
+<SPSmqdc id="1,12,0">2,12</SPSmqdc><!--small wall, bar 12, down-->
+<SPSmqdc id="1,13,0">2,13</SPSmqdc><!--small wall, bar 13, down-->
+<SPSmqdc id="1,14,0">2,14</SPSmqdc><!--small wall, bar 14, down-->
+<SPSmqdc id="1,15,0">2,15</SPSmqdc><!--small wall, bar 15, down-->
+<SPSmqdc id="1,16,0">2,16</SPSmqdc><!--small wall, bar 16, down-->
+<SPSmqdc id="1,17,0">2,17</SPSmqdc><!--small wall, bar 17, down-->
+
+<SPSmqdc id="3,0,0">2,18</SPSmqdc><!--big wall, bar 0, down-->
+<SPSmqdc id="3,1,0">2,19</SPSmqdc><!--big wall, bar 1, down-->
+<SPSmqdc id="3,2,0">2,20</SPSmqdc><!--big wall, bar 2, down-->
+<SPSmqdc id="3,3,0">2,21</SPSmqdc><!--big wall, bar 3, down-->
+<SPSmqdc id="3,4,0">2,22</SPSmqdc><!--big wall, bar 4, down-->
+<SPSmqdc id="3,5,0">2,23</SPSmqdc><!--big wall, bar 5, down-->
+<SPSmqdc id="3,6,0">2,24</SPSmqdc><!--big wall, bar 6, down-->
+<SPSmqdc id="3,7,0">2,25</SPSmqdc><!--big wall, bar 7, down-->
+<SPSmqdc id="3,8,0">2,26</SPSmqdc><!--big wall, bar 8, down-->
+<SPSmqdc id="3,9,0">2,27</SPSmqdc><!--big wall, bar 9, down-->
+<SPSmqdc id="3,10,0">2,28</SPSmqdc><!--big wall, bar 10, down-->
+<SPSmqdc id="3,11,0">2,29</SPSmqdc><!--big wall, bar 11, down-->
+<SPSmqdc id="3,12,0">2,30</SPSmqdc><!--big wall, bar 12, down-->
+<SPSmqdc id="3,13,0">2,31</SPSmqdc><!--big wall, bar 13, down-->
+<SPSmqdc id="3,14,0">3,0</SPSmqdc><!--big wall, bar 14, down-->
+<SPSmqdc id="3,15,0">3,1</SPSmqdc><!--big wall, bar 15, down-->
+<SPSmqdc id="3,16,0">3,2</SPSmqdc><!--big wall, bar 16, down-->
+<SPSmqdc id="3,17,0">3,3</SPSmqdc><!--big wall, bar 17, down-->
+<SPSmqdc id="3,18,0">3,4</SPSmqdc><!--big wall, bar 18, down-->
+<SPSmqdc id="3,19,0">3,5</SPSmqdc><!--big wall, bar 19, down-->
+<SPSmqdc id="3,20,0">3,6</SPSmqdc><!--big wall, bar 20, down-->
+<SPSmqdc id="3,21,0">3,7</SPSmqdc><!--big wall, bar 21, down-->
+<SPSmqdc id="3,22,0">3,8</SPSmqdc><!--big wall, bar 22, down-->
+<SPSmqdc id="3,23,0">3,9</SPSmqdc><!--big wall, bar 23, down-->
+<SPSmqdc id="3,24,0">3,10</SPSmqdc><!--big wall, bar 24, down-->
+<SPSmqdc id="3,25,0">3,11</SPSmqdc><!--big wall, bar 25, down-->
+<SPSmqdc id="3,26,0">3,12</SPSmqdc><!--big wall, bar 26, down-->
+<SPSmqdc id="3,27,0">3,13</SPSmqdc><!--big wall, bar 27, down-->
+
+<!-- UP PMTs -->
+<SPSmqdc id="1,0,1">3,16</SPSmqdc><!--small wall, bar 0, up -->
+<SPSmqdc id="1,1,1">3,17</SPSmqdc><!--small wall, bar 1, up -->
+<SPSmqdc id="1,2,1">3,18</SPSmqdc><!--small wall, bar 2, up -->
+<SPSmqdc id="1,3,1">3,19</SPSmqdc><!--small wall, bar 3, up -->
+<SPSmqdc id="1,4,1">3,20</SPSmqdc><!--small wall, bar 4, up -->
+<SPSmqdc id="1,5,1">3,21</SPSmqdc><!--small wall, bar 5, up -->
+<SPSmqdc id="1,6,1">3,22</SPSmqdc><!--small wall, bar 6, up -->
+<SPSmqdc id="1,7,1">3,23</SPSmqdc><!--small wall, bar 7, up -->
+<SPSmqdc id="1,8,1">3,24</SPSmqdc><!--small wall, bar 8, up -->
+<SPSmqdc id="1,9,1">3,25</SPSmqdc><!--small wall, bar 9, up -->
+<SPSmqdc id="1,10,1">3,26</SPSmqdc><!--small wall, bar 10, up -->
+<SPSmqdc id="1,11,1">3,27</SPSmqdc><!--small wall, bar 11, up -->
+<SPSmqdc id="1,12,1">3,28</SPSmqdc><!--small wall, bar 12, up -->
+<SPSmqdc id="1,13,1">3,29</SPSmqdc><!--small wall, bar 13, up -->
+<SPSmqdc id="1,14,1">3,30</SPSmqdc><!--small wall, bar 14, up -->
+<SPSmqdc id="1,15,1">3,31</SPSmqdc><!--small wall, bar 15, up -->
+<SPSmqdc id="1,16,1">4,0</SPSmqdc><!--small wall, bar 16, up -->
+<SPSmqdc id="1,17,1">4,1</SPSmqdc><!--small wall, bar 17, up -->
+
+<SPSmqdc id="3,0,1">4,2</SPSmqdc><!--big wall, bar 0, up -->
+<SPSmqdc id="3,1,1">4,3</SPSmqdc><!--big wall, bar 1, up -->
+<SPSmqdc id="3,2,1">4,4</SPSmqdc><!--big wall, bar 2, up -->
+<SPSmqdc id="3,3,1">4,5</SPSmqdc><!--big wall, bar 3, up -->
+<SPSmqdc id="3,4,1">4,6</SPSmqdc><!--big wall, bar 4, up -->
+<SPSmqdc id="3,5,1">4,7</SPSmqdc><!--big wall, bar 5, up -->
+<SPSmqdc id="3,6,1">4,8</SPSmqdc><!--big wall, bar 6, up -->
+<SPSmqdc id="3,7,1">4,9</SPSmqdc><!--big wall, bar 7, up -->
+<SPSmqdc id="3,8,1">4,10</SPSmqdc><!--big wall, bar 8, up -->
+<SPSmqdc id="3,9,1">4,11</SPSmqdc><!--big wall, bar 9, up -->
+<SPSmqdc id="3,10,1">4,12</SPSmqdc><!--big wall, bar 10, up -->
+<SPSmqdc id="3,11,1">4,13</SPSmqdc><!--big wall, bar 11, up -->
+<SPSmqdc id="3,12,1">4,14</SPSmqdc><!--big wall, bar 12, up -->
+<SPSmqdc id="3,13,1">4,15</SPSmqdc><!--big wall, bar 13, up -->
+<SPSmqdc id="3,14,1">4,16</SPSmqdc><!--big wall, bar 14, up -->
+<SPSmqdc id="3,15,1">4,17</SPSmqdc><!--big wall, bar 15, up -->
+<SPSmqdc id="3,16,1">4,18</SPSmqdc><!--big wall, bar 16, up -->
+<SPSmqdc id="3,17,1">4,19</SPSmqdc><!--big wall, bar 17, up -->
+<SPSmqdc id="3,19,1">4,20</SPSmqdc><!--big wall, bar 18, up -->  <!-- after taking data for big wall we found out that channels SPSRR18 and SPSRR19U were switched the places -->
+<SPSmqdc id="3,18,1">4,21</SPSmqdc><!--big wall, bar 19, up -->
+<SPSmqdc id="3,20,1">4,22</SPSmqdc><!--big wall, bar 20, up -->
+<SPSmqdc id="3,21,1">4,23</SPSmqdc><!--big wall, bar 21, up -->
+<SPSmqdc id="3,22,1">4,24</SPSmqdc><!--big wall, bar 22, up -->
+<SPSmqdc id="3,23,1">4,25</SPSmqdc><!--big wall, bar 23, up -->
+<SPSmqdc id="3,24,1">4,26</SPSmqdc><!--big wall, bar 24, up -->
+<SPSmqdc id="3,25,1">4,27</SPSmqdc><!--big wall, bar 25, up -->
+<SPSmqdc id="3,26,1">4,28</SPSmqdc><!--big wall, bar 26, up -->
+<SPSmqdc id="3,27,1">4,29</SPSmqdc><!--big wall, bar 27, up -->
+
+</run>
+
+<run nr="631"> <!--Correct mapping after we redo cabling -->
+<SPSmqdc id="3,18,1">4,20</SPSmqdc><!--big wall, bar 18, up -->
+<SPSmqdc id="3,19,1">4,21</SPSmqdc><!--big wall, bar 19, up -->
+
+
+</run>
+
+<run nr="725">
+
+<SPStrb id="1,0,0">0x0672,1</SPStrb><!--small wall, bar 0, down-->
+<SPStrb id="1,1,0">0x0672,2</SPStrb><!--small wall, bar 1, down-->
+<SPStrb id="1,2,0">0x0672,3</SPStrb><!--small wall, bar 2, down-->
+<SPStrb id="1,3,0">0x0672,4</SPStrb><!--small wall, bar 3, down-->
+<SPStrb id="1,4,0">0x0672,5</SPStrb><!--small wall, bar 4, down-->
+<SPStrb id="1,5,0">0x0672,6</SPStrb><!--small wall, bar 5, down-->
+<SPStrb id="1,6,0">0x0672,7</SPStrb><!--small wall, bar 6, down-->
+<SPStrb id="1,7,0">0x0672,8</SPStrb><!--small wall, bar 7, down-->
+<SPStrb id="1,8,0">0x0672,9</SPStrb><!--small wall, bar 8, down-->
+<SPStrb id="1,9,0">0x0672,10</SPStrb><!--small wall, bar 9, down-->
+<SPStrb id="1,10,0">0x0672,11</SPStrb><!--small wall, bar 10, down-->
+<SPStrb id="1,11,0">0x0672,12</SPStrb><!--small wall, bar 11, down-->
+<SPStrb id="1,12,0">0x0672,13</SPStrb><!--small wall, bar 12, down-->
+<SPStrb id="1,13,0">0x0672,14</SPStrb><!--small wall, bar 13, down-->
+<SPStrb id="1,14,0">0x0672,15</SPStrb><!--small wall, bar 14, down-->
+<SPStrb id="1,15,0">0x0672,16</SPStrb><!--small wall, bar 15, down-->
+<SPStrb id="1,16,0">0x0672,17</SPStrb><!--small wall, bar 16, down-->
+<SPStrb id="1,17,0">0x0672,18</SPStrb><!--small wall, bar 17, down-->
+
+<SPStrb id="3,0,0">0x0672,19</SPStrb><!--big wall, bar 0, down-->
+<SPStrb id="3,1,0">0x0672,20</SPStrb><!--big wall, bar 1, down-->
+<SPStrb id="3,2,0">0x0672,21</SPStrb><!--big wall, bar 2, down-->
+<SPStrb id="3,3,0">0x0672,22</SPStrb><!--big wall, bar 3, down-->
+<SPStrb id="3,4,0">0x0672,23</SPStrb><!--big wall, bar 4, down-->
+<SPStrb id="3,5,0">0x0672,24</SPStrb><!--big wall, bar 5, down-->
+<SPStrb id="3,6,0">0x0672,25</SPStrb><!--big wall, bar 6, down-->
+<SPStrb id="3,7,0">0x0672,26</SPStrb><!--big wall, bar 7, down-->
+<SPStrb id="3,8,0">0x0672,27</SPStrb><!--big wall, bar 8, down-->
+<SPStrb id="3,9,0">0x0672,28</SPStrb><!--big wall, bar 9, down-->
+<SPStrb id="3,10,0">0x0672,29</SPStrb><!--big wall, bar 10, down-->
+<SPStrb id="3,11,0">0x0672,30</SPStrb><!--big wall, bar 11, down-->
+<SPStrb id="3,12,0">0x0672,31</SPStrb><!--big wall, bar 12, down-->
+<SPStrb id="3,13,0">0x0672,32</SPStrb><!--big wall, bar 13, down-->
+<SPStrb id="3,14,0">0x0672,33</SPStrb><!--big wall, bar 14, down-->
+<SPStrb id="3,15,0">0x0672,34</SPStrb><!--big wall, bar 15, down-->
+<SPStrb id="3,16,0">0x0672,35</SPStrb><!--big wall, bar 16, down-->
+<SPStrb id="3,17,0">0x0672,36</SPStrb><!--big wall, bar 17, down-->
+<SPStrb id="3,18,0">0x0672,37</SPStrb><!--big wall, bar 18, down-->
+<SPStrb id="3,19,0">0x0672,38</SPStrb><!--big wall, bar 19, down-->
+<SPStrb id="3,20,0">0x0672,39</SPStrb><!--big wall, bar 20, down-->
+<SPStrb id="3,21,0">0x0672,40</SPStrb><!--big wall, bar 21, down-->
+<SPStrb id="3,22,0">0x0672,41</SPStrb><!--big wall, bar 22, down-->
+<SPStrb id="3,23,0">0x0672,42</SPStrb><!--big wall, bar 23, down-->
+<SPStrb id="3,24,0">0x0672,43</SPStrb><!--big wall, bar 24, down-->
+<SPStrb id="3,25,0">0x0672,44</SPStrb><!--big wall, bar 25, down-->
+<SPStrb id="3,26,0">0x0672,45</SPStrb><!--big wall, bar 26, down-->
+<SPStrb id="3,27,0">0x0672,46</SPStrb><!--big wall, bar 27, down-->
+
+<!-- UP PMTs -->
+<SPStrb id="1,0,1">0x0673,1</SPStrb><!--small wall, bar 0, up -->
+<SPStrb id="1,1,1">0x0673,2</SPStrb><!--small wall, bar 1, up -->
+<SPStrb id="1,2,1">0x0673,3</SPStrb><!--small wall, bar 2, up -->
+<SPStrb id="1,3,1">0x0673,4</SPStrb><!--small wall, bar 3, up -->
+<SPStrb id="1,4,1">0x0673,5</SPStrb><!--small wall, bar 4, up -->
+<SPStrb id="1,5,1">0x0673,6</SPStrb><!--small wall, bar 5, up -->
+<SPStrb id="1,6,1">0x0673,7</SPStrb><!--small wall, bar 6, up -->
+<SPStrb id="1,7,1">0x0673,8</SPStrb><!--small wall, bar 7, up -->
+<SPStrb id="1,8,1">0x0673,9</SPStrb><!--small wall, bar 8, up -->
+<SPStrb id="1,9,1">0x0673,10</SPStrb><!--small wall, bar 9, up -->
+<SPStrb id="1,10,1">0x0673,11</SPStrb><!--small wall, bar 10, up -->
+<SPStrb id="1,11,1">0x0673,12</SPStrb><!--small wall, bar 11, up -->
+<SPStrb id="1,12,1">0x0673,13</SPStrb><!--small wall, bar 12, up -->
+<SPStrb id="1,13,1">0x0673,14</SPStrb><!--small wall, bar 13, up -->
+<SPStrb id="1,14,1">0x0673,15</SPStrb><!--small wall, bar 14, up -->
+<SPStrb id="1,15,1">0x0673,16</SPStrb><!--small wall, bar 15, up -->
+<SPStrb id="1,16,1">0x0673,17</SPStrb><!--small wall, bar 16, up -->
+<SPStrb id="1,17,1">0x0673,18</SPStrb><!--small wall, bar 17, up -->
+
+<SPStrb id="3,0,1">0x0673,19</SPStrb><!--big wall, bar 0, up -->
+<SPStrb id="3,1,1">0x0673,20</SPStrb><!--big wall, bar 1, up -->
+<SPStrb id="3,2,1">0x0673,21</SPStrb><!--big wall, bar 2, up -->
+<SPStrb id="3,3,1">0x0673,22</SPStrb><!--big wall, bar 3, up -->
+<SPStrb id="3,4,1">0x0673,23</SPStrb><!--big wall, bar 4, up -->
+<SPStrb id="3,5,1">0x0673,24</SPStrb><!--big wall, bar 5, up -->
+<SPStrb id="3,6,1">0x0673,25</SPStrb><!--big wall, bar 6, up -->
+<SPStrb id="3,7,1">0x0673,26</SPStrb><!--big wall, bar 7, up -->
+<SPStrb id="3,8,1">0x0673,27</SPStrb><!--big wall, bar 8, up -->
+<SPStrb id="3,9,1">0x0673,28</SPStrb><!--big wall, bar 9, up -->
+<SPStrb id="3,10,1">0x0673,29</SPStrb><!--big wall, bar 10, up -->
+<SPStrb id="3,11,1">0x0673,30</SPStrb><!--big wall, bar 11, up -->
+<SPStrb id="3,12,1">0x0673,31</SPStrb><!--big wall, bar 12, up -->
+<SPStrb id="3,13,1">0x0673,32</SPStrb><!--big wall, bar 13, up -->
+<SPStrb id="3,14,1">0x0673,33</SPStrb><!--big wall, bar 14, up -->
+<SPStrb id="3,15,1">0x0673,34</SPStrb><!--big wall, bar 15, up -->
+<SPStrb id="3,16,1">0x0673,35</SPStrb><!--big wall, bar 16, up -->
+<SPStrb id="3,17,1">0x0673,36</SPStrb><!--big wall, bar 17, up -->
+<SPStrb id="3,18,1">0x0673,37</SPStrb><!--big wall, bar 18, up -->
+<SPStrb id="3,19,1">0x0673,38</SPStrb><!--big wall, bar 19, up -->
+<SPStrb id="3,20,1">0x0673,39</SPStrb><!--big wall, bar 20, up -->
+<SPStrb id="3,21,1">0x0673,40</SPStrb><!--big wall, bar 21, up -->
+<SPStrb id="3,22,1">0x0673,41</SPStrb><!--big wall, bar 22, up -->
+<SPStrb id="3,23,1">0x0673,42</SPStrb><!--big wall, bar 23, up -->
+<SPStrb id="3,24,1">0x0673,43</SPStrb><!--big wall, bar 24, up -->
+<SPStrb id="3,25,1">0x0673,44</SPStrb><!--big wall, bar 25, up -->
+<SPStrb id="3,26,1">0x0673,45</SPStrb><!--big wall, bar 26, up -->
+<SPStrb id="3,27,1">0x0673,46</SPStrb><!--big wall, bar 27, up -->
+
+</run>
+
+
+<run nr="763">
+<!--funky because some straws are broken-->
+<!--     <stt id="1,0,18" > 0x1351,16  </stt>
+    <stt id="1,1,19" > 0x1351,15  </stt>
+    <stt id="1,0,20" > 0x1351,14  </stt>
+    <stt id="1,0,21" > 0x1351,13  </stt>
+    <stt id="1,0,22" > 0x1351,12  </stt>
+    <stt id="1,0,23" > 0x1351,11  </stt>
+    <stt id="1,0,24" > 0x1351,10  </stt>
+    <stt id="1,0,25" > 0x1351,9  </stt>
+    <stt id="1,0,26" > 0x1351,8  </stt>
+    <stt id="1,0,27" > 0x1351,7 </stt>
+    <stt id="1,0,28"> 0x1351,6 </stt>
+    <stt id="1,0,29"> 0x1351,5 </stt>
+    <stt id="1,0,30"> 0x1351,4 </stt>
+    <stt id="1,1,29"> 0x1351,3 </stt>
+    <stt id="1,1,30"> 0x1351,2 </stt>
+    <stt id="1,0,31"> 0x1351,1 </stt>
+
+    <stt id="1,0,34" > 0x1351,32 </stt>
+    <stt id="1,0,35" > 0x1351,31 </stt>
+    <stt id="1,0,36" > 0x1351,30 </stt>
+    <stt id="1,0,37" > 0x1351,29 </stt>
+    <stt id="1,0,38" > 0x1351,28 </stt>
+    <stt id="1,0,39" > 0x1351,27 </stt>
+    <stt id="1,0,40" > 0x1351,26 </stt>
+    <stt id="1,0,41" > 0x1351,25 </stt>
+    <stt id="1,0,42" > 0x1351,24 </stt>1
+    <stt id="1,0,43" > 0x1351,23 </stt>
+    <stt id="1,0,44"> 0x1351,22 </stt>
+    <stt id="1,0,45"> 0x1351,21 </stt>
+    <stt id="1,0,46"> 0x1351,20 </stt>
+    <stt id="1,0,47"> 0x1351,19 </stt>
+    <stt id="1,0,48"> 0x1351,18 </stt>
+    <stt id="1,0,49"> 0x1351,17 </stt> -->
+</run>
+
+
+<run nr="934"><!-- side, plane, straw in plane -->
+    <!--PADIWAS-->
+<!--     <stt id="1,4,1 "> 0x0650, 1 </stt>
+    <stt id="1,4,2 "> 0x0650, 2 </stt>
+    <stt id="1,4,3 "> 0x0650, 3 </stt>
+    <stt id="1,4,4 "> 0x0650, 4 </stt>
+    <stt id="1,4,5 "> 0x0650, 5 </stt>
+    <stt id="1,4,6 "> 0x0650, 6 </stt>
+    <stt id="1,4,7 "> 0x0650, 7 </stt>
+    <stt id="1,4,8 "> 0x0650, 8 </stt>
+    <stt id="1,4,9 "> 0x0650, 9 </stt>
+    <stt id="1,4,10"> 0x0650,10 </stt>
+    <stt id="1,4,11"> 0x0650,11 </stt>
+    <stt id="1,4,12"> 0x0650,12 </stt>
+    <stt id="1,4,13"> 0x0650,13 </stt>
+    <stt id="1,4,14"> 0x0650,14 </stt>
+    <stt id="1,4,15"> 0x0650,15 </stt>
+    <stt id="1,4,16"> 0x0650,16 </stt>
+
+    
+    <stt id="1,3,1 "> 0x0650,17 </stt>
+    <stt id="1,3,2 "> 0x0650,18 </stt>
+    <stt id="1,3,3 "> 0x0650,19 </stt>
+    <stt id="1,3,4 "> 0x0650,20 </stt>
+    <stt id="1,3,5 "> 0x0650,21 </stt>
+    <stt id="1,3,6 "> 0x0650,22 </stt>
+    <stt id="1,3,7 "> 0x0650,23 </stt>
+    <stt id="1,3,8 "> 0x0650,24 </stt>
+    <stt id="1,3,9 "> 0x0650,25 </stt>
+    <stt id="1,3,10"> 0x0650,26 </stt>
+    <stt id="1,3,11"> 0x0650,27 </stt>
+    <stt id="1,3,12"> 0x0650,28 </stt>
+    <stt id="1,3,13"> 0x0650,29 </stt>
+    <stt id="1,3,14"> 0x0650,30 </stt>
+    <stt id="1,3,15"> 0x0650,31 </stt>
+    <stt id="1,3,16"> 0x0650,32 </stt>
+
+    <stt id="1,2,1 "> 0x0650,33 </stt>
+    <stt id="1,2,2 "> 0x0650,34</stt>
+    <stt id="1,2,3 "> 0x0650,35 </stt>
+    <stt id="1,2,4 "> 0x0650,36 </stt>
+    <stt id="1,2,5 "> 0x0650,37 </stt>
+    <stt id="1,2,6 "> 0x0650,38 </stt>
+    <stt id="1,2,7 "> 0x0650,39 </stt>
+    <stt id="1,2,8 "> 0x0650,40 </stt>
+    <stt id="1,2,9 "> 0x0650,41 </stt>
+    <stt id="1,2,10"> 0x0650,42 </stt>
+    <stt id="1,2,11"> 0x0650,43 </stt>
+    <stt id="1,2,12"> 0x0650,44 </stt>
+    <stt id="1,2,13"> 0x0650,45 </stt>
+    <stt id="1,2,14"> 0x0650,46 </stt>
+    <stt id="1,2,15"> 0x0650,47 </stt>
+    <stt id="1,2,16"> 0x0650,48 </stt>
+
+    <stt id="1,1,1 "> 0x0653,1  </stt>
+    <stt id="1,1,2 "> 0x0653,2 </stt>
+    <stt id="1,1,3 "> 0x0653,3  </stt>
+    <stt id="1,1,4 "> 0x0653,4  </stt>
+    <stt id="1,1,5 "> 0x0653,5  </stt>
+    <stt id="1,1,6 "> 0x0653,6  </stt>
+    <stt id="1,1,7 "> 0x0653,7  </stt>
+    <stt id="1,1,8 "> 0x0653,8  </stt>
+    <stt id="1,1,9 "> 0x0653,9  </stt>
+    <stt id="1,1,10"> 0x0653,10 </stt>
+    <stt id="1,1,11"> 0x0653,11 </stt>
+    <stt id="1,1,12"> 0x0653,12 </stt>
+    <stt id="1,1,13"> 0x0653,13 </stt>
+    <stt id="1,1,14"> 0x0653,14 </stt>
+    <stt id="1,1,15"> 0x0653,15 </stt>
+    <stt id="1,1,16"> 0x0653,16 </stt> -->
+
+    <!--KRAKOW-->
+    <stt id="1,4,18 "> 0x1350, 1 </stt>
+    <stt id="1,4,16 "> 0x1350, 2 </stt>
+    <stt id="1,4,19 "> 0x1350, 3 </stt>
+    <stt id="1,4,20 "> 0x1350, 4 </stt>
+    <stt id="1,4,21 "> 0x1350, 5 </stt>
+    <stt id="1,4,22 "> 0x1350, 6 </stt>
+    <stt id="1,4,23 "> 0x1350, 7 </stt>
+    <stt id="1,4,24 "> 0x1350, 8 </stt>
+    <stt id="1,4,25 "> 0x1350, 9 </stt>
+    <stt id="1,4,26"> 0x1350,10 </stt>
+    <stt id="1,4,27"> 0x1350,11 </stt>
+    <stt id="1,4,28"> 0x1350,12 </stt>
+    <stt id="1,4,29"> 0x1350,13 </stt>
+    <stt id="1,4,30"> 0x1350,14 </stt>
+    <stt id="1,4,31"> 0x1350,15 </stt>
+    <stt id="1,4,32"> 0x1350,16 </stt>
+
+    
+    <stt id="1,3,16"> 0x1350,17 </stt>
+    <stt id="1,3,17"> 0x1350,18 </stt>
+    <stt id="1,3,18"> 0x1350,19 </stt>
+    <stt id="1,3,19"> 0x1350,20 </stt>
+    <stt id="1,3,20"> 0x1350,21 </stt>
+    <stt id="1,3,21"> 0x1350,22 </stt>
+    <stt id="1,3,22"> 0x1350,23 </stt>
+    <stt id="1,3,23"> 0x1350,24 </stt>
+    <stt id="1,3,24"> 0x1350,25 </stt>
+    <stt id="1,3,25"> 0x1350,26 </stt>
+    <stt id="1,3,26"> 0x1350,27 </stt>
+    <stt id="1,3,27"> 0x1350,28 </stt>
+    <stt id="1,3,28"> 0x1350,29 </stt>
+    <stt id="1,3,29"> 0x1350,30 </stt>
+    <stt id="1,3,30"> 0x1350,31 </stt>
+    <stt id="1,3,31"> 0x1350,32 </stt>
+
+    <stt id="1,2,16"> 0x1350,33 </stt>
+    <stt id="1,2,17"> 0x1350,34</stt>
+    <stt id="1,2,18"> 0x1350,35 </stt>
+    <stt id="1,2,19"> 0x1350,36 </stt>
+    <stt id="1,2,20"> 0x1350,37 </stt>
+    <stt id="1,2,21"> 0x1350,38 </stt>
+    <stt id="1,2,22"> 0x1350,39 </stt>
+    <stt id="1,2,23"> 0x1350,40 </stt>
+    <stt id="1,2,24"> 0x1350,41 </stt>
+    <stt id="1,2,25"> 0x1350,42 </stt>
+    <stt id="1,2,26"> 0x1350,43 </stt>
+    <stt id="1,2,27"> 0x1350,44 </stt>
+    <stt id="1,2,28"> 0x1350,45 </stt>
+    <stt id="1,2,29"> 0x1350,46 </stt>
+    <stt id="1,2,30"> 0x1350,47 </stt>
+    <stt id="1,2,31"> 0x1350,48 </stt>
+
+    <stt id="1,1,16"> 0x1353,1  </stt>
+<!--     <stt id="1,1,18"> 0x1353,2  </stt> -->
+    <stt id="1,1,17"> 0x1353,3  </stt>
+    <stt id="1,1,18"> 0x1353,4  </stt>
+    <stt id="1,1,19"> 0x1353,5  </stt>
+    <stt id="1,1,20"> 0x1353,6  </stt>
+    <stt id="1,1,21"> 0x1353,7  </stt>
+    <stt id="1,1,22"> 0x1353,8  </stt>
+    <stt id="1,1,23"> 0x1353,9  </stt>
+    <stt id="1,1,24"> 0x1353,10 </stt>
+    <stt id="1,1,25"> 0x1353,11 </stt>
+    <stt id="1,1,26"> 0x1353,12 </stt>
+    <stt id="1,1,27"> 0x1353,13 </stt>
+    <stt id="1,1,28"> 0x1353,14 </stt>
+    <stt id="1,1,29"> 0x1353,15 </stt>
+    <stt id="1,1,30"> 0x1353,16 </stt>
+
+</run>
+
+<run nr="960"><!--Beam monitor. Bar in plane then up/down-->
+<!--     <BMtrb id="3,1"> 0x0651, 1</BMtrb>
+    <BMtrb id="3,0"> 0x0651, 2</BMtrb>
+    <BMtrb id="2,1"> 0x0651, 3</BMtrb>
+    <BMtrb id="2,0"> 0x0651, 4</BMtrb>
+    <BMtrb id="1,1"> 0x0651, 5</BMtrb>
+    <BMtrb id="1,0"> 0x0651, 6</BMtrb>
+    <BMtrb id="0,1"> 0x0651, 7</BMtrb>
+    <BMtrb id="0,0"> 0x0651, 8</BMtrb> -->
+
+
+
+
+    <SPStrb id="0,0,1">0x0651,8</SPStrb><!--big wall, bar 0, up -->
+    <SPStrb id="0,0,0">0x0651,7</SPStrb><!--big wall, bar 1, up -->
+    <SPStrb id="0,1,1">0x0651,6</SPStrb><!--big wall, bar 2, up -->
+    <SPStrb id="0,1,0">0x0651,5</SPStrb><!--big wall, bar 34, up -->
+    <SPStrb id="0,2,1">0x0651,4</SPStrb><!--big wall, bar 4, up -->
+    <SPStrb id="0,2,0">0x0651,3</SPStrb><!--big wall, bar 5, up -->
+    <SPStrb id="0,3,1">0x0651,2</SPStrb><!--big wall, bar 6, up -->
+    <SPStrb id="0,3,0">0x0651,1</SPStrb><!--big wall, bar 7, up -->
+
+</run>
+<run nr="966">
+    <stt id="1,7,17"> 0x1351,16 </stt>
+    <stt id="1,7,18"> 0x1351,15 </stt>
+    <stt id="1,7,19"> 0x1351,14 </stt>
+    <stt id="1,7,20"> 0x1351,13 </stt>
+    <stt id="1,7,21"> 0x1351,12 </stt>
+    <stt id="1,7,22"> 0x1351,11 </stt>
+    <stt id="1,7,23"> 0x1351,10 </stt>
+    <stt id="1,7,24"> 0x1351,9  </stt>
+    <stt id="1,7,25"> 0x1351,8  </stt>
+    <stt id="1,7,26"> 0x1351,7  </stt>
+    <stt id="1,7,27"> 0x1351,6  </stt>
+    <stt id="1,7,28"> 0x1351,5  </stt>
+    <stt id="1,7,29"> 0x1351,4  </stt>
+    <stt id="1,7,30"> 0x1351,3  </stt>
+    <stt id="1,7,31"> 0x1351,2  </stt>
+    <stt id="1,7,32"> 0x1351,1  </stt>
+        
+    <stt id="1,8,17"> 0x1351,17 </stt>
+    <stt id="1,8,18"> 0x1351,18 </stt>
+    <stt id="1,8,19"> 0x1351,19 </stt>
+    <stt id="1,8,20"> 0x1351,20 </stt>
+    <stt id="1,8,21"> 0x1351,21 </stt>
+    <stt id="1,8,22"> 0x1351,22 </stt>
+    <stt id="1,8,23"> 0x1351,23 </stt>
+    <stt id="1,8,24"> 0x1351,24 </stt>
+    <stt id="1,8,25"> 0x1351,25 </stt>
+    <stt id="1,8,26"> 0x1351,26 </stt>
+    <stt id="1,8,27"> 0x1351,27 </stt>
+    <stt id="1,8,28"> 0x1351,28 </stt>
+    <stt id="1,8,29"> 0x1351,29 </stt>
+    <stt id="1,8,30"> 0x1351,30 </stt>
+    <stt id="1,8,31"> 0x1351,31 </stt>
+    <stt id="1,8,32"> 0x1351,32 </stt>
+
+    <stt id="1,9,17"> 0x1351,33 </stt>
+    <stt id="1,9,18"> 0x1351,34 </stt>
+    <stt id="1,9,19"> 0x1351,35 </stt>
+    <stt id="1,9,20"> 0x1351,36 </stt>
+    <stt id="1,9,21"> 0x1351,37 </stt>
+    <stt id="1,9,22"> 0x1351,38 </stt>
+    <stt id="1,9,23"> 0x1351,39 </stt>
+    <stt id="1,9,24"> 0x1351,40 </stt>
+    <stt id="1,9,25"> 0x1351,41 </stt>
+    <stt id="1,9,26"> 0x1351,42 </stt>
+    <stt id="1,9,27"> 0x1351,43 </stt>
+    <stt id="1,9,28"> 0x1351,44 </stt>
+    <stt id="1,9,29"> 0x1351,45 </stt>
+    <stt id="1,9,30"> 0x1351,46 </stt>
+    <stt id="1,9,31"> 0x1351,47 </stt>
+    <stt id="1,9,32"> 0x1351,48 </stt>
+
+    <stt id="1,6,17"> 0x1352,1  </stt>
+    <stt id="1,6,18"> 0x1352,2  </stt>
+    <stt id="1,6,19"> 0x1352,3  </stt>
+    <stt id="1,6,20"> 0x1352,4  </stt>
+    <stt id="1,6,21"> 0x1352,5  </stt>
+    <stt id="1,6,22"> 0x1352,6  </stt>
+    <stt id="1,6,23"> 0x1352,7  </stt>
+    <stt id="1,6,24"> 0x1352,8  </stt>
+    <stt id="1,6,25"> 0x1352,9  </stt>
+    <stt id="1,6,26"> 0x1352,10 </stt>
+    <stt id="1,6,27"> 0x1352,11 </stt>
+    <stt id="1,6,28"> 0x1352,12 </stt>
+    <stt id="1,6,29"> 0x1352,13 </stt>
+    <stt id="1,6,30"> 0x1352,14 </stt>
+    <stt id="1,6,31"> 0x1352,15 </stt>
+    <stt id="1,6,32"> 0x1352,16 </stt>
+
+    <stt id="1,5,17"> 0x1352,17 </stt>
+    <stt id="1,5,18"> 0x1352,18 </stt>
+    <stt id="1,5,19"> 0x1352,19 </stt>
+    <stt id="1,5,20"> 0x1352,20 </stt>
+    <stt id="1,5,21"> 0x1352,21 </stt>
+    <stt id="1,5,22"> 0x1352,22 </stt>
+    <stt id="1,5,23"> 0x1352,23 </stt>
+    <stt id="1,5,24"> 0x1352,24 </stt>
+    <stt id="1,5,25"> 0x1352,25 </stt>
+    <stt id="1,5,26"> 0x1352,26 </stt>
+    <stt id="1,5,27"> 0x1352,27 </stt>
+    <stt id="1,5,28"> 0x1352,28 </stt>
+    <stt id="1,5,29"> 0x1352,29 </stt>
+    <stt id="1,5,30"> 0x1352,30 </stt>
+    <stt id="1,5,31"> 0x1352,31 </stt>
+    <stt id="1,5,32"> 0x1352,32 </stt>
+<!-- original
+ -->
+ <!--     <stt id="1,0,17"> 0x1353,17 </stt>
+    <stt id="1,0,18"> 0x1353,18 </stt>
+    <stt id="1,0,19"> 0x1353,19 </stt>
+    <stt id="1,0,20"> 0x1353,20 </stt>
+    <stt id="1,0,21"> 0x1353,21 </stt>
+    <stt id="1,0,22"> 0x1353,22 </stt>
+    <stt id="1,0,23"> 0x1353,23 </stt>
+    <stt id="1,0,24"> 0x1353,24 </stt>
+    <stt id="1,0,25"> 0x1353,25 </stt>
+    <stt id="1,0,26"> 0x1353,26 </stt>
+    <stt id="1,0,27"> 0x1353,27 </stt>
+    <stt id="1,0,28"> 0x1353,28 </stt>
+    <stt id="1,0,29"> 0x1353,29 </stt>
+    <stt id="1,0,30"> 0x1353,30 </stt>
+    <stt id="1,0,31"> 0x1353,31 </stt>
+    <stt id="1,0,32"> 0x1353,32 </stt> -->
+<!--remapped with offset of two-->
+    <stt id="1,0,15"> 0x1353,17 </stt>
+    <stt id="1,0,16"> 0x1353,18 </stt>
+    <stt id="1,0,17"> 0x1353,19 </stt>
+    <stt id="1,0,18"> 0x1353,20 </stt>
+    <stt id="1,0,19"> 0x1353,21 </stt>
+    <stt id="1,0,20"> 0x1353,22 </stt>
+    <stt id="1,0,21"> 0x1353,23 </stt>
+    <stt id="1,0,22"> 0x1353,24 </stt>
+    <stt id="1,0,23"> 0x1353,25 </stt>
+    <stt id="1,0,24"> 0x1353,26 </stt>
+    <stt id="1,0,25"> 0x1353,27 </stt>
+    <stt id="1,0,26"> 0x1353,28 </stt>
+    <stt id="1,0,27"> 0x1353,29 </stt>
+    <stt id="1,0,28"> 0x1353,30 </stt>
+    <stt id="1,0,29"> 0x1353,31 </stt>
+    <stt id="1,0,30"> 0x1353,32 </stt>
+<!-- remapped with offset of -1
+ -->
+<!--     <stt id="1,4,16 "> 0x1350, 1 </stt>
+    <stt id="1,4,17 "> 0x1350, 2 </stt>
+    <stt id="1,4,18 "> 0x1350, 3 </stt>
+    <stt id="1,4,19 "> 0x1350, 4 </stt>
+    <stt id="1,4,20 "> 0x1350, 5 </stt>
+    <stt id="1,4,21 "> 0x1350, 6 </stt>
+    <stt id="1,4,22 "> 0x1350, 7 </stt>
+    <stt id="1,4,23 "> 0x1350, 8 </stt>
+    <stt id="1,4,24 "> 0x1350, 9 </stt>
+    <stt id="1,4,25"> 0x1350,10 </stt>
+    <stt id="1,4,26"> 0x1350,11 </stt>
+    <stt id="1,4,27"> 0x1350,12 </stt>
+    <stt id="1,4,28"> 0x1350,13 </stt>
+    <stt id="1,4,29"> 0x1350,14 </stt>
+    <stt id="1,4,30"> 0x1350,15 </stt>
+    <stt id="1,4,31"> 0x1350,16 </stt> -->
+</run>
+</mapper>
+
+
+

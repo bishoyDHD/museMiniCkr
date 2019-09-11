@@ -1,0 +1,77 @@
+#
+# Makefile to process OLYMPUS raw data ROOT files for Near Online Monitoring
+#
+
+DATAPATH=/data/fall2012/ROOTfiles
+NEARONLINEDIR=/data/scratch/nearonline
+MYSELF=src/allyoucaneat/macros/MakeNearOnlineROOTfiles
+#targets = $@_tof.root $@_lumi.root $@_lumitracks.root
+
+target = $@
+runno = $(target:.near=)
+
+GOPTS=
+
+%.nearonline : %.symb %.tof %.wc %.gemtracks %.mwpctracks %.sipmefficiencies %.lumihitmaps
+	@echo "Near online processing for run $* done!"
+
+# %.run :
+# 	$(MAKE) -j 3 $*.tof $*.gem $*.mwpc -f $(MYSELF)
+# 	$(MAKE) -j 2 $*.gemtracks $*.mwpctracks -f $(MYSELF)
+
+# Process raw data with SYMB plugin:
+%.symb :
+	@echo "Making SYMB for run $*"
+	bin/cooker recipes/sm.xml \
+	$(DATAPATH)/run_$*_*.root $(NEARONLINE)/$*_symb.root $(GOPTS)
+
+# Process raw data with TOF plugin:
+%.tof :
+	@echo "Making TOFs for run $*"
+	bin/cooker recipes/tof.xml \
+	  $(DATAPATH)/run_$*_*.root $(NEARONLINEDIR)/$*_tof.root $(GOPTS)
+
+# Process raw data with LumiGEM plugin:
+%.gem :
+	@echo "Making GEMs for run $*"
+	bin/cooker recipes/GEMlumi_XY_tofs.xml \
+	  $(DATAPATH)/run_$*_*.root $(NEARONLINEDIR)/$*_gem.root $(GOPTS)
+
+# Process raw data with MWPC plugin:
+%.mwpc :
+	@echo "Making MWPCs for run $*"
+	bin/cooker recipes/mwpc_hits.xml \
+	  $(DATAPATH)/run_$*_*.root $(NEARONLINEDIR)/$*_mwpc.root $(GOPTS)
+
+# Tracking with LumiGEMs only:
+%.gemtracks : %.gem
+	@echo "Making GEM tracks for run $*"
+	bin/cooker recipes/fitlumis_GEM.xml \
+	  $(NEARONLINEDIR)/$*_gem.root $(NEARONLINEDIR)/$*_gemtracks.root $(GOPTS)
+
+# Tracking with MWPCs only:
+%.mwpctracks : %.mwpc
+	@echo "Making MWPC tracks for run $*"
+	bin/cooker recipes/fitlumis_MWPC.xml \
+	  $(NEARONLINEDIR)/$*_mwpc.root $(NEARONLINEDIR)/$*_mwpctracks.root $(GOPTS)
+
+# Tracking with both, MWPCs and GEMs:
+%.lumitracks : %.gem %.mwpc
+	@echo "Making lumi tracks for run $*"
+	bin/cooker recipes/fitlumis.xml \
+	  $(NEARONLINEDIR)/$*_gem.root:$(NEARONLINEDIR)/$*_mwpc.root $(NEARONLINEDIR)/$*_lumitracks.root $(GOPTS)
+
+# Determine SiPM efficiencies from lumitracks:
+%.sipmefficiencies : %.lumitracks
+	@echo "Making SiPM efficiencies for run $*"
+	bin/cooker recipes/lumievent.xml $(NEARONLINEDIR)/$*_lumitracks.root $(GOPTS)
+
+%.lumihitmaps : %.lumitracks
+	@echo "Making Lumi Hitmaps for run $*"
+	bin/cooker recipes/LumiTrackOverview.xml $(NEARONLINEDIR)/$*_lumitracks.root $(NEARONLINEDIR)/$*_lumihitmaps.root $(GOPTS)
+
+# Process raw data with WC2 plugin (without tracking):
+%.wc :
+	@echo "Making WCs for run $*"
+	bin/cooker recipes/WC2.xml \
+	  $(DATAPATH)/run_$*_*.root $(NEARONLINEDIR)/$*_wc.root -c WC2:useTracking:false $(GOPTS)

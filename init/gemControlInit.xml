@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<museinit
+   xml:base="/home/tpatel/MUSE1/muse/src/plugins/detector/gemControl/"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:noNamespaceSchemaLocation='demo.xsd'
+   xmlns:xi="http://www.w3.org/2001/XInclude">
+
+ <xi:include href="init/gemControl.xml" parse="xml"/> 
+</museinit>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<museinit
+   xml:base="homedir/.muse/shared/"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:noNamespaceSchemaLocation='demo.xsd'
+   xmlns:xi="http://www.w3.org/2001/XInclude">
+
+ <xi:include href="init/LumiGEM.xml" parse="xml"/> <!-- include LumiGEM config -->
+
+ <!-- <xi:include href="init/GEMlumi_XY.xml" parse="xml"/> --> <!-- include LumiGEM config -->
+ <xi:include href="init/adctdc.xml" parse="xml"/> <!-- include adctdc config -->
+ <xi:include href="init/STT.xml" parse="xml"/>
+ <xi:include href="init/BH.xml" parse="xml"/>
+ <xi:include href="init/BM.xml" parse="xml"/>
+ <xi:include href="init/PbGlass.xml" parse="xml"/>
+
+
+</museinit>

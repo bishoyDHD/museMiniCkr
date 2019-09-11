@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<muse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation='recipe.xsd'>
+
+<init>init/GEMlumi_XY.xml</init>
+
+<source>MRT</source> <!-- the source tree name-->
+<destination>lumigemcooked</destination> <!-- the destination tree name-->
+
+<plugins>
+  <plugin> 
+     <name>GEMtng</name>
+     <file>libGEMtng</file>
+  </plugin>
+</plugins>
+
+
+<!-- These functions will be called at the beginning --> 
+<startup>
+ <GEMtng>startup</GEMtng>
+ <GEMtng>dH_allRaw</GEMtng> <!-- this needs to AFTER startup -->
+ <GEMtng>dH_planeRaw</GEMtng> 
+ <GEMtng>dH_planeProcessed</GEMtng> 
+ <GEMtng>dH_planeSum</GEMtng> 
+ <GEMtng>dH_planeHits</GEMtng> 
+ <GEMtng>dH_stackHits</GEMtng> 
+ <GEMtng>dH_dxdy</GEMtng> 
+</startup>
+
+<!-- These functions will be executed for every event, in order of appearance -->
+<execute>
+ <GEMtng>process</GEMtng>
+</execute>
+
+
+</muse>

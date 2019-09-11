@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<muse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation='recipe.xsd'>
+
+<init>init/GEMlumi_XY.xml</init>
+
+<source>MMT</source> <!-- the source tree name-->
+<destination>lumigemcooked</destination> <!-- the destination tree name-->
+
+<plugins>
+<!--
+<plugin> 
+     <name>testbeamanalysis</name>
+     <file>libtestbeamanalysis</file>
+  </plugin>-->
+  <plugin> 
+     <name>LumiGEM</name>
+     <file>libLumiGEM</file>
+  </plugin>
+</plugins>
+
+
+<!-- These functions will be called at the 'very' beginning -->
+<defineHistograms>
+<!-- <testbeamanalysis>defineHistograms</testbeamanalysis>-->
+  <!--<LumiGEM>defineHistograms</LumiGEM>--> <!--function below calls define histograms anyway-->
+  <LumiGEM>defineHistogramsSpecAll</LumiGEM>
+</defineHistograms>
+
+<!-- These functions will be called at the beginning --> 
+<startup>
+<!--<testbeamanalysis>startup</testbeamanalysis>-->
+ <LumiGEM>startup</LumiGEM>
+</startup>
+
+<!-- These functions will be executed for every event, in order of appearance -->
+<execute>
+ <!--<testbeamanalysis>process</testbeamanalysis>-->
+ <LumiGEM>process</LumiGEM>
+</execute>
+
+<!-- These functions will be called at the end of the file --> 
+<finalize>
+ <!--<testbeamanalysis>finalize</testbeamanalysis>-->
+ <LumiGEM>done</LumiGEM>
+</finalize>
+
+</muse>

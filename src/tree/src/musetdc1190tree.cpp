@@ -1,0 +1,11 @@
+#include "musetdc1190tree.h"
+
+MUSETDC1190::MUSETDC1190()
+{
+}
+
+MUSETDC1190::~MUSETDC1190()
+{
+}
+
+ClassImp(MUSETDC1190);

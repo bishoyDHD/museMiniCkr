@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<muse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation='recipe.xsd'>
+
+<init>init/all.xml</init>
+
+<source>MMT</source> <!-- the source tree name-->
+<destination>PbGlass</destination> <!-- the destination tree name-->
+
+<plugins>
+  <plugin> 
+     <name>PbGlass</name>
+     <file>libPbGlass</file>
+  </plugin>
+</plugins>
+
+
+<defineHistograms>
+ <PbGlass>defineHistograms</PbGlass>
+</defineHistograms>
+
+<!-- These functions will be called at the beginning --> 
+<startup>
+ <PbGlass>startup</PbGlass>
+</startup>
+
+<!-- These functions will be executed for every event, in order of appearance -->
+<execute>
+ <PbGlass>process</PbGlass>
+</execute>
+
+<!-- These functions will be called after the first pass of data -->
+<postprocess>
+</postprocess>
+
+<!-- These functions call for a 2nd pass of the data and will be executed for every event -->
+<execute2>
+</execute2>
+
+<!-- These functions will be called at the end of the file --> 
+<finalize>
+  <PbGlass>finalize</PbGlass>
+</finalize>
+
+</muse>

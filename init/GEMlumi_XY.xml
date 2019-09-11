@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--   xml:base="/home/muse/muse/src/plugins/detector/LumiGEM/Plugin/"-->
+<museinit
+   xml:base="/home/tpatel/MUSE1/muse/src/plugins/detector/LumiGEM/Plugin/"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:noNamespaceSchemaLocation='demo.xsd'
+   xmlns:xi="http://www.w3.org/2001/XInclude">
+
+ <xi:include href="init/LumiGEM.xml" parse="xml"/> <!-- include LumiGEM config -->
+
+</museinit>

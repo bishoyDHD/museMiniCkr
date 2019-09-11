@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LumiGEM>
+  <config>
+    <!-- GEM APV mapping configuration tags                           -->
+    <AddAPVright>    AddAPVtoGEMright </AddAPVright>
+    <AddAPVleft>     AddAPVtoGEMleft  </AddAPVleft>
+    <ModifyAPVright> ModifyAPVright   </ModifyAPVright>
+    <ModifyAPVleft>  ModifyAPVleft    </ModifyAPVleft>
+    <SwapGEMaxis>    SwapGEMaxis      </SwapGEMaxis>
+    <!-- Cluster Finder configuration tags                            -->
+    <LMGaussFilterSigma> SetLMGaussFilterSigma </LMGaussFilterSigma>
+    <LMMinimumAmplitude> SetLMMininumAmplitude </LMMinimumAmplitude>
+    <LMMinimumDistance>  SetLMMinimumDistance  </LMMinimumDistance>
+    <LMMaximumNLM>       SetLMMaximumNLM       </LMMaximumNLM>
+    <CFMinimumAmplitude> SetCFMinimumAmplitude </CFMinimumAmplitude>
+    <CFSigmaRange>       SetCFSigmaRange       </CFSigmaRange>
+    <!-- Trigger Pattern of Interest configuration tags               -->
+    <TriggerPattern> SetTriggerPattern </TriggerPattern>
+  </config>
+<!--##################################################################-->
+  <date time="2000-01-01T00:00:00">
+<!--
+    The following section contains the GEM APV mapping configuration.
+
+    The idea is to map logical APV numbers to the axis of the GEMs in
+    the right order. The parameters are
+
+      lAPV    logical APV number in the data stream
+      gem     "US": upstream, "MI": middle, "DS": downstream
+      xy      "x": APV sits on GEM x axis, "y": y axis
+      skip    skip the first n samples from the APV data block
+
+    To add an APV to the right sector use 'AddAPVright' and for the
+    left sector 'AddAPVleft'.
+
+    N.B.: The parameter 'id' is mandatory in these xml files. The
+    following lines will be processed in order of ascending 'id' for
+    each kind of tag (i.e. 'AddPAVright/left'). As the proper cGEM
+    configuration depends on the order in which the APVs are added to
+    the GEM objects the 'id' parameter needs to be taken into account,
+    although in principle it has no meaning in the configuration
+    process of the cGEM class itself. We just have to ccope with the
+    fact that it is mandatory here...
+-->
+
+    <!-- ===== Right sector GEM APV configuration ===== -->  <!-- ===== Right sector APV modification config. (averaging etc.) ===== -->
+    <!-- =====           lAPV gem   xy  skip      ===== -->  <!-- =====              lAPV  channels  size  method              ===== -->
+    <AddAPVright id=" 0">  1, "US", "x",  6  </AddAPVright>  <ModifyAPVright id=" 0">  1, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 1">  0, "US", "x",  0  </AddAPVright>  <ModifyAPVright id=" 1">  0, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 2">  3, "US", "y",  6  </AddAPVright>  <ModifyAPVright id=" 2">  3, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 3">  2, "US", "y",  0  </AddAPVright>  <ModifyAPVright id=" 3">  2, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <SwapGEMaxis id=" 0"> "right", "US", "x" </SwapGEMaxis>
+    <SwapGEMaxis id=" 1"> "right", "US", "y" </SwapGEMaxis>
+
+    <AddAPVright id=" 4">  5, "MI", "x",  6  </AddAPVright>  <ModifyAPVright id=" 4">  5, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 5">  4, "MI", "x",  0  </AddAPVright>  <ModifyAPVright id=" 5">  4, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 6">  7, "MI", "y",  6  </AddAPVright>  <ModifyAPVright id=" 6">  7, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 7">  6, "MI", "y",  0  </AddAPVright>  <ModifyAPVright id=" 7">  6, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <SwapGEMaxis id=" 2"> "right", "MI", "x" </SwapGEMaxis>
+    <SwapGEMaxis id=" 3"> "right", "MI", "y" </SwapGEMaxis>
+
+    <AddAPVright id=" 8">  9, "DS", "x",  6  </AddAPVright>  <ModifyAPVright id=" 8">  9, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 9">  8, "DS", "x",  0  </AddAPVright>  <ModifyAPVright id=" 9">  8, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id="10"> 11, "DS", "y",  6  </AddAPVright>  <ModifyAPVright id="10"> 11, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id="11"> 10, "DS", "y",  0  </AddAPVright>  <ModifyAPVright id="11"> 10, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <SwapGEMaxis id=" 4"> "right", "DS", "x" </SwapGEMaxis>
+
+    <!-- ===== Left sector GEM APV configuration ===== -->  <!-- ===== Right sector APV modification config. (averaging etc.) ===== -->
+    <!-- =====     lAPV        xy  skip          ===== -->  <!-- =====             lAPV  channels  size  method               ===== -->
+    <AddAPVleft id=" 0">  1, "US", "x",  6  </AddAPVleft>   <ModifyAPVleft id=" 0">  1, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 1">  0, "US", "x",  0  </AddAPVleft>   <ModifyAPVleft id=" 1">  0, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 2">  3, "US", "y",  6  </AddAPVleft>   <ModifyAPVleft id=" 2">  3, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 3">  2, "US", "y",  0  </AddAPVleft>   <ModifyAPVleft id=" 3">  2, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <SwapGEMaxis id=" 5"> "left", "US", "x" </SwapGEMaxis>
+    <SwapGEMaxis id=" 6"> "left", "US", "y" </SwapGEMaxis>
+
+    <AddAPVleft id=" 4">  5, "MI", "x",  6  </AddAPVleft>   <ModifyAPVleft id=" 4">  5, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 5">  4, "MI", "x",  0  </AddAPVleft>   <ModifyAPVleft id=" 5">  4, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 6">  7, "MI", "y",  6  </AddAPVleft>   <ModifyAPVleft id=" 6">  7, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 7">  6, "MI", "y",  0  </AddAPVleft>   <ModifyAPVleft id=" 7">  6, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <SwapGEMaxis id=" 7"> "left", "MI", "x" </SwapGEMaxis>
+    <SwapGEMaxis id=" 8"> "left", "MI", "y" </SwapGEMaxis>
+
+    <AddAPVleft id=" 8">  9, "DS", "x",  6  </AddAPVleft>   <ModifyAPVleft id=" 8">  9, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 9">  8, "DS", "x",  0  </AddAPVleft>   <ModifyAPVleft id=" 9">  8, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id="10"> 11, "DS", "y",  6  </AddAPVleft>   <ModifyAPVleft id="10"> 10, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id="11"> 10, "DS", "y",  0  </AddAPVleft>   <ModifyAPVleft id="11"> 11, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <SwapGEMaxis id=" 9"> "left", "DS", "x" </SwapGEMaxis>
+
+<!--
+    The following section contains the cluster finder configuration.
+-->
+<!--  Preprocessing                                                   -->
+<!--
+    <RemoveLinearBaseline id="0">    1  </RemoveLinearBaseline>
+-->
+<!--  Local maximum                                                   -->
+    <LMGaussFilterSigma   id="0">  1.0  </LMGaussFilterSigma>
+    <LMMinimumAmplitude   id="0">   25  </LMMinimumAmplitude>
+    <LMMinimumDistance    id="0">    5  </LMMinimumDistance>
+    <LMMaximumNLM         id="0">   10  </LMMaximumNLM>
+<!--  Cluster finder                                                  -->
+    <CFMinimumAmplitude   id="0">   50  </CFMinimumAmplitude>
+    <CFSigmaRange         id="0"> 0.4, 2.5 </CFSigmaRange>
+<!--  Trigger Pattern                                                 -->
+    <TriggerPattern       id="0"> 0x16  </TriggerPattern>
+  </date>
+
+<!--##################################################################-->
+  
+  <date time="2015-01-31T17:30:00">
+    <!-- ===== Left sector GEM APV configuration ===== -->  <!-- ===== Right sector APV modification config. (averaging etc.) ===== -->
+    <!-- =====     lAPV        xy  skip          ===== -->  <!-- =====             lAPV  channels  size  method               ===== -->
+<<<<<<< HEAD
+    <AddAPVleft id=" 0">  1, "MI", "x",  6  </AddAPVleft>   <ModifyAPVleft id=" 0">  1, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 1">  0, "MI", "x",  0  </AddAPVleft>   <ModifyAPVleft id=" 1">  0, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 2">  3, "MI", "y",  6  </AddAPVleft>   <ModifyAPVleft id=" 2">  3, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 3">  2, "MI", "y",  0  </AddAPVleft>   <ModifyAPVleft id=" 3">  2, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <SwapGEMaxis id=" 5"> "left", "MI", "x" </SwapGEMaxis>
+    
+
+    <AddAPVleft id=" 4">  5, "US", "x",  6  </AddAPVleft>   <ModifyAPVleft id=" 4">  5, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 5">  4, "US", "x",  0  </AddAPVleft>   <ModifyAPVleft id=" 5">  4, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 6">  7, "US", "y",  6  </AddAPVleft>   <ModifyAPVleft id=" 6">  7, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 7">  6, "US", "y",  0  </AddAPVleft>   <ModifyAPVleft id=" 7">  6, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <SwapGEMaxis id=" 6"> "left", "US", "x" </SwapGEMaxis>
+    <SwapGEMaxis id=" 7"> "left", "US", "y" </SwapGEMaxis>
+
+
+    <AddAPVleft id=" 8">  9, "DS", "x",  6  </AddAPVleft>   <ModifyAPVleft id=" 8">  9, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 9">  8, "DS", "x",  0  </AddAPVleft>   <ModifyAPVleft id=" 9">  8, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id="10"> 11, "DS", "y",  6  </AddAPVleft>   <ModifyAPVleft id="10"> 10, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id="11"> 10, "DS", "y",  0  </AddAPVleft>   <ModifyAPVleft id="11"> 11, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <SwapGEMaxis id=" 8"> "left", "DS", "x" </SwapGEMaxis>
+
+
+
+</date>
+=======
+    <AddAPVleft id=" 0">  3, "US", "x",  6  </AddAPVleft>   <ModifyAPVleft id=" 0">  3, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 1">  2, "US", "x",  0  </AddAPVleft>   <ModifyAPVleft id=" 1">  2, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 2">  5, "US", "y",  6  </AddAPVleft>   <ModifyAPVleft id=" 2">  5, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 3">  4, "US", "y",  0  </AddAPVleft>   <ModifyAPVleft id=" 3">  4, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <SwapGEMaxis id=" 5"> "left", "US", "x" </SwapGEMaxis>
+    <SwapGEMaxis id=" 6"> "left", "US", "y" </SwapGEMaxis>
+>>>>>>> 8af31c551cb60493d9ef8ed2e2ec120ae7750772
+
+    <AddAPVleft id=" 4">  1, "MI", "x",  6  </AddAPVleft>   <ModifyAPVleft id=" 4">  1, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 5">  0, "MI", "x",  0  </AddAPVleft>   <ModifyAPVleft id=" 5">  0, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 6"> 10, "MI", "y",  6  </AddAPVleft>   <ModifyAPVleft id=" 6"> 10, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 7"> 11, "MI", "y",  0  </AddAPVleft>   <ModifyAPVleft id=" 7"> 11, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <SwapGEMaxis id=" 7"> "left", "MI", "x" </SwapGEMaxis>
+    <SwapGEMaxis id=" 8"> "left", "MI", "y" </SwapGEMaxis>
+
+    <AddAPVleft id=" 8">  7, "DS", "x",  6  </AddAPVleft>   <ModifyAPVleft id=" 8">  7, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 9">  6, "DS", "x",  0  </AddAPVleft>   <ModifyAPVleft id=" 9">  6, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id="10">  9, "DS", "y",  6  </AddAPVleft>   <ModifyAPVleft id="10">  9, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id="11">  8, "DS", "y",  0  </AddAPVleft>   <ModifyAPVleft id="11">  8, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <SwapGEMaxis id=" 9"> "left", "DS", "x" </SwapGEMaxis>
+    <!--
+       <AddAPVleft id=" 0">  1, "MI", "x",  6  </AddAPVleft>   <ModifyAPVleft id=" 0">  1, "0 32 64 96", 4, 2 </ModifyAPVleft>
+       <AddAPVleft id=" 1">  0, "MI", "x",  0  </AddAPVleft>   <ModifyAPVleft id=" 1">  0, "0 32 64 96", 4, 2 </ModifyAPVleft>
+       <AddAPVleft id=" 2"> 99, "MI", "y",  6  </AddAPVleft>   <ModifyAPVleft id=" 2"> 99, "0 32 64 96", 4, 2 </ModifyAPVleft>
+       <AddAPVleft id=" 3"> 99, "MI", "y",  0  </AddAPVleft>   <ModifyAPVleft id=" 3"> 99, "0 32 64 96", 4, 2 </ModifyAPVleft>
+       <SwapGEMaxis id=" 5"> "left", "MI", "x" </SwapGEMaxis>
+       
+       <AddAPVleft id=" 4">  3, "US", "x",  6  </AddAPVleft>   <ModifyAPVleft id=" 4">  3, "0 32 64 96", 4, 2 </ModifyAPVleft>
+       <AddAPVleft id=" 5">  2, "US", "x",  0  </AddAPVleft>   <ModifyAPVleft id=" 5">  2, "0 32 64 96", 4, 2 </ModifyAPVleft>
+       <AddAPVleft id=" 6">  5, "US", "y",  6  </AddAPVleft>   <ModifyAPVleft id=" 6">  5, "0 32 64 96", 4, 2 </ModifyAPVleft>
+       <AddAPVleft id=" 7">  4, "US", "y",  0  </AddAPVleft>   <ModifyAPVleft id=" 7">  4, "0 32 64 96", 4, 2 </ModifyAPVleft>
+       <SwapGEMaxis id=" 6"> "left", "US", "x" </SwapGEMaxis>
+       <SwapGEMaxis id=" 7"> "left", "US", "y" </SwapGEMaxis>
+       
+       <AddAPVleft id=" 8">  7, "DS", "x",  6  </AddAPVleft>   <ModifyAPVleft id=" 8">  7, "0 32 64 96", 4, 2 </ModifyAPVleft>
+       <AddAPVleft id=" 9">  6, "DS", "x",  0  </AddAPVleft>   <ModifyAPVleft id=" 9">  6, "0 32 64 96", 4, 2 </ModifyAPVleft>
+       <AddAPVleft id="10">  9, "DS", "y",  6  </AddAPVleft>   <ModifyAPVleft id="10">  9, "0 32 64 96", 4, 2 </ModifyAPVleft>
+       <AddAPVleft id="11">  8, "DS", "y",  0  </AddAPVleft>   <ModifyAPVleft id="11">  8, "0 32 64 96", 4, 2 </ModifyAPVleft>
+       <SwapGEMaxis id=" 8"> "left", "DS", "x" </SwapGEMaxis>
+       -->
+  </date>
+
+<!--##################################################################-->
+</LumiGEM>

@@ -1,0 +1,2072 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LumiGEM>
+  <config>
+    <!-- GEM APV mapping configuration tags                           -->
+    <AddAPVright>    AddAPVtoGEMright </AddAPVright>
+    <AddAPVleft>     AddAPVtoGEMleft  </AddAPVleft>
+    <ModifyAPVright> ModifyAPVright   </ModifyAPVright>
+    <ModifyAPVleft>  ModifyAPVleft    </ModifyAPVleft>
+ <SkipAPVChannelsright>  SkipAPVChannelsright    </SkipAPVChannelsright>
+    <SwapGEMaxis>    SwapGEMaxis      </SwapGEMaxis>
+    <!-- Data quality checking configuration                          -->
+    <SetAPVSyncRange>      SetAPVsyncDataRange   </SetAPVSyncRange>
+    <SetAPVOOSyncSaThresh> SetAPVoutOfSyncSampleThreshold   </SetAPVOOSyncSaThresh>
+    <SetAPVOOSyncEvThresh> SetAPVoutOfSyncEventThreshold    </SetAPVOOSyncEvThresh>
+    <SetAPVZeroEvThresh>   SetAPVzeroSamplesEventThreshold  </SetAPVZeroEvThresh>
+    <!-- Cluster Finder configuration tags                            -->
+    <LMGaussFilterSigma>   SetLMGaussFilterSigma </LMGaussFilterSigma>
+    <LMMinimumAmplitude>   SetLMMininumAmplitude </LMMinimumAmplitude>
+    <LMMinimumDistance>    SetLMMinimumDistance  </LMMinimumDistance>
+    <LMMaximumNLM>         SetLMMaximumNLM       </LMMaximumNLM>
+    <CFMinimumAmplitude>   SetCFMinimumAmplitude </CFMinimumAmplitude>
+    <CFSigmaRange>         SetCFSigmaRange       </CFSigmaRange>
+    <CFMake1dClusters>     SetMake1dClusters     </CFMake1dClusters>
+    <CFRepairBrokenStrips> SetRepairBrokenStrips </CFRepairBrokenStrips>
+    <!-- Trigger Pattern of Interest configuration tags               -->
+    <TriggerPattern> SetTriggerPattern </TriggerPattern>
+    <!-- Monitoring of SC channels to determine detector status       -->
+    <MonitorSC>    watchSCchannel   </MonitorSC>
+    <MonitorGEMHV> watchSCHVchannel </MonitorGEMHV>
+    <PerChannelPed> SetPerChannelPedestal </PerChannelPed>
+   <deadchannels> Maskdeadchannels </deadchannels>
+    <CalibConsts> Channel_2_channel_gain_calib </CalibConsts>
+  </config>
+<!--##################################################################-->
+  <date time="2000-01-01T00:00:00Z">
+<!--
+    The following section contains the GEM APV mapping configuration.
+
+    The idea is to map logical APV numbers to the axis of the GEMs in
+    the right order. The parameters are
+
+      lAPV    logical APV number in the data stream
+      gem     "US": upstream, "MI": middle, "DS": downstream
+      xy      "x": APV sits on GEM x axis, "y": y axis
+      skip    skip the first n samples from the APV data block
+
+    To add an APV to the right sector use 'AddAPVright' and for the
+    left sector 'AddAPVleft'.
+
+    N.B.: The parameter 'id' is mandatory in these xml files. The
+    following lines will be processed in order of ascending 'id' for
+    each kind of tag (i.e. 'AddPAVright/left'). As the proper cGEM
+    configuration depends on the order in which the APVs are added to
+    the GEM objects the 'id' parameter needs to be taken into account,
+    although in principle it has no meaning in the configuration
+    process of the cGEM class itself. We just have to cope with the
+    fact that it is mandatory here...
+-->
+
+<!-- ================================== Testbeam 22 ================================== -->
+
+    <!-- =====           lAPV gem   xy  skip      ===== -->  <!-- =====              lAPV  channels  size  method              ===== -->
+    <!--<AddAPVleft id=" 0">  0, "US", "x",  6  </AddAPVleft>  <ModifyAPVleft id=" 0">  0, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 1">  1, "US", "x",  0  </AddAPVleft>  <ModifyAPVleft id=" 1">  1, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 2">  2, "US", "y",  6  </AddAPVleft>  <ModifyAPVleft id=" 2">  2, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 3">  3, "US", "y",  0  </AddAPVleft>  <ModifyAPVleft id=" 3">  3, "0 32 64 96", 4, 2 </ModifyAPVleft>
+
+    <AddAPVleft id=" 4">  4, "MI", "x",  6  </AddAPVleft>  <ModifyAPVleft id=" 4">  4, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 5">  5, "MI", "x",  0  </AddAPVleft>  <ModifyAPVleft id=" 5">  5, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 6">  6, "MI", "y",  6  </AddAPVleft>  <ModifyAPVleft id=" 6">  6, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 7">  7, "MI", "y",  0  </AddAPVleft>  <ModifyAPVleft id=" 7">  7, "0 32 64 96", 4, 2 </ModifyAPVleft>
+
+    <AddAPVleft id=" 8">  8, "DS", "x",  6  </AddAPVleft>  <ModifyAPVleft id=" 8">  8, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 9">  9, "DS", "x",  0  </AddAPVleft>  <ModifyAPVleft id=" 9">  9, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id="10"> 10, "DS", "y",  6  </AddAPVleft>  <ModifyAPVleft id="10"> 10, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id="11"> 11, "DS", "y",  0  </AddAPVleft>  <ModifyAPVleft id="11"> 11, "0 32 64 96", 4, 2 </ModifyAPVleft> -->
+
+<!--
+    The following section contains the cluster finder configuration.
+-->
+<!--  Preprocessing                                                   -->
+     <!-- preprocessing config not in use yet -->
+<!--  Local maximum                                                   -->
+    <LMGaussFilterSigma   id="0">  1.0  </LMGaussFilterSigma>
+    <LMMinimumAmplitude   id="0">   50  </LMMinimumAmplitude>
+    <LMMinimumDistance    id="0">    5  </LMMinimumDistance>
+    <LMMaximumNLM         id="0">   10  </LMMaximumNLM>
+<!--  Cluster finder                                                  -->
+    <CFMinimumAmplitude   id="0">   100  </CFMinimumAmplitude>
+    <CFSigmaRange         id="0"> 0.3, 3 </CFSigmaRange>
+
+    <CFMake1dClusters     id="0">    0  </CFMake1dClusters>
+    <CFRepairBrokenStrips id="0">    1  </CFRepairBrokenStrips>
+<!--  Trigger Pattern                                                 -->
+    <TriggerPattern       id="0"> 0xff  </TriggerPattern>
+
+<!--  Raw Data Quality Checking Configuration                         -->
+    <SetAPVSyncRange      id="0"> -65535, +65535 </SetAPVSyncRange>
+    <SetAPVOOSyncSaThresh id="0">   10           </SetAPVOOSyncSaThresh>
+    <SetAPVOOSyncEvThresh id="0">   10           </SetAPVOOSyncEvThresh>
+    <SetAPVZeroEvThresh   id="0">   10           </SetAPVZeroEvThresh>
+
+<!--  Slow Control channels to watch                                  -->
+<!--   This section contains default ranges for the GEM HV slow control
+       variables to be watched by the SCManager                       -->
+<!--    left sector US GEM           sector value   +/-               -->
+    <MonitorGEMHV id=" 1"> "LG:LUSMVI", 0, 4150.0, 150.0 </MonitorGEMHV>
+    <MonitorGEMHV id=" 2"> "LG:LUSMCI", 0,  315.0,  10.0 </MonitorGEMHV>
+    <MonitorGEMHV id=" 3"> "LG:LUSSTI", 0,   1.0,    0.1 </MonitorGEMHV>
+<!--    left sector MI GEM                                            -->
+    <MonitorGEMHV id=" 4"> "LG:LMIMVI", 0, 4150.0, 150.0 </MonitorGEMHV>
+    <MonitorGEMHV id=" 5"> "LG:LMIMCI", 0,  315.0,  10.0 </MonitorGEMHV>
+    <MonitorGEMHV id=" 6"> "LG:LMISTI", 0,   1.0,    0.1 </MonitorGEMHV>
+<!--    left sector DS GEM                                            -->
+    <MonitorGEMHV id=" 7"> "LG:LDSMVI", 0, 4150.0, 150.0 </MonitorGEMHV>
+    <MonitorGEMHV id=" 8"> "LG:LDSMCI", 0,  315.0,  10.0 </MonitorGEMHV>
+    <MonitorGEMHV id=" 9"> "LG:LDSSTI", 0,   1.0,    0.1 </MonitorGEMHV>
+<!--    right sector US GEM                                            -->
+    <MonitorGEMHV id="10"> "LG:RUSMVI", 1, 4150.0, 150.0 </MonitorGEMHV>
+    <MonitorGEMHV id="11"> "LG:RUSMCI", 1,  315.0,  10.0 </MonitorGEMHV>
+    <MonitorGEMHV id="12"> "LG:RUSSTI", 1,   1.0,    0.1 </MonitorGEMHV>
+<!--    right sector MI GEM                                            -->
+    <MonitorGEMHV id="13"> "LG:RMIMVI", 1, 4150.0, 150.0 </MonitorGEMHV>
+    <MonitorGEMHV id="14"> "LG:RMIMCI", 1,  315.0,  10.0 </MonitorGEMHV>
+    <MonitorGEMHV id="15"> "LG:RMISTI", 1,   1.0,    0.1 </MonitorGEMHV>
+<!--    right sector DS GEM                                            -->
+    <MonitorGEMHV id="16"> "LG:RDSMVI", 1, 4150.0, 150.0 </MonitorGEMHV>
+    <MonitorGEMHV id="17"> "LG:RDSMCI", 1,  315.0,  10.0 </MonitorGEMHV>
+    <MonitorGEMHV id="18"> "LG:RDSSTI", 1,   1.0,    0.1 </MonitorGEMHV>
+  </date>
+
+  <date time="2012-01-01T00:00:00Z">
+
+    <!-- ===== Right sector GEM APV configuration ===== -->  <!-- ===== Right sector APV modification config. (averaging etc.) ===== -->
+    <!-- =====           lAPV gem   xy  skip      ===== -->  <!-- =====              lAPV  channels  size  method              ===== -->
+
+
+
+<!-- MK/IL/TP Summer 2018 / MK Aug 7, 2018 - arrange initially like in Fall 2017--> 
+<!-- PLAYING - FIFO ORDERING REVERSED PER MPD: 15-0 iinstead of 0-15 for US->DS; re-ordered IDs (no difference), removed 'Modifiers'. Swapped x-x and y-y-->
+<!-- (Swapping x with y had funny effect of clustering becoming very quick)-->
+    <AddAPVright id=" 0"> 1, "DS", "y",  0  </AddAPVright>
+    <AddAPVright id=" 1"> 0, "DS", "y",  6  </AddAPVright>
+    <AddAPVright id=" 2"> 3, "DS", "x",  6  </AddAPVright>
+    <AddAPVright id=" 3"> 2, "DS", "x",  0  </AddAPVright>
+
+    <AddAPVright id=" 4"> 5, "MI", "y",  0  </AddAPVright>
+    <AddAPVright id=" 5"> 4, "MI", "y",  6  </AddAPVright>
+    <AddAPVright id=" 6">  7,  "MI", "x",  6  </AddAPVright>
+    <AddAPVright id=" 7">  6,  "MI", "x",  0  </AddAPVright>
+
+    <AddAPVright id=" 8">  9, "4TH", "y",  0  </AddAPVright>
+    <AddAPVright id=" 9">  8, "4TH", "y",  6  </AddAPVright>
+    <AddAPVright id=" 10">  11, "4TH", "x",  6  </AddAPVright>
+    <AddAPVright id=" 11">  10, "4TH", "x",  0  </AddAPVright>
+
+    <AddAPVright id=" 12">  13, "US", "y",  0  </AddAPVright>
+    <AddAPVright id=" 13">  12, "US", "y",  6  </AddAPVright>
+    <AddAPVright id=" 14">  15, "US", "x",  6  </AddAPVright>
+    <AddAPVright id=" 15">  14, "US", "x",  0  </AddAPVright>
+
+<!--         <SwapGEMaxis id=" 0"> "right", "DS", "y" </SwapGEMaxis> 
+    <SwapGEMaxis id=" 1"> "right", "MI", "y" </SwapGEMaxis>  
+    <SwapGEMaxis id=" 2"> "right", "4TH","y" </SwapGEMaxis> 
+    <SwapGEMaxis id=" 3"> "right", "US", "y" </SwapGEMaxis>
+    <SwapGEMaxis id=" 4"> "right", "DS", "x" </SwapGEMaxis> 
+    <SwapGEMaxis id=" 5"> "right", "MI", "x" </SwapGEMaxis>  
+    <SwapGEMaxis id=" 6"> "right", "4TH","x" </SwapGEMaxis> 
+    <SwapGEMaxis id=" 7"> "right", "US", "x" </SwapGEMaxis> -->
+
+<!--  2 IFP GEMs now appened to the 4-GEM telescope  -->
+<!--     <AddAPVright id=" 16"> 17, "DS-IFP", "y",  6  </AddAPVright>
+    <AddAPVright id=" 17"> 16, "DS-IFP", "y",  0  </AddAPVright>
+    <AddAPVright id=" 18"> 19, "DS-IFP", "x",  6  </AddAPVright>
+    <AddAPVright id=" 19"> 18, "DS-IFP", "x",  0  </AddAPVright>
+
+    <AddAPVright id=" 20"> 21, "US-IFP", "y",  6  </AddAPVright>
+    <AddAPVright id=" 21"> 20, "US-IFP", "y",  0  </AddAPVright>
+    <AddAPVright id=" 22"> 23, "US-IFP", "x",  6  </AddAPVright>
+    <AddAPVright id=" 23"> 22, "US-IFP", "x",  0  </AddAPVright>
+ -->
+
+
+
+
+
+<!-- MK/IL/TP Summer 2018 / MK Aug 7, 2018 - arrange like in Fall 2017--> 
+<!-- PLAYING - FIFO ORDERING REVERSED PER MPD: 15-0 iinstead of 0-15 for US->DS; re-ordered IDs (no difference), removed Modifiers-->
+<!--<AddAPVright id=" 0"> 0, "DS", "y",  6  </AddAPVright>
+    <AddAPVright id=" 1"> 1, "DS", "y",  0  </AddAPVright>
+    <AddAPVright id=" 2"> 2, "DS", "x",  6  </AddAPVright>
+    <AddAPVright id=" 3"> 3, "DS", "x",  0  </AddAPVright>
+
+    <AddAPVright id=" 4"> 4, "MI", "y",  6  </AddAPVright>
+    <AddAPVright id=" 5"> 5, "MI", "y",  0  </AddAPVright>
+    <AddAPVright id=" 6">  6,  "MI", "x",  6  </AddAPVright>
+    <AddAPVright id=" 7">  7,  "MI", "x",  0  </AddAPVright>
+
+    <AddAPVright id=" 8">  8, "4TH", "y",  6  </AddAPVright>
+    <AddAPVright id=" 9">  9, "4TH", "y",  0  </AddAPVright>
+    <AddAPVright id=" 10">  10, "4TH", "x",  6  </AddAPVright>
+    <AddAPVright id=" 11">  11, "4TH", "x",  0  </AddAPVright>
+
+    <AddAPVright id=" 12">  12, "US", "y",  6  </AddAPVright>
+    <AddAPVright id=" 13">  13, "US", "y",  0  </AddAPVright>
+    <AddAPVright id=" 14">  14, "US", "x",  6  </AddAPVright>
+    <AddAPVright id=" 15">  15, "US", "x",  0  </AddAPVright>-->
+
+<!--  2 IFP GEMs now appened to the 4-GEM telescope  -->
+<!-- <AddAPVright id=" 16"> 16, "DS-IFP", "y",  6  </AddAPVright>
+    <AddAPVright id=" 17"> 17, "DS-IFP", "y",  0  </AddAPVright>
+    <AddAPVright id=" 18"> 18, "DS-IFP", "x",  6  </AddAPVright>
+    <AddAPVright id=" 19"> 19, "DS-IFP", "x",  0  </AddAPVright>
+
+    <AddAPVright id=" 20"> 20, "US-IFP", "y",  6  </AddAPVright>
+    <AddAPVright id=" 21"> 21, "US-IFP", "y",  0  </AddAPVright>
+    <AddAPVright id=" 22"> 22, "US-IFP", "x",  6  </AddAPVright>
+    <AddAPVright id=" 23"> 23, "US-IFP", "x",  0  </AddAPVright>
+ -->
+
+<!-- MK/IL/TP Summer 2018 / MK Aug 7, 2018 - arrange like in Fall 2017--> 
+<!-- PLAYING - FIFO ORDERING REVERSED PER MPD: 15-0 iinstead of 0-15 for US->DS -->
+<!--<AddAPVright id=" 14"> 0, "DS", "y",  6  </AddAPVright> <ModifyAPVright id=" 14"> 15, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 15"> 1, "DS", "y",  0  </AddAPVright> <ModifyAPVright id=" 15"> 14, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 12"> 2, "DS", "x",  6  </AddAPVright> <ModifyAPVright id=" 12"> 13, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 13"> 3, "DS", "x",  0  </AddAPVright> <ModifyAPVright id=" 13"> 12, "0 32 64 96", 4, 2 </ModifyAPVright>
+
+    <AddAPVright id=" 10"> 4, "MI", "y",  6  </AddAPVright> <ModifyAPVright id=" 10"> 11, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 11"> 5, "MI", "y",  0  </AddAPVright> <ModifyAPVright id=" 11"> 10, "0 32 64 96", 4, 2 </ModifyAPVright> 
+    <AddAPVright id=" 8">  6,  "MI", "x",  6  </AddAPVright> <ModifyAPVright id=" 8">   9, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 9">  7,  "MI", "x",  0  </AddAPVright> <ModifyAPVright id=" 9">   8, "0 32 64 96", 4, 2 </ModifyAPVright>
+
+    <AddAPVright id=" 6">  8, "4TH", "y",  6  </AddAPVright> <ModifyAPVright id=" 6">  7, "0 32 64 96", 4, 2 </ModifyAPVright> 
+    <AddAPVright id=" 7">  9, "4TH", "y",  0  </AddAPVright> <ModifyAPVright id=" 7">  6, "0 32 64 96", 4, 2 </ModifyAPVright>  
+    <AddAPVright id=" 4">  10, "4TH", "x",  6  </AddAPVright> <ModifyAPVright id=" 4">  5, "0 32 64 96", 4, 2 </ModifyAPVright> 
+    <AddAPVright id=" 5">  11, "4TH", "x",  0  </AddAPVright> <ModifyAPVright id=" 5">  4, "0 32 64 96", 4, 2 </ModifyAPVright>
+
+    <AddAPVright id=" 2">  12, "US", "y",  6  </AddAPVright>  <ModifyAPVright id=" 2">  3, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 3">  13, "US", "y",  0  </AddAPVright>  <ModifyAPVright id=" 3">  2, "0 2 4 6 8 10 22 32 64 96", 10, 2 </ModifyAPVright>
+    <AddAPVright id=" 0">  14, "US", "x",  6  </AddAPVright>  <ModifyAPVright id=" 0">  1, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 1">  15, "US", "x",  0  </AddAPVright>  <ModifyAPVright id=" 1">  0, "0 32 64 96", 4, 2 </ModifyAPVright>-->
+
+<!--  2 IFP GEMs now appened to the 4-GEM telescope  -->
+<!--<AddAPVright id=" 22"> 16, "DS-IFP", "y",  6  </AddAPVright>  <ModifyAPVright id=" 22">  23, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 23"> 17, "DS-IFP", "y",  0  </AddAPVright>  <ModifyAPVright id=" 23">  22, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 20"> 18, "DS-IFP", "x",  6  </AddAPVright>  <ModifyAPVright id=" 20">  21, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 21"> 19, "DS-IFP", "x",  0  </AddAPVright>  <ModifyAPVright id=" 21">  20, "0 32 64 96", 4, 2 </ModifyAPVright>
+
+    <AddAPVright id=" 18"> 20, "US-IFP", "y",  6  </AddAPVright>  <ModifyAPVright id=" 18">  19, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 19"> 21, "US-IFP", "y",  0  </AddAPVright>  <ModifyAPVright id=" 19">  18, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 16"> 22, "US-IFP", "x",  6  </AddAPVright>  <ModifyAPVright id=" 16">  17, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 17"> 23, "US-IFP", "x",  0  </AddAPVright>  <ModifyAPVright id=" 17">  16, "0 32 64 96", 4, 2 </ModifyAPVright>-->
+
+
+
+<!-- MK/IL/TP Summer 2018 / MK Aug 5, 2018 - arrange like in Fall 2017--> 
+<!--<AddAPVright id=" 0">  1, "US", "x",  6  </AddAPVright>  <ModifyAPVright id=" 0">  1, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 1">  0, "US", "x",  0  </AddAPVright>  <ModifyAPVright id=" 1">  0, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 2">  3, "US", "y",  6  </AddAPVright>  <ModifyAPVright id=" 2">  3, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 3">  2, "US", "y",  0  </AddAPVright>  <ModifyAPVright id=" 3">  2, "0 2 4 6 8 10 22 32 64 96", 10, 2 </ModifyAPVright>
+
+    <AddAPVright id=" 4">  5, "4TH", "x",  6  </AddAPVright> <ModifyAPVright id=" 4">  5, "0 32 64 96", 4, 2 </ModifyAPVright> 
+    <AddAPVright id=" 5">  4, "4TH", "x",  0  </AddAPVright> <ModifyAPVright id=" 5">  4, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 6">  7, "4TH", "y",  6  </AddAPVright> <ModifyAPVright id=" 6">  7, "0 32 64 96", 4, 2 </ModifyAPVright> 
+    <AddAPVright id=" 7">  6, "4TH", "y",  0  </AddAPVright> <ModifyAPVright id=" 7">  6, "0 32 64 96", 4, 2 </ModifyAPVright>  
+
+    <AddAPVright id=" 8">  9,  "MI", "x",  6  </AddAPVright> <ModifyAPVright id=" 8">   9, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 9">  8,  "MI", "x",  0  </AddAPVright> <ModifyAPVright id=" 9">   8, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 10"> 11, "MI", "y",  6  </AddAPVright> <ModifyAPVright id=" 10"> 11, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 11"> 10, "MI", "y",  0  </AddAPVright> <ModifyAPVright id=" 11"> 10, "0 32 64 96", 4, 2 </ModifyAPVright> 
+
+    <AddAPVright id=" 12"> 13, "DS", "x",  6  </AddAPVright> <ModifyAPVright id=" 12"> 13, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 13"> 12, "DS", "x",  0  </AddAPVright> <ModifyAPVright id=" 13"> 12, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 14"> 15, "DS", "y",  6  </AddAPVright> <ModifyAPVright id=" 14"> 15, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 15"> 14, "DS", "y",  0  </AddAPVright> <ModifyAPVright id=" 15"> 14, "0 32 64 96", 4, 2 </ModifyAPVright>-->
+
+<!--  2 IFP GEMs now appened to the 4-GEM telescope  -->
+<!--<AddAPVright id=" 16"> 17, "US-IFP", "x",  6  </AddAPVright>  <ModifyAPVright id=" 16">  17, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 17"> 16, "US-IFP", "x",  0  </AddAPVright>  <ModifyAPVright id=" 17">  16, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 18"> 19, "US-IFP", "y",  6  </AddAPVright>  <ModifyAPVright id=" 18">  19, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 19"> 18, "US-IFP", "y",  0  </AddAPVright>  <ModifyAPVright id=" 19">  18, "0 32 64 96", 4, 2 </ModifyAPVright>
+
+    <AddAPVright id=" 20"> 21, "DS-IFP", "x",  6  </AddAPVright>  <ModifyAPVright id=" 20">  21, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 21"> 20, "DS-IFP", "x",  0  </AddAPVright>  <ModifyAPVright id=" 21">  20, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 22"> 23, "DS-IFP", "y",  6  </AddAPVright>  <ModifyAPVright id=" 22">  23, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 23"> 22, "DS-IFP", "y",  0  </AddAPVright>  <ModifyAPVright id=" 23">  22, "0 32 64 96", 4, 2 </ModifyAPVright>-->
+
+
+<!-- MK/IL/TP Summer 2018 -->
+<!--
+    <AddAPVright id=" 0">  2, "US", "x",  6  </AddAPVright>  <ModifyAPVright id=" 0">  2, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 1">  3, "US", "x",  0  </AddAPVright>  <ModifyAPVright id=" 1">  3, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 2">  0, "US", "y",  6  </AddAPVright>  <ModifyAPVright id=" 2">  0, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 3">  1, "US", "y",  0  </AddAPVright>  <ModifyAPVright id=" 3">  1, "0 2 4 6 8 10 22 32 64 96", 10, 2 </ModifyAPVright>
+
+    <AddAPVright id=" 4">  6, "4TH", "x",  6  </AddAPVright> <ModifyAPVright id=" 4">  6, "0 32 64 96", 4, 2 </ModifyAPVright> 
+    <AddAPVright id=" 5">  7, "4TH", "x",  0  </AddAPVright> <ModifyAPVright id=" 5">  7, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 6">  4, "4TH", "y",  6  </AddAPVright> <ModifyAPVright id=" 6">  4, "0 32 64 96", 4, 2 </ModifyAPVright> 
+    <AddAPVright id=" 7">  5, "4TH", "y",  0  </AddAPVright> <ModifyAPVright id=" 7">  5, "0 32 64 96", 4, 2 </ModifyAPVright>  
+
+    <AddAPVright id=" 8">  10, "MI", "x",  6  </AddAPVright>  <ModifyAPVright id=" 8"> 10, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 9">  11, "MI", "x",  0  </AddAPVright>  <ModifyAPVright id=" 9"> 11, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 10"> 8,  "MI", "y",  6  </AddAPVright>  <ModifyAPVright id=" 10"> 8, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 11"> 7,  "MI", "y",  0  </AddAPVright>  <ModifyAPVright id=" 11"> 7, "0 32 64 96", 4, 2 </ModifyAPVright> 
+
+    <AddAPVright id=" 12"> 14, "DS", "x",  6  </AddAPVright>  <ModifyAPVright id=" 12">  14, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 13"> 15, "DS", "x",  0  </AddAPVright>  <ModifyAPVright id=" 13">  15, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 14"> 12, "DS", "y",  6  </AddAPVright>  <ModifyAPVright id=" 14"> 12, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 15"> 13, "DS", "y",  0  </AddAPVright>  <ModifyAPVright id=" 15"> 13, "0 32 64 96", 4, 2 </ModifyAPVright> -->
+
+<!--  2 IFP GEMs now appened to the 4-GEM telescope  -->
+<!--<AddAPVright id=" 16">  18, "US-IFP", "x",  6  </AddAPVright>  <ModifyAPVright id=" 16">  18, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 17">  19, "US-IFP", "x",  0  </AddAPVright>  <ModifyAPVright id=" 17">  19, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 18">  16, "US-IFP", "y",  6  </AddAPVright>  <ModifyAPVright id=" 18">  16, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 19">  17, "US-IFP", "y",  0  </AddAPVright>  <ModifyAPVright id=" 19">  17, "0 32 64 96", 4, 2 </ModifyAPVright>
+
+    <AddAPVright id=" 20">  22, "DS-IFP", "x",  6  </AddAPVright>  <ModifyAPVright id=" 20">  22, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 21">  23, "DS-IFP", "x",  0  </AddAPVright>  <ModifyAPVright id=" 21">  23, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 22">  20, "DS-IFP", "y",  6  </AddAPVright>  <ModifyAPVright id=" 22">  20, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 23">  21, "DS-IFP", "y",  0  </AddAPVright>  <ModifyAPVright id=" 23">  21, "0 32 64 96", 4, 2 </ModifyAPVright>-->
+
+
+
+<!--Tanvi, Summer 2018 for IFP GEMs -->
+<!-- <AddAPVleft id=" 0">  18, "US", "x",  6  </AddAPVleft>  <ModifyAPVleft id=" 0">  18, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 1">  19, "US", "x",  0  </AddAPVleft>  <ModifyAPVleft id=" 1">  19, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 2">  16, "US", "y",  6  </AddAPVleft>  <ModifyAPVleft id=" 2">  16, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 3">  17, "US", "y",  0  </AddAPVleft>  <ModifyAPVleft id=" 3">  17, "0 32 64 96", 4, 2 </ModifyAPVleft>-->
+
+<!--dummy entries to fill left sector elements start-->
+<!-- <AddAPVleft id=" 4">  24, "4TH", "x",  6  </AddAPVleft>  <ModifyAPVleft id=" 4">  24, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 5">  25, "4TH", "x",  0  </AddAPVleft>  <ModifyAPVleft id=" 5">  25, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 6">  26, "4TH", "y",  6  </AddAPVleft>  <ModifyAPVleft id=" 6">  26, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 7">  27, "4TH", "y",  0  </AddAPVleft>  <ModifyAPVleft id=" 7">  27, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 8">  28, "MI", "x",  6  </AddAPVleft>  <ModifyAPVleft id=" 8">  28, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 9">  29, "MI", "x",  0  </AddAPVleft>  <ModifyAPVleft id=" 9">  29, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 10">  30, "MI", "y",  6  </AddAPVleft>  <ModifyAPVleft id=" 10">  30, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 11">  31, "MI", "y",  0  </AddAPVleft>  <ModifyAPVleft id=" 11">  31, "0 32 64 96", 4, 2 </ModifyAPVleft>-->
+<!--dummy entries to fill left sector elements end-->
+
+<!-- <AddAPVleft id=" 12">  22, "DS", "x",  6  </AddAPVleft>  <ModifyAPVleft id=" 12">  22, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 13">  23, "DS", "x",  0  </AddAPVleft>  <ModifyAPVleft id=" 13">  23, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 14">  20, "DS", "y",  6  </AddAPVleft>  <ModifyAPVleft id=" 14">  20, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 15">  21, "DS", "y",  0  </AddAPVleft>  <ModifyAPVleft id=" 15">  21, "0 32 64 96", 4, 2 </ModifyAPVleft>-->
+
+
+<!--  From Summer 2018, using with 4 GEMs  -->
+<!--
+    <AddAPVright id=" 0">  1, "DS", "x",  6  </AddAPVright>  <ModifyAPVright id=" 0">  1, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 1">  0, "DS", "x",  0  </AddAPVright>  <ModifyAPVright id=" 1">  0, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 2">  3, "DS", "y",  6  </AddAPVright>  <ModifyAPVright id=" 2">  3, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 3">  2, "DS", "y",  0  </AddAPVright>  <ModifyAPVright id=" 3">  2, "0 2 4 6 8 10 22 32 64 96", 10, 2 </ModifyAPVright>
+
+    <AddAPVright id=" 4">  5, "MI", "x",  6  </AddAPVright>  <ModifyAPVright id=" 4">  5, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 5">  4, "MI", "x",  0  </AddAPVright>  <ModifyAPVright id=" 5">  4, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 6">  7, "MI", "y",  6  </AddAPVright>  <ModifyAPVright id=" 6">  7, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 7">  6, "MI", "y",  0  </AddAPVright>  <ModifyAPVright id=" 7">  6, "0 32 64 96", 4, 2 </ModifyAPVright>
+   
+    <AddAPVright id=" 8">  9, "4TH", "x",  6  </AddAPVright>  <ModifyAPVright id=" 8"> 9, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 9">  8, "4TH", "x",  0  </AddAPVright>  <ModifyAPVright id=" 9"> 8, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 10"> 11, "4TH", "y",  6  </AddAPVright>  <ModifyAPVright id=" 10"> 11, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 11"> 10, "4TH", "y",  0  </AddAPVright>  <ModifyAPVright id=" 11"> 10, "0 32 64 96", 4, 2 </ModifyAPVright>
+
+    <AddAPVright id=" 12"> 13, "US", "x",  6  </AddAPVright>  <ModifyAPVright id=" 12">  13, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 13"> 12, "US", "x",  0  </AddAPVright>  <ModifyAPVright id=" 13">  12, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 14"> 15, "US", "y",  6  </AddAPVright>  <ModifyAPVright id=" 14"> 15, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 15"> 14, "US", "y",  0  </AddAPVright>  <ModifyAPVright id=" 15"> 14, "0 32 64 96", 4, 2 </ModifyAPVright>
+-->
+
+<!-- FRom Fall 2017, using with 4 GEMs , testing -->
+<!--<AddAPVright id=" 12">  1, "US", "x",  6  </AddAPVright>  <ModifyAPVright id=" 12">  1, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 13">  0, "US", "x",  0  </AddAPVright>  <ModifyAPVright id=" 13">  0, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 14">  3, "US", "y",  6  </AddAPVright>  <ModifyAPVright id=" 14">  3, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 15">  2, "US", "y",  0  </AddAPVright>  <ModifyAPVright id=" 15">  2, "0 32 64 96", 4, 2 </ModifyAPVright>
+   
+    <AddAPVright id=" 4">  5, "4TH", "x",  6  </AddAPVright>  <ModifyAPVright id="4"> 5, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 5">  4, "4TH", "x",  0  </AddAPVright>  <ModifyAPVright id="5"> 4, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 6">  7, "4TH", "y",  6  </AddAPVright>  <ModifyAPVright id="6"> 7, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 7">  6, "4TH", "y",  0  </AddAPVright>  <ModifyAPVright id="7"> 6, "0 32 64 96", 4, 2 </ModifyAPVright>
+
+    <AddAPVright id=" 8">  9,  "MI", "x",  6  </AddAPVright>  <ModifyAPVright id=" 8">  9, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 9">  8,  "MI", "x",  0  </AddAPVright>  <ModifyAPVright id=" 9">  8, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 10"> 11, "MI", "y",  6  </AddAPVright>  <ModifyAPVright id=" 10">  11, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 11"> 10, "MI", "y",  0  </AddAPVright>  <ModifyAPVright id=" 11">  10, "0 32 64 96", 4, 2 </ModifyAPVright>
+
+    <AddAPVright id=" 0"> 13, "DS", "x",  6  </AddAPVright>  <ModifyAPVright id="0">  13, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 1"> 12, "DS", "x",  0  </AddAPVright>  <ModifyAPVright id="1">  12, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 2"> 15, "DS", "y",  6  </AddAPVright>  <ModifyAPVright id="2"> 15, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 3"> 14, "DS", "y",  0  </AddAPVright>  <ModifyAPVright id="3">  14, "0 2 4 6 8 10 22 32 64 96", 10, 2 </ModifyAPVright>
+
+  <SwapGEMaxis id=" 0"> "right", "DS", "y" </SwapGEMaxis> 
+    <SwapGEMaxis id=" 0"> "right", "MI", "y" </SwapGEMaxis>  
+    <SwapGEMaxis id=" 0"> "right", "4TH","y" </SwapGEMaxis> 
+     <SwapGEMaxis id=" 0"> "right", "US", "y" </SwapGEMaxis> -->
+
+
+<!--  FRom Fall 2017, using with 4 GEMs  -->
+<!--
+    <AddAPVright id=" 0">  1, "DS", "x",  6  </AddAPVright>  <ModifyAPVright id=" 0">  1, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 1">  0, "DS", "x",  0  </AddAPVright>  <ModifyAPVright id=" 1">  0, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 2">  3, "DS", "y",  6  </AddAPVright>  <ModifyAPVright id=" 2">  3, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 3">  2, "DS", "y",  0  </AddAPVright>  <ModifyAPVright id=" 3">  2, "0 2 4 6 8 10 22 32 64 96", 10, 2 </ModifyAPVright>
+
+    <AddAPVright id=" 4">  5, "MI", "x",  6  </AddAPVright>  <ModifyAPVright id=" 4">  5, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 5">  4, "MI", "x",  0  </AddAPVright>  <ModifyAPVright id=" 5">  4, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 6">  7, "MI", "y",  6  </AddAPVright>  <ModifyAPVright id=" 6">  7, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 7">  6, "MI", "y",  0  </AddAPVright>  <ModifyAPVright id=" 7">  6, "0 32 64 96", 4, 2 </ModifyAPVright>
+   
+    <AddAPVright id=" 8">  9, "4TH", "x",  6  </AddAPVright>  <ModifyAPVright id=" 8"> 9, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 9">  8, "4TH", "x",  0  </AddAPVright>  <ModifyAPVright id=" 9"> 8, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 10"> 11, "4TH", "y",  6  </AddAPVright>  <ModifyAPVright id=" 10"> 11, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 11"> 10, "4TH", "y",  0  </AddAPVright>  <ModifyAPVright id=" 11"> 10, "0 32 64 96", 4, 2 </ModifyAPVright>
+
+    <AddAPVright id=" 12"> 13, "US", "x",  6  </AddAPVright>  <ModifyAPVright id=" 12">  13, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 13"> 12, "US", "x",  0  </AddAPVright>  <ModifyAPVright id=" 13">  12, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 14"> 15, "US", "y",  6  </AddAPVright>  <ModifyAPVright id=" 14"> 15, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 15"> 14, "US", "y",  0  </AddAPVright>  <ModifyAPVright id=" 15"> 14, "0 32 64 96", 4, 2 </ModifyAPVright>
+-->
+
+<!-- The following has used till June 2017 with 3 GEMs -->
+
+<!--
+    <AddAPVright id=" 0">  1, "DS", "x",  6  </AddAPVright>  <ModifyAPVright id=" 0">  1, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 1">  0, "DS", "x",  0  </AddAPVright>  <ModifyAPVright id=" 1">  0, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 2">  3, "DS", "y",  6  </AddAPVright>  <ModifyAPVright id=" 2">  3, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 3">  2, "DS", "y",  0  </AddAPVright>  <ModifyAPVright id=" 3">  2, "0 2 4 6 8 10 22 32 64 96", 10, 2 </ModifyAPVright>
+    
+
+    <AddAPVright id=" 4">  5, "MI", "x",  6  </AddAPVright>  <ModifyAPVright id=" 4">  5, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 5">  4, "MI", "x",  0  </AddAPVright>  <ModifyAPVright id=" 5">  4, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 6">  7, "MI", "y",  6  </AddAPVright>  <ModifyAPVright id=" 6">  7, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 7">  6, "MI", "y",  0  </AddAPVright>  <ModifyAPVright id=" 7">  6, "0 32 64 96", 4, 2 </ModifyAPVright>
+   
+
+    <AddAPVright id=" 8">  9, "US", "x",  6  </AddAPVright>  <ModifyAPVright id=" 8">  9, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id=" 9">  8, "US", "x",  0  </AddAPVright>  <ModifyAPVright id=" 9">  8, "0 32 64 96", 4, 2 </ModifyAPVright>
+    <AddAPVright id="10"> 11, "US", "y",  6  </AddAPVright>  <ModifyAPVright id="10"> 11, "0 32 64 96", 4, 2 </ModifyAPVright>
+
+    <AddAPVright id="11"> 10, "US", "y",  0  </AddAPVright>  <ModifyAPVright id="11"> 10, "0 32 64 96", 4, 2 </ModifyAPVright>-->
+
+ 
+<!-- <SwapGEMaxis id=" 0"> "right", "DS", "y" </SwapGEMaxis> -->
+
+<!--
+    <AddAPVleft id=" 0">  1, "US", "x",  6  </AddAPVleft>  <ModifyAPVleft id=" 0">  1, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 1">  0, "US", "x",  0  </AddAPVleft>  <ModifyAPVleft id=" 1">  0, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 2">  3, "US", "y",  6  </AddAPVleft>  <ModifyAPVleft id=" 2">  3, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 3">  2, "US", "y",  0  </AddAPVleft>  <ModifyAPVleft id=" 3">  2, "0 32 64 96", 4, 2 </ModifyAPVleft>
+
+
+     <AddAPVleft id=" 4">  5, "MI", "x",  6  </AddAPVleft>  <ModifyAPVleft id=" 4">  5, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 5">  4, "MI", "x",  0  </AddAPVleft>  <ModifyAPVleft id=" 5">  4, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 6">  7, "MI", "y",  6  </AddAPVleft>  <ModifyAPVleft id=" 6">  7, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 7">  6, "MI", "y",  0  </AddAPVleft>  <ModifyAPVleft id=" 7">  6, "0 32 64 96", 4, 2 </ModifyAPVleft>
+
+    <AddAPVleft id=" 8">  9, "DS", "x",  6  </AddAPVleft>  <ModifyAPVleft id=" 8">  9, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id=" 9">  8, "DS", "x",  0  </AddAPVleft>  <ModifyAPVleft id=" 9">  8, "0 32 64 96", 4, 2 </ModifyAPVleft>
+    <AddAPVleft id="10"> 11, "DS", "y",  6  </AddAPVleft>  <ModifyAPVleft id="10"> 11, "0 32 64 96", 4, 2 </ModifyAPVleft>
+
+    <AddAPVleft id="11"> 10, "DS", "y",  0  </AddAPVleft>  <ModifyAPVleft id="11"> 10, "0 32 64 96", 4, 2 </ModifyAPVleft> 
+
+  <SwapGEMaxis id=" 1"> "left", "DS", "y" </SwapGEMaxis>
+-->
+
+  </date>
+
+    
+<!--##################################################################-->
+
+
+    <!-- right sector LumiGEM HVs changed during run #2688 -->
+<!--  
+    <MonitorGEMHV id="10"> "LG:RUSMVI", 1, 4115.0, 5.0 </MonitorGEMHV>
+    <MonitorGEMHV id="11"> "LG:RUSMCI", 1,  312.0, 3.0 </MonitorGEMHV>
+    <MonitorGEMHV id="13"> "LG:RMIMVI", 1, 4175.0, 5.0 </MonitorGEMHV>
+    <MonitorGEMHV id="14"> "LG:RMIMCI", 1,  316.0, 3.0 </MonitorGEMHV>
+    <MonitorGEMHV id="16"> "LG:RDSMVI", 1, 4115.0, 5.0 </MonitorGEMHV>
+    <MonitorGEMHV id="17"> "LG:RDSMCI", 1,  312.0, 3.0 </MonitorGEMHV>
+-->
+
+
+<!--##################################################################-->
+<!--#### DEad channels to mask (ID = 500*i+ 2*k + 0/1) ##############################-->
+<date time="2012-02-05T20:50:00Z">
+
+	<!--This is a terrible way to identify dead channels-->
+	<!--The id uniquely identifies which channel in which GEM fired so everything else is useless-->
+	<!--And then you store the channel number twice, no need for that-->
+	<!--Ethan-->
+	<deadchannels id="1745">3,122,1,122</deadchannels>
+	<deadchannels id="1761">3,130,1,130</deadchannels>
+	<deadchannels id="1809">3,154,1,154</deadchannels>
+	<deadchannels id="1825">3,162,1,162</deadchannels>
+	<deadchannels id="1873">3,186,1,186</deadchannels>
+	<deadchannels id="1889">3,194,1,194</deadchannels>
+	<deadchannels id="1937">3,218,1,218</deadchannels>
+	<deadchannels id="1953">3,226,1,226</deadchannels>
+	<!--Commented out by Ethan-->
+	<!--<deadchannels id="1749">1,0,124,1,124</deadchannels>
+<deadchannels id="1753">1,0,126,1,126</deadchannels>
+<deadchannels id="1757">1,0,128,1,128</deadchannels>
+<deadchannels id="1761">1,0,130,1,130</deadchannels>
+<deadchannels id="1789">1,0,144,1,144</deadchannels>
+<deadchannels id="1748">1,0,124,0,124</deadchannels>
+<deadchannels id="1868">1,0,184,0,184</deadchannels>-->
+
+
+
+<!--<deadchannels id="1751">1,0,125,1,125</deadchannels>
+<deadchannels id="1755">1,0,127,1,127</deadchannels>
+<deadchannels id="1759">1,0,129,1,129</deadchannels>-->
+
+
+<!--<deadchannels id="1500">1,0,0,0,0</deadchannels>
+<deadchannels id="1502">1,0,1,0,1</deadchannels>
+<deadchannels id="1504">1,0,2,0,2</deadchannels>
+<deadchannels id="1506">1,0,3,0,3</deadchannels>
+<deadchannels id="1508">1,0,4,0,4</deadchannels>
+<deadchannels id="1510">1,0,5,0,5</deadchannels>
+<deadchannels id="1512">1,0,6,0,6</deadchannels>
+<deadchannels id="1514">1,0,7,0,7</deadchannels>
+<deadchannels id="1552">1,0,26,0,26</deadchannels>
+<deadchannels id="1616">1,0,58,0,58</deadchannels>
+<deadchannels id="1680">1,0,90,0,90</deadchannels>
+<deadchannels id="1808">1,0,154,0,154</deadchannels>
+<deadchannels id="1872">1,0,186,0,186</deadchannels>
+<deadchannels id="1936">1,0,218,0,218</deadchannels>
+<deadchannels id="1990">1,0,245,0,245</deadchannels>
+<deadchannels id="1996">1,0,248,0,248</deadchannels>
+<deadchannels id="1998">1,0,249,0,249</deadchannels>-->
+
+<!--Commented out by Ethan
+<deadchannels id="2368">1,1,184,1,184</deadchannels>
+<deadchannels id="2004">1,1,2,0,2</deadchannels>
+<deadchannels id="2008">1,1,4,0,4</deadchannels>
+<deadchannels id="2026">1,1,13,0,13</deadchannels>
+<deadchannels id="2030">1,1,15,0,15</deadchannels>
+<deadchannels id="2040">1,1,20,0,20</deadchannels>
+<deadchannels id="2088">1,1,44,0,44</deadchannels>
+<deadchannels id="2112">1,1,56,0,56</deadchannels>
+<deadchannels id="2120">1,1,60,0,60</deadchannels>
+<deadchannels id="2140">1,1,70,0,70</deadchannels>
+<deadchannels id="2195">1,1,98,0,98</deadchannels>
+<deadchannels id="2232">1,1,116,0,116</deadchannels>
+
+<deadchannels id="2625">1,2,62,1,62</deadchannels>
+<deadchannels id="2631">1,2,65,1,65</deadchannels>
+<deadchannels id="2887">1,2,193,1,193</deadchannels>
+<deadchannels id="2572">1,2,36,0,36</deadchannels>
+<deadchannels id="2782">1,2,141,0,141</deadchannels>
+<deadchannels id="2786">1,2,143,0,143</deadchannels>
+<deadchannels id="2814">1,2,157,0,157</deadchannels>-->
+
+ </date>
+ 
+<!--##################################################################-->
+<!--#### APV chanel-2-channel calibration constants (ID = 500*gem + 2*k + 0/1)##################-->
+<!--#### id, tel, GEM, strip, X/Y (X=0 and Y=1), Calib Constant ##################-->
+
+<!--All the numbers below need to have 1500 subtracted from them-->
+<!-- It used to be that there were two telescopes and MUSE only used the second telescope. This causes a 1500 offset in calib constants
+Someone else needs to change that
+Ethan
+ -->
+ <date time="2012-02-05T20:50:00Z">
+
+<CalibConsts id="1500">0,0,0,1</CalibConsts>
+<CalibConsts id="1501">0,0,1,1</CalibConsts>
+<CalibConsts id="1502">0,1,0,1</CalibConsts>
+<CalibConsts id="1503">0,1,1,1</CalibConsts>
+<CalibConsts id="1504">0,2,0,1</CalibConsts>
+<CalibConsts id="1505">0,2,1,1</CalibConsts>
+<CalibConsts id="1506">0,3,0,1</CalibConsts>
+<CalibConsts id="1507">0,3,1,1</CalibConsts>
+<CalibConsts id="1508">0,4,0,1</CalibConsts>
+<CalibConsts id="1509">0,4,1,1</CalibConsts>
+<CalibConsts id="1510">0,5,0,1</CalibConsts>
+<CalibConsts id="1511">0,5,1,1</CalibConsts>
+<CalibConsts id="1512">0,6,0,1</CalibConsts>
+<CalibConsts id="1513">0,6,1,1</CalibConsts>
+<CalibConsts id="1514">0,7,0,1</CalibConsts>
+<CalibConsts id="1515">0,7,1,1</CalibConsts>
+<CalibConsts id="1516">0,8,0,1.57089</CalibConsts>
+<CalibConsts id="1517">0,8,1,1.67187</CalibConsts>
+<CalibConsts id="1518">0,9,0,1.01756</CalibConsts>
+<CalibConsts id="1519">0,9,1,1.05834</CalibConsts>
+<CalibConsts id="1520">0,10,0,10.026</CalibConsts>
+<CalibConsts id="1521">0,10,1,3.41805</CalibConsts>
+<CalibConsts id="1522">0,11,0,0.91145</CalibConsts>
+<CalibConsts id="1523">0,11,1,0.875039</CalibConsts>
+<CalibConsts id="1524">0,12,0,0.928203</CalibConsts>
+<CalibConsts id="1525">0,12,1,0.983176</CalibConsts>
+<CalibConsts id="1526">0,13,0,0.983078</CalibConsts>
+<CalibConsts id="1527">0,13,1,1.0624</CalibConsts>
+<CalibConsts id="1528">0,14,0,0.887715</CalibConsts>
+<CalibConsts id="1529">0,14,1,0.970085</CalibConsts>
+<CalibConsts id="1530">0,15,0,0.958208</CalibConsts>
+<CalibConsts id="1531">0,15,1,0.890805</CalibConsts>
+<CalibConsts id="1532">0,16,0,0.930737</CalibConsts>
+<CalibConsts id="1533">0,16,1,1.07228</CalibConsts>
+<CalibConsts id="1534">0,17,0,0.985209</CalibConsts>
+<CalibConsts id="1535">0,17,1,1.14123</CalibConsts>
+<CalibConsts id="1536">0,18,0,0.954853</CalibConsts>
+<CalibConsts id="1537">0,18,1,1.19543</CalibConsts>
+<CalibConsts id="1538">0,19,0,1.02675</CalibConsts>
+<CalibConsts id="1539">0,19,1,0.982478</CalibConsts>
+<CalibConsts id="1540">0,20,0,1.03848</CalibConsts>
+<CalibConsts id="1541">0,20,1,1.01863</CalibConsts>
+<CalibConsts id="1542">0,21,0,0.932009</CalibConsts>
+<CalibConsts id="1543">0,21,1,1.01713</CalibConsts>
+<CalibConsts id="1544">0,22,0,1.14969</CalibConsts>
+<CalibConsts id="1545">0,22,1,0.893104</CalibConsts>
+<CalibConsts id="1546">0,23,0,0.97256</CalibConsts>
+<CalibConsts id="1547">0,23,1,0.91434</CalibConsts>
+<CalibConsts id="1548">0,24,0,0.910842</CalibConsts>
+<CalibConsts id="1549">0,24,1,0.835937</CalibConsts>
+<CalibConsts id="1550">0,25,0,1.11582</CalibConsts>
+<CalibConsts id="1551">0,25,1,0.918588</CalibConsts>
+<CalibConsts id="1552">0,26,0,1</CalibConsts>
+<CalibConsts id="1553">0,26,1,1</CalibConsts>
+<CalibConsts id="1554">0,27,0,1.17952</CalibConsts>
+<CalibConsts id="1555">0,27,1,1.09866</CalibConsts>
+<CalibConsts id="1556">0,28,0,0.918821</CalibConsts>
+<CalibConsts id="1557">0,28,1,0.887379</CalibConsts>
+<CalibConsts id="1558">0,29,0,0.994551</CalibConsts>
+<CalibConsts id="1559">0,29,1,0.995908</CalibConsts>
+<CalibConsts id="1560">0,30,0,1.0026</CalibConsts>
+<CalibConsts id="1561">0,30,1,0.990208</CalibConsts>
+<CalibConsts id="1562">0,31,0,0.990218</CalibConsts>
+<CalibConsts id="1563">0,31,1,1.1319</CalibConsts>
+<CalibConsts id="1564">0,32,0,0.995277</CalibConsts>
+<CalibConsts id="1565">0,32,1,1.11548</CalibConsts>
+<CalibConsts id="1566">0,33,0,1.14775</CalibConsts>
+<CalibConsts id="1567">0,33,1,1.15072</CalibConsts>
+<CalibConsts id="1568">0,34,0,5.16489</CalibConsts>
+<CalibConsts id="1569">0,34,1,3.03577</CalibConsts>
+<CalibConsts id="1570">0,35,0,1.00481</CalibConsts>
+<CalibConsts id="1571">0,35,1,1.0665</CalibConsts>
+<CalibConsts id="1572">0,36,0,1.03848</CalibConsts>
+<CalibConsts id="1573">0,36,1,1.16918</CalibConsts>
+<CalibConsts id="1574">0,37,0,1.0322</CalibConsts>
+<CalibConsts id="1575">0,37,1,1.26191</CalibConsts>
+<CalibConsts id="1576">0,38,0,0.948872</CalibConsts>
+<CalibConsts id="1577">0,38,1,1.15939</CalibConsts>
+<CalibConsts id="1578">0,39,0,0.983788</CalibConsts>
+<CalibConsts id="1579">0,39,1,0.970085</CalibConsts>
+<CalibConsts id="1580">0,40,0,0.854878</CalibConsts>
+<CalibConsts id="1581">0,40,1,0.908937</CalibConsts>
+<CalibConsts id="1582">0,41,0,0.937134</CalibConsts>
+<CalibConsts id="1583">0,41,1,1.10041</CalibConsts>
+<CalibConsts id="1584">0,42,0,7.49192</CalibConsts>
+<CalibConsts id="1585">0,42,1,5.69676</CalibConsts>
+<CalibConsts id="1586">0,43,0,0.971175</CalibConsts>
+<CalibConsts id="1587">0,43,1,0.96066</CalibConsts>
+<CalibConsts id="1588">0,44,0,0.981663</CalibConsts>
+<CalibConsts id="1589">0,44,1,0.973496</CalibConsts>
+<CalibConsts id="1590">0,45,0,0.903</CalibConsts>
+<CalibConsts id="1591">0,45,1,0.890805</CalibConsts>
+<CalibConsts id="1592">0,46,0,0.896469</CalibConsts>
+<CalibConsts id="1593">0,46,1,0.952071</CalibConsts>
+<CalibConsts id="1594">0,47,0,0.849551</CalibConsts>
+<CalibConsts id="1595">0,47,1,1.00897</CalibConsts>
+<CalibConsts id="1596">0,48,0,0.99238</CalibConsts>
+<CalibConsts id="1597">0,48,1,0.899488</CalibConsts>
+<CalibConsts id="1598">0,49,0,0.926941</CalibConsts>
+<CalibConsts id="1599">0,49,1,0.924724</CalibConsts>
+<CalibConsts id="1600">0,50,0,0.837549</CalibConsts>
+<CalibConsts id="1601">0,50,1,0.970085</CalibConsts>
+<CalibConsts id="1602">0,51,0,0.967729</CalibConsts>
+<CalibConsts id="1603">0,51,1,0.945568</CalibConsts>
+<CalibConsts id="1604">0,52,0,0.937778</CalibConsts>
+<CalibConsts id="1605">0,52,1,0.922259</CalibConsts>
+<CalibConsts id="1606">0,53,0,0.975343</CalibConsts>
+<CalibConsts id="1607">0,53,1,0.882852</CalibConsts>
+<CalibConsts id="1608">0,54,0,1.0636</CalibConsts>
+<CalibConsts id="1609">0,54,1,0.982478</CalibConsts>
+<CalibConsts id="1610">0,55,0,0.860271</CalibConsts>
+<CalibConsts id="1611">0,55,1,0.92349</CalibConsts>
+<CalibConsts id="1612">0,56,0,0.979547</CalibConsts>
+<CalibConsts id="1613">0,56,1,0.887379</CalibConsts>
+<CalibConsts id="1614">0,57,0,0.953517</CalibConsts>
+<CalibConsts id="1615">0,57,1,1.03153</CalibConsts>
+<CalibConsts id="1616">0,58,0,1</CalibConsts>
+<CalibConsts id="1617">0,58,1,1</CalibConsts>
+<CalibConsts id="1618">0,59,0,1.04007</CalibConsts>
+<CalibConsts id="1619">0,59,1,1.00971</CalibConsts>
+<CalibConsts id="1620">0,60,0,0.950195</CalibConsts>
+<CalibConsts id="1621">0,60,1,1.03307</CalibConsts>
+<CalibConsts id="1622">0,61,0,0.955522</CalibConsts>
+<CalibConsts id="1623">0,61,1,1.05031</CalibConsts>
+<CalibConsts id="1624">0,62,0,1.28393</CalibConsts>
+<CalibConsts id="1625">0,62,1,0.91434</CalibConsts>
+<CalibConsts id="1626">0,63,0,0.877997</CalibConsts>
+<CalibConsts id="1627">0,63,1,0.937245</CalibConsts>
+<CalibConsts id="1628">0,64,0,0.899426</CalibConsts>
+<CalibConsts id="1629">0,64,1,0.952726</CalibConsts>
+<CalibConsts id="1630">0,65,0,0.940365</CalibConsts>
+<CalibConsts id="1631">0,65,1,1.07228</CalibConsts>
+<CalibConsts id="1632">0,66,0,3.61679</CalibConsts>
+<CalibConsts id="1633">0,66,1,2.2149</CalibConsts>
+<CalibConsts id="1634">0,67,0,0.937778</CalibConsts>
+<CalibConsts id="1635">0,67,1,1.00824</CalibConsts>
+<CalibConsts id="1636">0,68,0,0.852739</CalibConsts>
+<CalibConsts id="1637">0,68,1,1.10745</CalibConsts>
+<CalibConsts id="1638">0,69,0,1.0917</CalibConsts>
+<CalibConsts id="1639">0,69,1,0.967373</CalibConsts>
+<CalibConsts id="1640">0,70,0,0.979547</CalibConsts>
+<CalibConsts id="1641">0,70,1,1.06732</CalibConsts>
+<CalibConsts id="1642">0,71,0,0.958882</CalibConsts>
+<CalibConsts id="1643">0,71,1,0.883415</CalibConsts>
+<CalibConsts id="1644">0,72,0,0.943619</CalibConsts>
+<CalibConsts id="1645">0,72,1,0.990208</CalibConsts>
+<CalibConsts id="1646">0,73,0,0.90902</CalibConsts>
+<CalibConsts id="1647">0,73,1,0.927201</CalibConsts>
+<CalibConsts id="1648">0,74,0,0.89588</CalibConsts>
+<CalibConsts id="1649">0,74,1,1.35717</CalibConsts>
+<CalibConsts id="1650">0,75,0,0.906602</CalibConsts>
+<CalibConsts id="1651">0,75,1,0.994477</CalibConsts>
+<CalibConsts id="1652">0,76,0,0.940365</CalibConsts>
+<CalibConsts id="1653">0,76,1,1.03307</CalibConsts>
+<CalibConsts id="1654">0,77,0,1.03928</CalibConsts>
+<CalibConsts id="1655">0,77,1,0.985977</CalibConsts>
+<CalibConsts id="1656">0,78,0,0.818445</CalibConsts>
+<CalibConsts id="1657">0,78,1,0.914945</CalibConsts>
+<CalibConsts id="1658">0,79,0,0.835496</CalibConsts>
+<CalibConsts id="1659">0,79,1,1.01938</CalibConsts>
+<CalibConsts id="1660">0,80,0,0.975343</CalibConsts>
+<CalibConsts id="1661">0,80,1,0.96805</CalibConsts>
+<CalibConsts id="1662">0,81,0,0.897059</CalibConsts>
+<CalibConsts id="1663">0,81,1,0.96805</CalibConsts>
+<CalibConsts id="1664">0,82,0,0.903598</CalibConsts>
+<CalibConsts id="1665">0,82,1,1.01788</CalibConsts>
+<CalibConsts id="1666">0,83,0,0.869598</CalibConsts>
+<CalibConsts id="1667">0,83,1,1.04398</CalibConsts>
+<CalibConsts id="1668">0,84,0,1.06692</CalibConsts>
+<CalibConsts id="1669">0,84,1,1.06322</CalibConsts>
+<CalibConsts id="1670">0,85,0,0.983788</CalibConsts>
+<CalibConsts id="1671">0,85,1,0.924106</CalibConsts>
+<CalibConsts id="1672">0,86,0,1.0636</CalibConsts>
+<CalibConsts id="1673">0,86,1,0.919808</CalibConsts>
+<CalibConsts id="1674">0,87,0,1.0168</CalibConsts>
+<CalibConsts id="1675">0,87,1,1.01341</CalibConsts>
+<CalibConsts id="1676">0,88,0,0.989499</CalibConsts>
+<CalibConsts id="1677">0,88,1,0.890805</CalibConsts>
+<CalibConsts id="1678">0,89,0,0.920682</CalibConsts>
+<CalibConsts id="1679">0,89,1,0.971447</CalibConsts>
+<CalibConsts id="1680">0,90,0,1</CalibConsts>
+<CalibConsts id="1681">0,90,1,1</CalibConsts>
+<CalibConsts id="1682">0,91,0,0.937134</CalibConsts>
+<CalibConsts id="1683">0,91,1,1.11011</CalibConsts>
+<CalibConsts id="1684">0,92,0,1.11856</CalibConsts>
+<CalibConsts id="1685">0,92,1,1.40112</CalibConsts>
+<CalibConsts id="1686">0,93,0,0.931373</CalibConsts>
+<CalibConsts id="1687">0,93,1,1.02618</CalibConsts>
+<CalibConsts id="1688">0,94,0,0.900614</CalibConsts>
+<CalibConsts id="1689">0,94,1,1.16918</CalibConsts>
+<CalibConsts id="1690">0,95,0,0.877997</CalibConsts>
+<CalibConsts id="1691">0,95,1,0.901832</CalibConsts>
+<CalibConsts id="1692">0,96,0,0.896469</CalibConsts>
+<CalibConsts id="1693">0,96,1,1.05915</CalibConsts>
+<CalibConsts id="1694">0,97,0,1.06443</CalibConsts>
+<CalibConsts id="1695">0,97,1,0.908341</CalibConsts>
+<CalibConsts id="1696">0,98,0,3.54164</CalibConsts>
+<CalibConsts id="1697">0,98,1,1.92801</CalibConsts>
+<CalibConsts id="1698">0,99,0,0.873498</CalibConsts>
+<CalibConsts id="1699">0,99,1,0.970765</CalibConsts>
+<CalibConsts id="1700">0,100,0,0.940365</CalibConsts>
+<CalibConsts id="1701">0,100,1,0.961995</CalibConsts>
+<CalibConsts id="1702">0,101,0,0.901805</CalibConsts>
+<CalibConsts id="1703">0,101,1,1.15648</CalibConsts>
+<CalibConsts id="1704">0,102,0,0.901209</CalibConsts>
+<CalibConsts id="1705">0,102,1,0.975554</CalibConsts>
+<CalibConsts id="1706">0,103,0,0.958208</CalibConsts>
+<CalibConsts id="1707">0,103,1,0.950111</CalibConsts>
+<CalibConsts id="1708">0,104,0,0.894118</CalibConsts>
+<CalibConsts id="1709">0,104,1,0.967373</CalibConsts>
+<CalibConsts id="1710">0,105,0,0.884261</CalibConsts>
+<CalibConsts id="1711">0,105,1,0.952071</CalibConsts>
+<CalibConsts id="1712">0,106,0,0.917584</CalibConsts>
+<CalibConsts id="1713">0,106,1,0.886811</CalibConsts>
+<CalibConsts id="1714">0,107,0,0.923175</CalibConsts>
+<CalibConsts id="1715">0,107,1,0.995192</CalibConsts>
+<CalibConsts id="1716">0,108,0,0.97256</CalibConsts>
+<CalibConsts id="1717">0,108,1,0.926581</CalibConsts>
+<CalibConsts id="1718">0,109,0,0.994551</CalibConsts>
+<CalibConsts id="1719">0,109,1,0.908937</CalibConsts>
+<CalibConsts id="1720">0,110,0,0.859729</CalibConsts>
+<CalibConsts id="1721">0,110,1,0.844607</CalibConsts>
+<CalibConsts id="1722">0,111,0,1.10318</CalibConsts>
+<CalibConsts id="1723">0,111,1,0.952071</CalibConsts>
+<CalibConsts id="1724">0,112,0,0.965673</CalibConsts>
+<CalibConsts id="1725">0,112,1,0.925342</CalibConsts>
+<CalibConsts id="1726">0,113,0,1.09608</CalibConsts>
+<CalibConsts id="1727">0,113,1,0.911331</CalibConsts>
+<CalibConsts id="1728">0,114,0,0.852206</CalibConsts>
+<CalibConsts id="1729">0,114,1,0.941068</CalibConsts>
+<CalibConsts id="1730">0,115,0,0.979547</CalibConsts>
+<CalibConsts id="1731">0,115,1,0.847192</CalibConsts>
+<CalibConsts id="1732">0,116,0,1.01984</CalibConsts>
+<CalibConsts id="1733">0,116,1,0.957339</CalibConsts>
+<CalibConsts id="1734">0,117,0,0.899426</CalibConsts>
+<CalibConsts id="1735">0,117,1,0.997343</CalibConsts>
+<CalibConsts id="1736">0,118,0,0.933924</CalibConsts>
+<CalibConsts id="1737">0,118,1,0.873934</CalibConsts>
+<CalibConsts id="1738">0,119,0,1.01604</CalibConsts>
+<CalibConsts id="1739">0,119,1,1.14501</CalibConsts>
+<CalibConsts id="1740">0,120,0,1.38994</CalibConsts>
+<CalibConsts id="1741">0,120,1,1.1319</CalibConsts>
+<CalibConsts id="1742">0,121,0,2.99677</CalibConsts>
+<CalibConsts id="1743">0,121,1,5.62728</CalibConsts>
+<CalibConsts id="1744">0,122,0,1</CalibConsts>
+<CalibConsts id="1745">0,122,1,1</CalibConsts>
+<CalibConsts id="1746">0,123,0,0.981663</CalibConsts>
+<CalibConsts id="1747">0,123,1,1.02013</CalibConsts>
+<CalibConsts id="1748">0,124,0,1</CalibConsts>
+<CalibConsts id="1749">0,124,1,1</CalibConsts>
+<CalibConsts id="1750">0,125,0,0.961587</CalibConsts>
+<CalibConsts id="1751">0,125,1,1.03461</CalibConsts>
+<CalibConsts id="1752">0,126,0,0.97256</CalibConsts>
+<CalibConsts id="1753">0,126,1,1</CalibConsts>
+<CalibConsts id="1754">0,127,0,0.98735</CalibConsts>
+<CalibConsts id="1755">0,127,1,1.10834</CalibConsts>
+<CalibConsts id="1756">0,128,0,0.852206</CalibConsts>
+<CalibConsts id="1757">0,128,1,1</CalibConsts>
+<CalibConsts id="1758">0,129,0,1.02986</CalibConsts>
+<CalibConsts id="1759">0,129,1,1.01341</CalibConsts>
+<CalibConsts id="1760">0,130,0,7.10172</CalibConsts>
+<CalibConsts id="1761">0,130,1,1</CalibConsts>
+<CalibConsts id="1762">0,131,0,0.901805</CalibConsts>
+<CalibConsts id="1763">0,131,1,0.981085</CalibConsts>
+<CalibConsts id="1764">0,132,0,0.913894</CalibConsts>
+<CalibConsts id="1765">0,132,1,0.890805</CalibConsts>
+<CalibConsts id="1766">0,133,0,0.93649</CalibConsts>
+<CalibConsts id="1767">0,133,1,0.913737</CalibConsts>
+<CalibConsts id="1768">0,134,0,0.883687</CalibConsts>
+<CalibConsts id="1769">0,134,1,0.81478</CalibConsts>
+<CalibConsts id="1770">0,135,0,1.03141</CalibConsts>
+<CalibConsts id="1771">0,135,1,0.925961</CalibConsts>
+<CalibConsts id="1772">0,136,0,0.916351</CalibConsts>
+<CalibConsts id="1773">0,136,1,0.859287</CalibConsts>
+<CalibConsts id="1774">0,137,0,1.0229</CalibConsts>
+<CalibConsts id="1775">0,137,1,0.895994</CalibConsts>
+<CalibConsts id="1776">0,138,0,3.53246</CalibConsts>
+<CalibConsts id="1777">0,138,1,5.42867</CalibConsts>
+<CalibConsts id="1778">0,139,0,0.907809</CalibConsts>
+<CalibConsts id="1779">0,139,1,0.812866</CalibConsts>
+<CalibConsts id="1780">0,140,0,0.867937</CalibConsts>
+<CalibConsts id="1781">0,140,1,0.930942</CalibConsts>
+<CalibConsts id="1782">0,141,0,0.89765</CalibConsts>
+<CalibConsts id="1783">0,141,1,0.886811</CalibConsts>
+<CalibConsts id="1784">0,142,0,0.935206</CalibConsts>
+<CalibConsts id="1785">0,142,1,0.939791</CalibConsts>
+<CalibConsts id="1786">0,143,0,0.881403</CalibConsts>
+<CalibConsts id="1787">0,143,1,0.941068</CalibConsts>
+<CalibConsts id="1788">0,144,0,0.926311</CalibConsts>
+<CalibConsts id="1789">0,144,1,1</CalibConsts>
+<CalibConsts id="1790">0,145,0,0.986635</CalibConsts>
+<CalibConsts id="1791">0,145,1,0.903008</CalibConsts>
+<CalibConsts id="1792">0,146,0,0.948213</CalibConsts>
+<CalibConsts id="1793">0,146,1,0.862499</CalibConsts>
+<CalibConsts id="1794">0,147,0,0.956192</CalibConsts>
+<CalibConsts id="1795">0,147,1,0.837961</CalibConsts>
+<CalibConsts id="1796">0,148,0,0.910233</CalibConsts>
+<CalibConsts id="1797">0,148,1,0.966023</CalibConsts>
+<CalibConsts id="1798">0,149,0,0.97256</CalibConsts>
+<CalibConsts id="1799">0,149,1,0.973496</CalibConsts>
+<CalibConsts id="1800">0,150,0,0.980957</CalibConsts>
+<CalibConsts id="1801">0,150,1,0.779894</CalibConsts>
+<CalibConsts id="1802">0,151,0,0.91944</CalibConsts>
+<CalibConsts id="1803">0,151,1,0.941068</CalibConsts>
+<CalibConsts id="1804">0,152,0,0.925682</CalibConsts>
+<CalibConsts id="1805">0,152,1,0.887948</CalibConsts>
+<CalibConsts id="1806">0,153,0,1.01077</CalibConsts>
+<CalibConsts id="1807">0,153,1,0.91555</CalibConsts>
+<CalibConsts id="1808">0,154,0,1</CalibConsts>
+<CalibConsts id="1809">0,154,1,1</CalibConsts>
+<CalibConsts id="1810">0,155,0,0.907205</CalibConsts>
+<CalibConsts id="1811">0,155,1,0.877813</CalibConsts>
+<CalibConsts id="1812">0,156,0,0.812592</CalibConsts>
+<CalibConsts id="1813">0,156,1,0.895415</CalibConsts>
+<CalibConsts id="1814">0,157,0,0.906</CalibConsts>
+<CalibConsts id="1815">0,157,1,0.885676</CalibConsts>
+<CalibConsts id="1816">0,158,0,0.923801</CalibConsts>
+<CalibConsts id="1817">0,158,1,0.809066</CalibConsts>
+<CalibConsts id="1818">0,159,0,0.967042</CalibConsts>
+<CalibConsts id="1819">0,159,1,0.919808</CalibConsts>
+<CalibConsts id="1820">0,160,0,1.00186</CalibConsts>
+<CalibConsts id="1821">0,160,1,0.867907</CalibConsts>
+<CalibConsts id="1822">0,161,0,0.964307</CalibConsts>
+<CalibConsts id="1823">0,161,1,0.936611</CalibConsts>
+<CalibConsts id="1824">0,162,0,3.71534</CalibConsts>
+<CalibConsts id="1825">0,162,1,6.35005</CalibConsts>
+<CalibConsts id="1826">0,163,0,0.942315</CalibConsts>
+<CalibConsts id="1827">0,163,1,0.932196</CalibConsts>
+<CalibConsts id="1828">0,164,0,0.962945</CalibConsts>
+<CalibConsts id="1829">0,164,1,0.876701</CalibConsts>
+<CalibConsts id="1830">0,165,0,1.0369</CalibConsts>
+<CalibConsts id="1831">0,165,1,0.868451</CalibConsts>
+<CalibConsts id="1832">0,166,0,0.928835</CalibConsts>
+<CalibConsts id="1833">0,166,1,0.809539</CalibConsts>
+<CalibConsts id="1834">0,167,0,0.941664</CalibConsts>
+<CalibConsts id="1835">0,167,1,0.943634</CalibConsts>
+<CalibConsts id="1836">0,168,0,1.01002</CalibConsts>
+<CalibConsts id="1837">0,168,1,0.899488</CalibConsts>
+<CalibConsts id="1838">0,169,0,0.952851</CalibConsts>
+<CalibConsts id="1839">0,169,1,0.831418</CalibConsts>
+<CalibConsts id="1840">0,170,0,3.71534</CalibConsts>
+<CalibConsts id="1841">0,170,1,5.22382</CalibConsts>
+<CalibConsts id="1842">0,171,0,1.00407</CalibConsts>
+<CalibConsts id="1843">0,171,1,0.921645</CalibConsts>
+<CalibConsts id="1844">0,172,0,0.935206</CalibConsts>
+<CalibConsts id="1845">0,172,1,0.85346</CalibConsts>
+<CalibConsts id="1846">0,173,0,0.924427</CalibConsts>
+<CalibConsts id="1847">0,173,1,0.942991</CalibConsts>
+<CalibConsts id="1848">0,174,0,0.826883</CalibConsts>
+<CalibConsts id="1849">0,174,1,1.02846</CalibConsts>
+<CalibConsts id="1850">0,175,0,0.853273</CalibConsts>
+<CalibConsts id="1851">0,175,1,0.909534</CalibConsts>
+<CalibConsts id="1852">0,176,0,1.23732</CalibConsts>
+<CalibConsts id="1853">0,176,1,0.786988</CalibConsts>
+<CalibConsts id="1854">0,177,0,0.978844</CalibConsts>
+<CalibConsts id="1855">0,177,1,0.922259</CalibConsts>
+<CalibConsts id="1856">0,178,0,0.878563</CalibConsts>
+<CalibConsts id="1857">0,178,1,0.852409</CalibConsts>
+<CalibConsts id="1858">0,179,0,0.861902</CalibConsts>
+<CalibConsts id="1859">0,179,1,0.91434</CalibConsts>
+<CalibConsts id="1860">0,180,0,0.980957</CalibConsts>
+<CalibConsts id="1861">0,180,1,0.924724</CalibConsts>
+<CalibConsts id="1862">0,181,0,0.879697</CalibConsts>
+<CalibConsts id="1863">0,181,1,0.88511</CalibConsts>
+<CalibConsts id="1864">0,182,0,0.942315</CalibConsts>
+<CalibConsts id="1865">0,182,1,0.797874</CalibConsts>
+<CalibConsts id="1866">0,183,0,0.930737</CalibConsts>
+<CalibConsts id="1867">0,183,1,0.927201</CalibConsts>
+<CalibConsts id="1868">0,184,0,1</CalibConsts>
+<CalibConsts id="1869">0,184,1,0.894258</CalibConsts>
+<CalibConsts id="1870">0,185,0,1.00704</CalibConsts>
+<CalibConsts id="1871">0,185,1,0.939791</CalibConsts>
+<CalibConsts id="1872">0,186,0,1</CalibConsts>
+<CalibConsts id="1873">0,186,1,1</CalibConsts>
+<CalibConsts id="1874">0,187,0,1.02675</CalibConsts>
+<CalibConsts id="1875">0,187,1,0.962664</CalibConsts>
+<CalibConsts id="1876">0,188,0,0.903598</CalibConsts>
+<CalibConsts id="1877">0,188,1,0.929068</CalibConsts>
+<CalibConsts id="1878">0,189,0,0.881973</CalibConsts>
+<CalibConsts id="1879">0,189,1,0.891953</CalibConsts>
+<CalibConsts id="1880">0,190,0,0.898241</CalibConsts>
+<CalibConsts id="1881">0,190,1,1.23159</CalibConsts>
+<CalibConsts id="1882">0,191,0,0.920682</CalibConsts>
+<CalibConsts id="1883">0,191,1,0.905963</CalibConsts>
+<CalibConsts id="1884">0,192,0,1.0026</CalibConsts>
+<CalibConsts id="1885">0,192,1,0.949459</CalibConsts>
+<CalibConsts id="1886">0,193,0,0.858646</CalibConsts>
+<CalibConsts id="1887">0,193,1,0.910731</CalibConsts>
+<CalibConsts id="1888">0,194,0,4.73448</CalibConsts>
+<CalibConsts id="1889">0,194,1,5.67341</CalibConsts>
+<CalibConsts id="1890">0,195,0,0.898241</CalibConsts>
+<CalibConsts id="1891">0,195,1,0.979697</CalibConsts>
+<CalibConsts id="1892">0,196,0,0.810178</CalibConsts>
+<CalibConsts id="1893">0,196,1,0.939153</CalibConsts>
+<CalibConsts id="1894">0,197,0,0.984498</CalibConsts>
+<CalibConsts id="1895">0,197,1,0.90537</CalibConsts>
+<CalibConsts id="1896">0,198,0,0.87238</CalibConsts>
+<CalibConsts id="1897">0,198,1,0.893104</CalibConsts>
+<CalibConsts id="1898">0,199,0,0.913282</CalibConsts>
+<CalibConsts id="1899">0,199,1,0.916156</CalibConsts>
+<CalibConsts id="1900">0,200,0,0.846913</CalibConsts>
+<CalibConsts id="1901">0,200,1,0.878928</CalibConsts>
+<CalibConsts id="1902">0,201,0,0.954185</CalibConsts>
+<CalibConsts id="1903">0,201,1,1.03153</CalibConsts>
+<CalibConsts id="1904">0,202,0,1.0952</CalibConsts>
+<CalibConsts id="1905">0,202,1,0.966698</CalibConsts>
+<CalibConsts id="1906">0,203,0,0.812592</CalibConsts>
+<CalibConsts id="1907">0,203,1,0.837454</CalibConsts>
+<CalibConsts id="1908">0,204,0,1.06526</CalibConsts>
+<CalibConsts id="1909">0,204,1,1.07645</CalibConsts>
+<CalibConsts id="1910">0,205,0,0.870709</CalibConsts>
+<CalibConsts id="1911">0,205,1,0.85346</CalibConsts>
+<CalibConsts id="1912">0,206,0,0.865733</CalibConsts>
+<CalibConsts id="1913">0,206,1,0.777703</CalibConsts>
+<CalibConsts id="1914">0,207,0,0.891779</CalibConsts>
+<CalibConsts id="1915">0,207,1,0.798795</CalibConsts>
+<CalibConsts id="1916">0,208,0,0.935206</CalibConsts>
+<CalibConsts id="1917">0,208,1,0.844607</CalibConsts>
+<CalibConsts id="1918">0,209,0,1.02137</CalibConsts>
+<CalibConsts id="1919">0,209,1,0.901832</CalibConsts>
+<CalibConsts id="1920">0,210,0,0.905398</CalibConsts>
+<CalibConsts id="1921">0,210,1,0.816703</CalibConsts>
+<CalibConsts id="1922">0,211,0,0.905398</CalibConsts>
+<CalibConsts id="1923">0,211,1,0.802499</CalibConsts>
+<CalibConsts id="1924">0,212,0,0.894118</CalibConsts>
+<CalibConsts id="1925">0,212,1,1.01788</CalibConsts>
+<CalibConsts id="1926">0,213,0,1.04645</CalibConsts>
+<CalibConsts id="1927">0,213,1,0.930942</CalibConsts>
+<CalibConsts id="1928">0,214,0,0.927571</CalibConsts>
+<CalibConsts id="1929">0,214,1,0.876147</CalibConsts>
+<CalibConsts id="1930">0,215,0,0.907205</CalibConsts>
+<CalibConsts id="1931">0,215,1,0.817185</CalibConsts>
+<CalibConsts id="1932">0,216,0,0.875742</CalibConsts>
+<CalibConsts id="1933">0,216,1,0.822038</CalibConsts>
+<CalibConsts id="1934">0,217,0,0.990937</CalibConsts>
+<CalibConsts id="1935">0,217,1,1.03927</CalibConsts>
+<CalibConsts id="1936">0,218,0,1</CalibConsts>
+<CalibConsts id="1937">0,218,1,1</CalibConsts>
+<CalibConsts id="1938">0,219,0,1.06609</CalibConsts>
+<CalibConsts id="1939">0,219,1,1.04793</CalibConsts>
+<CalibConsts id="1940">0,220,0,0.918202</CalibConsts>
+<CalibConsts id="1941">0,220,1,0.895415</CalibConsts>
+<CalibConsts id="1942">0,221,0,1.03376</CalibConsts>
+<CalibConsts id="1943">0,221,1,0.913134</CalibConsts>
+<CalibConsts id="1944">0,222,0,1.11127</CalibConsts>
+<CalibConsts id="1945">0,222,1,0.866278</CalibConsts>
+<CalibConsts id="1946">0,223,0,0.920061</CalibConsts>
+<CalibConsts id="1947">0,223,1,0.893681</CalibConsts>
+<CalibConsts id="1948">0,224,0,0.925682</CalibConsts>
+<CalibConsts id="1949">0,224,1,0.938516</CalibConsts>
+<CalibConsts id="1950">0,225,0,0.978142</CalibConsts>
+<CalibConsts id="1951">0,225,1,0.995908</CalibConsts>
+<CalibConsts id="1952">0,226,0,5.43239</CalibConsts>
+<CalibConsts id="1953">0,226,1,7.44253</CalibConsts>
+<CalibConsts id="1954">0,227,0,1.0796</CalibConsts>
+<CalibConsts id="1955">0,227,1,0.895415</CalibConsts>
+<CalibConsts id="1956">0,228,0,0.90902</CalibConsts>
+<CalibConsts id="1957">0,228,1,0.907745</CalibConsts>
+<CalibConsts id="1958">0,229,0,0.998192</CalibConsts>
+<CalibConsts id="1959">0,229,1,0.866278</CalibConsts>
+<CalibConsts id="1960">0,230,0,0.885984</CalibConsts>
+<CalibConsts id="1961">0,230,1,0.875039</CalibConsts>
+<CalibConsts id="1962">0,231,0,0.942967</CalibConsts>
+<CalibConsts id="1963">0,231,1,0.849792</CalibConsts>
+<CalibConsts id="1964">0,232,0,0.932647</CalibConsts>
+<CalibConsts id="1965">0,232,1,1</CalibConsts>
+<CalibConsts id="1966">0,233,0,0.907205</CalibConsts>
+<CalibConsts id="1967">0,233,1,0.956677</CalibConsts>
+<CalibConsts id="1968">0,234,0,0.901209</CalibConsts>
+<CalibConsts id="1969">0,234,1,1</CalibConsts>
+<CalibConsts id="1970">0,235,0,0.935206</CalibConsts>
+<CalibConsts id="1971">0,235,1,0.891379</CalibConsts>
+<CalibConsts id="1972">0,236,0,0.984498</CalibConsts>
+<CalibConsts id="1973">0,236,1,1.28296</CalibConsts>
+<CalibConsts id="1974">0,237,0,0.91145</CalibConsts>
+<CalibConsts id="1975">0,237,1,0.961995</CalibConsts>
+<CalibConsts id="1976">0,238,0,0.875742</CalibConsts>
+<CalibConsts id="1977">0,238,1,1.37469</CalibConsts>
+<CalibConsts id="1978">0,239,0,0.973255</CalibConsts>
+<CalibConsts id="1979">0,239,1,0.964677</CalibConsts>
+<CalibConsts id="1980">0,240,0,0.884261</CalibConsts>
+<CalibConsts id="1981">0,240,1,2.18002</CalibConsts>
+<CalibConsts id="1982">0,241,0,0.954185</CalibConsts>
+<CalibConsts id="1983">0,241,1,0.974181</CalibConsts>
+<CalibConsts id="1984">0,242,0,1.14008</CalibConsts>
+<CalibConsts id="1985">0,242,1,1</CalibConsts>
+<CalibConsts id="1986">0,243,0,1.15651</CalibConsts>
+<CalibConsts id="1987">0,243,1,1.03849</CalibConsts>
+<CalibConsts id="1988">0,244,0,2.02304</CalibConsts>
+<CalibConsts id="1989">0,244,1,4.70854</CalibConsts>
+<CalibConsts id="1990">0,245,0,1</CalibConsts>
+<CalibConsts id="1991">0,245,1,1</CalibConsts>
+<CalibConsts id="1992">0,246,0,1</CalibConsts>
+<CalibConsts id="1993">0,246,1,1</CalibConsts>
+<CalibConsts id="1994">0,247,0,1</CalibConsts>
+<CalibConsts id="1995">0,247,1,1</CalibConsts>
+<CalibConsts id="1996">0,248,0,1</CalibConsts>
+<CalibConsts id="1997">0,248,1,1</CalibConsts>
+<CalibConsts id="1998">0,249,0,1</CalibConsts>
+<CalibConsts id="1999">0,249,1,1</CalibConsts>
+<CalibConsts id="2000">1,0,0,1</CalibConsts>
+<CalibConsts id="2001">1,0,1,1</CalibConsts>
+<CalibConsts id="2002">1,1,0,1</CalibConsts>
+<CalibConsts id="2003">1,1,1,1</CalibConsts>
+<CalibConsts id="2004">1,2,0,1</CalibConsts>
+<CalibConsts id="2005">1,2,1,1</CalibConsts>
+<CalibConsts id="2006">1,3,0,3.41951</CalibConsts>
+<CalibConsts id="2007">1,3,1,1</CalibConsts>
+<CalibConsts id="2008">1,4,0,1</CalibConsts>
+<CalibConsts id="2009">1,4,1,4.31365</CalibConsts>
+<CalibConsts id="2010">1,5,0,1.20347</CalibConsts>
+<CalibConsts id="2011">1,5,1,1.01907</CalibConsts>
+<CalibConsts id="2012">1,6,0,1.29291</CalibConsts>
+<CalibConsts id="2013">1,6,1,0.906412</CalibConsts>
+<CalibConsts id="2014">1,7,0,1.27956</CalibConsts>
+<CalibConsts id="2015">1,7,1,0.911024</CalibConsts>
+<CalibConsts id="2016">1,8,0,0.872172</CalibConsts>
+<CalibConsts id="2017">1,8,1,0.919604</CalibConsts>
+<CalibConsts id="2018">1,9,0,0.761643</CalibConsts>
+<CalibConsts id="2019">1,9,1,0.789198</CalibConsts>
+<CalibConsts id="2020">1,10,0,5.69919</CalibConsts>
+<CalibConsts id="2021">1,10,1,4.81658</CalibConsts>
+<CalibConsts id="2022">1,11,0,0.98087</CalibConsts>
+<CalibConsts id="2023">1,11,1,0.758008</CalibConsts>
+<CalibConsts id="2024">1,12,0,0.894192</CalibConsts>
+<CalibConsts id="2025">1,12,1,0.901089</CalibConsts>
+<CalibConsts id="2026">1,13,0,1</CalibConsts>
+<CalibConsts id="2027">1,13,1,0.86551</CalibConsts>
+<CalibConsts id="2028">1,14,0,0.975083</CalibConsts>
+<CalibConsts id="2029">1,14,1,0.851783</CalibConsts>
+<CalibConsts id="2030">1,15,0,1</CalibConsts>
+<CalibConsts id="2031">1,15,1,0.843753</CalibConsts>
+<CalibConsts id="2032">1,16,0,0.857095</CalibConsts>
+<CalibConsts id="2033">1,16,1,0.818672</CalibConsts>
+<CalibConsts id="2034">1,17,0,0.853407</CalibConsts>
+<CalibConsts id="2035">1,17,1,0.841769</CalibConsts>
+<CalibConsts id="2036">1,18,0,0.892583</CalibConsts>
+<CalibConsts id="2037">1,18,1,0.908712</CalibConsts>
+<CalibConsts id="2038">1,19,0,0.970312</CalibConsts>
+<CalibConsts id="2039">1,19,1,0.787462</CalibConsts>
+<CalibConsts id="2040">1,20,0,1</CalibConsts>
+<CalibConsts id="2041">1,20,1,0.809418</CalibConsts>
+<CalibConsts id="2042">1,21,0,1.00881</CalibConsts>
+<CalibConsts id="2043">1,21,1,0.84111</CalibConsts>
+<CalibConsts id="2044">1,22,0,0.899057</CalibConsts>
+<CalibConsts id="2045">1,22,1,0.822433</CalibConsts>
+<CalibConsts id="2046">1,23,0,0.784541</CalibConsts>
+<CalibConsts id="2047">1,23,1,0.900333</CalibConsts>
+<CalibConsts id="2048">1,24,0,0.894999</CalibConsts>
+<CalibConsts id="2049">1,24,1,0.875385</CalibConsts>
+<CalibConsts id="2050">1,25,0,0.92852</CalibConsts>
+<CalibConsts id="2051">1,25,1,0.993615</CalibConsts>
+<CalibConsts id="2052">1,26,0,1</CalibConsts>
+<CalibConsts id="2053">1,26,1,1</CalibConsts>
+<CalibConsts id="2054">1,27,0,0.965588</CalibConsts>
+<CalibConsts id="2055">1,27,1,1.00949</CalibConsts>
+<CalibConsts id="2056">1,28,0,0.940853</CalibConsts>
+<CalibConsts id="2057">1,28,1,0.796218</CalibConsts>
+<CalibConsts id="2058">1,29,0,0.836138</CalibConsts>
+<CalibConsts id="2059">1,29,1,0.821804</CalibConsts>
+<CalibConsts id="2060">1,30,0,0.977968</CalibConsts>
+<CalibConsts id="2061">1,30,1,0.848419</CalibConsts>
+<CalibConsts id="2062">1,31,0,0.842531</CalibConsts>
+<CalibConsts id="2063">1,31,1,0.729191</CalibConsts>
+<CalibConsts id="2064">1,32,0,0.838967</CalibConsts>
+<CalibConsts id="2065">1,32,1,0.766118</CalibConsts>
+<CalibConsts id="2066">1,33,0,0.765169</CalibConsts>
+<CalibConsts id="2067">1,33,1,0.925149</CalibConsts>
+<CalibConsts id="2068">1,34,0,3.43135</CalibConsts>
+<CalibConsts id="2069">1,34,1,5.83749</CalibConsts>
+<CalibConsts id="2070">1,35,0,0.941747</CalibConsts>
+<CalibConsts id="2071">1,35,1,0.896576</CalibConsts>
+<CalibConsts id="2072">1,36,0,0.797154</CalibConsts>
+<CalibConsts id="2073">1,36,1,0.885489</CalibConsts>
+<CalibConsts id="2074">1,37,0,0.91229</CalibConsts>
+<CalibConsts id="2075">1,37,1,0.898075</CalibConsts>
+<CalibConsts id="2076">1,38,0,0.829147</CalibConsts>
+<CalibConsts id="2077">1,38,1,0.763939</CalibConsts>
+<CalibConsts id="2078">1,39,0,0.783301</CalibConsts>
+<CalibConsts id="2079">1,39,1,0.862037</CalibConsts>
+<CalibConsts id="2080">1,40,0,0.866078</CalibConsts>
+<CalibConsts id="2081">1,40,1,0.869715</CalibConsts>
+<CalibConsts id="2082">1,41,0,0.854879</CalibConsts>
+<CalibConsts id="2083">1,41,1,0.76886</CalibConsts>
+<CalibConsts id="2084">1,42,0,3.37299</CalibConsts>
+<CalibConsts id="2085">1,42,1,5.04271</CalibConsts>
+<CalibConsts id="2086">1,43,0,0.942642</CalibConsts>
+<CalibConsts id="2087">1,43,1,0.841769</CalibConsts>
+<CalibConsts id="2088">1,44,0,1</CalibConsts>
+<CalibConsts id="2089">1,44,1,0.856537</CalibConsts>
+<CalibConsts id="2090">1,45,0,0.785784</CalibConsts>
+<CalibConsts id="2091">1,45,1,0.839795</CalibConsts>
+<CalibConsts id="2092">1,46,0,0.809518</CalibConsts>
+<CalibConsts id="2093">1,46,1,0.918818</CalibConsts>
+<CalibConsts id="2094">1,47,0,0.775946</CalibConsts>
+<CalibConsts id="2095">1,47,1,0.781731</CalibConsts>
+<CalibConsts id="2096">1,48,0,0.98087</CalibConsts>
+<CalibConsts id="2097">1,48,1,0.847749</CalibConsts>
+<CalibConsts id="2098">1,49,0,0.856355</CalibConsts>
+<CalibConsts id="2099">1,49,1,0.796808</CalibConsts>
+<CalibConsts id="2100">1,50,0,0.689131</CalibConsts>
+<CalibConsts id="2101">1,50,1,0.814327</CalibConsts>
+<CalibConsts id="2102">1,51,0,0.836843</CalibConsts>
+<CalibConsts id="2103">1,51,1,0.829419</CalibConsts>
+<CalibConsts id="2104">1,52,0,0.836843</CalibConsts>
+<CalibConsts id="2105">1,52,1,0.841769</CalibConsts>
+<CalibConsts id="2106">1,53,0,0.904799</CalibConsts>
+<CalibConsts id="2107">1,53,1,0.878967</CalibConsts>
+<CalibConsts id="2108">1,54,0,0.861563</CalibConsts>
+<CalibConsts id="2109">1,54,1,0.780594</CalibConsts>
+<CalibConsts id="2110">1,55,0,0.780834</CalibConsts>
+<CalibConsts id="2111">1,55,1,0.786885</CalibConsts>
+<CalibConsts id="2112">1,56,0,1</CalibConsts>
+<CalibConsts id="2113">1,56,1,0.823063</CalibConsts>
+<CalibConsts id="2114">1,57,0,0.893387</CalibConsts>
+<CalibConsts id="2115">1,57,1,0.832634</CalibConsts>
+<CalibConsts id="2116">1,58,0,1</CalibConsts>
+<CalibConsts id="2117">1,58,1,1</CalibConsts>
+<CalibConsts id="2118">1,59,0,0.954436</CalibConsts>
+<CalibConsts id="2119">1,59,1,0.971155</CalibConsts>
+<CalibConsts id="2120">1,60,0,1</CalibConsts>
+<CalibConsts id="2121">1,60,1,0.83006</CalibConsts>
+<CalibConsts id="2122">1,61,0,0.838967</CalibConsts>
+<CalibConsts id="2123">1,61,1,0.812479</CalibConsts>
+<CalibConsts id="2124">1,62,0,0.737293</CalibConsts>
+<CalibConsts id="2125">1,62,1,0.871126</CalibConsts>
+<CalibConsts id="2126">1,63,0,0.827762</CalibConsts>
+<CalibConsts id="2127">1,63,1,0.82814</CalibConsts>
+<CalibConsts id="2128">1,64,0,0.851941</CalibConsts>
+<CalibConsts id="2129">1,64,1,0.826229</CalibConsts>
+<CalibConsts id="2130">1,65,0,0.751827</CalibConsts>
+<CalibConsts id="2131">1,65,1,0.803364</CalibConsts>
+<CalibConsts id="2132">1,66,0,3.24072</CalibConsts>
+<CalibConsts id="2133">1,66,1,4.73171</CalibConsts>
+<CalibConsts id="2134">1,67,0,1.00574</CalibConsts>
+<CalibConsts id="2135">1,67,1,0.851783</CalibConsts>
+<CalibConsts id="2136">1,68,0,2.88273</CalibConsts>
+<CalibConsts id="2137">1,68,1,0.914904</CalibConsts>
+<CalibConsts id="2138">1,69,0,2.26924</CalibConsts>
+<CalibConsts id="2139">1,69,1,0.901089</CalibConsts>
+<CalibConsts id="2140">1,70,0,1</CalibConsts>
+<CalibConsts id="2141">1,70,1,0.818049</CalibConsts>
+<CalibConsts id="2142">1,71,0,0.903151</CalibConsts>
+<CalibConsts id="2143">1,71,1,0.980016</CalibConsts>
+<CalibConsts id="2144">1,72,0,0.810179</CalibConsts>
+<CalibConsts id="2145">1,72,1,0.943847</CalibConsts>
+<CalibConsts id="2146">1,73,0,0.979901</CalibConsts>
+<CalibConsts id="2147">1,73,1,1.11305</CalibConsts>
+<CalibConsts id="2148">1,74,0,4.36854</CalibConsts>
+<CalibConsts id="2149">1,74,1,2.26126</CalibConsts>
+<CalibConsts id="2150">1,75,0,2.01557</CalibConsts>
+<CalibConsts id="2151">1,75,1,0.852459</CalibConsts>
+<CalibConsts id="2152">1,76,0,3.01416</CalibConsts>
+<CalibConsts id="2153">1,76,1,0.885489</CalibConsts>
+<CalibConsts id="2154">1,77,0,0.925919</CalibConsts>
+<CalibConsts id="2155">1,77,1,0.759617</CalibConsts>
+<CalibConsts id="2156">1,78,0,0.762815</CalibConsts>
+<CalibConsts id="2157">1,78,1,0.956454</CalibConsts>
+<CalibConsts id="2158">1,79,0,2.21353</CalibConsts>
+<CalibConsts id="2159">1,79,1,0.866208</CalibConsts>
+<CalibConsts id="2160">1,80,0,4.33039</CalibConsts>
+<CalibConsts id="2161">1,80,1,0.872541</CalibConsts>
+<CalibConsts id="2162">1,81,0,0.883832</CalibConsts>
+<CalibConsts id="2163">1,81,1,0.933998</CalibConsts>
+<CalibConsts id="2164">1,82,0,0.818201</CalibConsts>
+<CalibConsts id="2165">1,82,1,0.893592</CalibConsts>
+<CalibConsts id="2166">1,83,0,0.840389</CalibConsts>
+<CalibConsts id="2167">1,83,1,0.830702</CalibConsts>
+<CalibConsts id="2168">1,84,0,0.901508</CalibConsts>
+<CalibConsts id="2169">1,84,1,0.943847</CalibConsts>
+<CalibConsts id="2170">1,85,0,0.899872</CalibConsts>
+<CalibConsts id="2171">1,85,1,0.855173</CalibConsts>
+<CalibConsts id="2172">1,86,0,0.876024</CalibConsts>
+<CalibConsts id="2173">1,86,1,0.853814</CalibConsts>
+<CalibConsts id="2174">1,87,0,0.887788</CalibConsts>
+<CalibConsts id="2175">1,87,1,0.849761</CalibConsts>
+<CalibConsts id="2176">1,88,0,0.723311</CalibConsts>
+<CalibConsts id="2177">1,88,1,0.895082</CalibConsts>
+<CalibConsts id="2178">1,89,0,1.11673</CalibConsts>
+<CalibConsts id="2179">1,89,1,0.877531</CalibConsts>
+<CalibConsts id="2180">1,90,0,1</CalibConsts>
+<CalibConsts id="2181">1,90,1,1</CalibConsts>
+<CalibConsts id="2182">1,91,0,2.33882</CalibConsts>
+<CalibConsts id="2183">1,91,1,1.08604</CalibConsts>
+<CalibConsts id="2184">1,92,0,6.23685</CalibConsts>
+<CalibConsts id="2185">1,92,1,0.978231</CalibConsts>
+<CalibConsts id="2186">1,93,0,4.98321</CalibConsts>
+<CalibConsts id="2187">1,93,1,0.914126</CalibConsts>
+<CalibConsts id="2188">1,94,0,2.8013</CalibConsts>
+<CalibConsts id="2189">1,94,1,0.884031</CalibConsts>
+<CalibConsts id="2190">1,95,0,0.907282</CalibConsts>
+<CalibConsts id="2191">1,95,1,1.03378</CalibConsts>
+<CalibConsts id="2192">1,96,0,0.892583</CalibConsts>
+<CalibConsts id="2193">1,96,1,0.969402</CalibConsts>
+<CalibConsts id="2194">1,97,0,0.876024</CalibConsts>
+<CalibConsts id="2195">1,97,1,0.884031</CalibConsts>
+<CalibConsts id="2196">1,98,0,1</CalibConsts>
+<CalibConsts id="2197">1,98,1,5.45227</CalibConsts>
+<CalibConsts id="2198">1,99,0,0.830535</CalibConsts>
+<CalibConsts id="2199">1,99,1,0.888418</CalibConsts>
+<CalibConsts id="2200">1,100,0,0.842531</CalibConsts>
+<CalibConsts id="2201">1,100,1,0.99638</CalibConsts>
+<CalibConsts id="2202">1,101,0,0.906453</CalibConsts>
+<CalibConsts id="2203">1,101,1,0.94885</CalibConsts>
+<CalibConsts id="2204">1,102,0,0.734019</CalibConsts>
+<CalibConsts id="2205">1,102,1,0.875385</CalibConsts>
+<CalibConsts id="2206">1,103,0,0.978933</CalibConsts>
+<CalibConsts id="2207">1,103,1,0.789778</CalibConsts>
+<CalibConsts id="2208">1,104,0,0.863815</CalibConsts>
+<CalibConsts id="2209">1,104,1,1.05614</CalibConsts>
+<CalibConsts id="2210">1,105,0,0.82091</CalibConsts>
+<CalibConsts id="2211">1,105,1,0.83783</CalibConsts>
+<CalibConsts id="2212">1,106,0,0.838967</CalibConsts>
+<CalibConsts id="2213">1,106,1,0.952214</CalibConsts>
+<CalibConsts id="2214">1,107,0,1.07906</CalibConsts>
+<CalibConsts id="2215">1,107,1,0.932377</CalibConsts>
+<CalibConsts id="2216">1,108,0,0.744489</CalibConsts>
+<CalibConsts id="2217">1,108,1,0.823063</CalibConsts>
+<CalibConsts id="2218">1,109,0,0.9572</CalibConsts>
+<CalibConsts id="2219">1,109,1,0.927546</CalibConsts>
+<CalibConsts id="2220">1,110,0,0.934646</CalibConsts>
+<CalibConsts id="2221">1,110,1,0.781731</CalibConsts>
+<CalibConsts id="2222">1,111,0,1.21676</CalibConsts>
+<CalibConsts id="2223">1,111,1,0.899579</CalibConsts>
+<CalibConsts id="2224">1,112,0,1</CalibConsts>
+<CalibConsts id="2225">1,112,1,0.949689</CalibConsts>
+<CalibConsts id="2226">1,113,0,0.863063</CalibConsts>
+<CalibConsts id="2227">1,113,1,1.03179</CalibConsts>
+<CalibConsts id="2228">1,114,0,0.839678</CalibConsts>
+<CalibConsts id="2229">1,114,1,0.893592</CalibConsts>
+<CalibConsts id="2230">1,115,0,0.907282</CalibConsts>
+<CalibConsts id="2231">1,115,1,0.871833</CalibConsts>
+<CalibConsts id="2232">1,116,0,1</CalibConsts>
+<CalibConsts id="2233">1,116,1,1.09045</CalibConsts>
+<CalibConsts id="2234">1,117,0,0.95998</CalibConsts>
+<CalibConsts id="2235">1,117,1,0.926745</CalibConsts>
+<CalibConsts id="2236">1,118,0,1.00574</CalibConsts>
+<CalibConsts id="2237">1,118,1,1.0949</CalibConsts>
+<CalibConsts id="2238">1,119,0,1</CalibConsts>
+<CalibConsts id="2239">1,119,1,1.02101</CalibConsts>
+<CalibConsts id="2240">1,120,0,2.1652</CalibConsts>
+<CalibConsts id="2241">1,120,1,2.26126</CalibConsts>
+<CalibConsts id="2242">1,121,0,1.17079</CalibConsts>
+<CalibConsts id="2243">1,121,1,2.20554</CalibConsts>
+<CalibConsts id="2244">1,122,0,1</CalibConsts>
+<CalibConsts id="2245">1,122,1,1</CalibConsts>
+<CalibConsts id="2246">1,123,0,0.871405</CalibConsts>
+<CalibConsts id="2247">1,123,1,0.980016</CalibConsts>
+<CalibConsts id="2248">1,124,0,0.908945</CalibConsts>
+<CalibConsts id="2249">1,124,1,1.05407</CalibConsts>
+<CalibConsts id="2250">1,125,0,0.932887</CalibConsts>
+<CalibConsts id="2251">1,125,1,0.972034</CalibConsts>
+<CalibConsts id="2252">1,126,0,0.800371</CalibConsts>
+<CalibConsts id="2253">1,126,1,0.99638</CalibConsts>
+<CalibConsts id="2254">1,127,0,0.906453</CalibConsts>
+<CalibConsts id="2255">1,127,1,0.892849</CalibConsts>
+<CalibConsts id="2256">1,128,0,0.876799</CalibConsts>
+<CalibConsts id="2257">1,128,1,1.12002</CalibConsts>
+<CalibConsts id="2258">1,129,0,0.889381</CalibConsts>
+<CalibConsts id="2259">1,129,1,0.904884</CalibConsts>
+<CalibConsts id="2260">1,130,0,4.0809</CalibConsts>
+<CalibConsts id="2261">1,130,1,4.06855</CalibConsts>
+<CalibConsts id="2262">1,131,0,0.952603</CalibConsts>
+<CalibConsts id="2263">1,131,1,1.13902</CalibConsts>
+<CalibConsts id="2264">1,132,0,0.786407</CalibConsts>
+<CalibConsts id="2265">1,132,1,1.0181</CalibConsts>
+<CalibConsts id="2266">1,133,0,0.835433</CalibConsts>
+<CalibConsts id="2267">1,133,1,0.949689</CalibConsts>
+<CalibConsts id="2268">1,134,0,0.952603</CalibConsts>
+<CalibConsts id="2269">1,134,1,1.04484</CalibConsts>
+<CalibConsts id="2270">1,135,0,1.0606</CalibConsts>
+<CalibConsts id="2271">1,135,1,0.957306</CalibConsts>
+<CalibConsts id="2272">1,136,0,1.03622</CalibConsts>
+<CalibConsts id="2273">1,136,1,1.07733</CalibConsts>
+<CalibConsts id="2274">1,137,0,0.844684</CalibConsts>
+<CalibConsts id="2275">1,137,1,1.02982</CalibConsts>
+<CalibConsts id="2276">1,138,0,2.43651</CalibConsts>
+<CalibConsts id="2277">1,138,1,1.85509</CalibConsts>
+<CalibConsts id="2278">1,139,0,0.927651</CalibConsts>
+<CalibConsts id="2279">1,139,1,0.972034</CalibConsts>
+<CalibConsts id="2280">1,140,0,0.813502</CalibConsts>
+<CalibConsts id="2281">1,140,1,0.98904</CalibConsts>
+<CalibConsts id="2282">1,141,0,0.862312</CalibConsts>
+<CalibConsts id="2283">1,141,1,1.05304</CalibConsts>
+<CalibConsts id="2284">1,142,0,0.825695</CalibConsts>
+<CalibConsts id="2285">1,142,1,0.912572</CalibConsts>
+<CalibConsts id="2286">1,143,0,0.879911</CalibConsts>
+<CalibConsts id="2287">1,143,1,0.786309</CalibConsts>
+<CalibConsts id="2288">1,144,0,0.976043</CalibConsts>
+<CalibConsts id="2289">1,144,1,0.907944</CalibConsts>
+<CalibConsts id="2290">1,145,0,0.844684</CalibConsts>
+<CalibConsts id="2291">1,145,1,1.0249</CalibConsts>
+<CalibConsts id="2292">1,146,0,0.964649</CalibConsts>
+<CalibConsts id="2293">1,146,1,0.993615</CalibConsts>
+<CalibConsts id="2294">1,147,0,0.788282</CalibConsts>
+<CalibConsts id="2295">1,147,1,0.95816</CalibConsts>
+<CalibConsts id="2296">1,148,0,0.838967</CalibConsts>
+<CalibConsts id="2297">1,148,1,1.30036</CalibConsts>
+<CalibConsts id="2298">1,149,0,0.895808</CalibConsts>
+<CalibConsts id="2299">1,149,1,1.09714</CalibConsts>
+<CalibConsts id="2300">1,150,0,0.883045</CalibConsts>
+<CalibConsts id="2301">1,150,1,0.945509</CalibConsts>
+<CalibConsts id="2302">1,151,0,1.05947</CalibConsts>
+<CalibConsts id="2303">1,151,1,0.967656</CalibConsts>
+<CalibConsts id="2304">1,152,0,0.983789</CalibConsts>
+<CalibConsts id="2305">1,152,1,1.02101</CalibConsts>
+<CalibConsts id="2306">1,153,0,1.02023</CalibConsts>
+<CalibConsts id="2307">1,153,1,1.05822</CalibConsts>
+<CalibConsts id="2308">1,154,0,1</CalibConsts>
+<CalibConsts id="2309">1,154,1,1</CalibConsts>
+<CalibConsts id="2310">1,155,0,0.919907</CalibConsts>
+<CalibConsts id="2311">1,155,1,1.18293</CalibConsts>
+<CalibConsts id="2312">1,156,0,0.802963</CalibConsts>
+<CalibConsts id="2313">1,156,1,0.980911</CalibConsts>
+<CalibConsts id="2314">1,157,0,0.973169</CalibConsts>
+<CalibConsts id="2315">1,157,1,0.965047</CalibConsts>
+<CalibConsts id="2316">1,158,0,0.880692</CalibConsts>
+<CalibConsts id="2317">1,158,1,0.95816</CalibConsts>
+<CalibConsts id="2318">1,159,0,0.864568</CalibConsts>
+<CalibConsts id="2319">1,159,1,1.00949</CalibConsts>
+<CalibConsts id="2320">1,160,0,0.982814</CalibConsts>
+<CalibConsts id="2321">1,160,1,1.15247</CalibConsts>
+<CalibConsts id="2322">1,161,0,0.847572</CalibConsts>
+<CalibConsts id="2323">1,161,1,0.961592</CalibConsts>
+<CalibConsts id="2324">1,162,0,3.0326</CalibConsts>
+<CalibConsts id="2325">1,162,1,2.52136</CalibConsts>
+<CalibConsts id="2326">1,163,0,0.90069</CalibConsts>
+<CalibConsts id="2327">1,163,1,1.13782</CalibConsts>
+<CalibConsts id="2328">1,164,0,0.808198</CalibConsts>
+<CalibConsts id="2329">1,164,1,1.08825</CalibConsts>
+<CalibConsts id="2330">1,165,0,0.832627</CalibConsts>
+<CalibConsts id="2331">1,165,1,1.06452</CalibConsts>
+<CalibConsts id="2332">1,166,0,0.908113</CalibConsts>
+<CalibConsts id="2333">1,166,1,0.963316</CalibConsts>
+<CalibConsts id="2334">1,167,0,1.09455</CalibConsts>
+<CalibConsts id="2335">1,167,1,1.14266</CalibConsts>
+<CalibConsts id="2336">1,168,0,0.843965</CalibConsts>
+<CalibConsts id="2337">1,168,1,1.03378</CalibConsts>
+<CalibConsts id="2338">1,169,0,0.827072</CalibConsts>
+<CalibConsts id="2339">1,169,1,0.942191</CalibConsts>
+<CalibConsts id="2340">1,170,0,1.98729</CalibConsts>
+<CalibConsts id="2341">1,170,1,2.3</CalibConsts>
+<CalibConsts id="2342">1,171,0,0.787656</CalibConsts>
+<CalibConsts id="2343">1,171,1,0.912572</CalibConsts>
+<CalibConsts id="2344">1,172,0,0.83755</CalibConsts>
+<CalibConsts id="2345">1,172,1,1.44368</CalibConsts>
+<CalibConsts id="2346">1,173,0,0.973169</CalibConsts>
+<CalibConsts id="2347">1,173,1,1.28174</CalibConsts>
+<CalibConsts id="2348">1,174,0,0.77232</CalibConsts>
+<CalibConsts id="2349">1,174,1,1.2123</CalibConsts>
+<CalibConsts id="2350">1,175,0,0.927651</CalibConsts>
+<CalibConsts id="2351">1,175,1,1.1961</CalibConsts>
+<CalibConsts id="2352">1,176,0,0.984766</CalibConsts>
+<CalibConsts id="2353">1,176,1,1.06346</CalibConsts>
+<CalibConsts id="2354">1,177,0,0.991659</CalibConsts>
+<CalibConsts id="2355">1,177,1,0.992697</CalibConsts>
+<CalibConsts id="2356">1,178,0,0.816853</CalibConsts>
+<CalibConsts id="2357">1,178,1,1.01618</CalibConsts>
+<CalibConsts id="2358">1,179,0,0.856355</CalibConsts>
+<CalibConsts id="2359">1,179,1,0.943847</CalibConsts>
+<CalibConsts id="2360">1,180,0,0.799725</CalibConsts>
+<CalibConsts id="2361">1,180,1,1.12002</CalibConsts>
+<CalibConsts id="2362">1,181,0,1.07906</CalibConsts>
+<CalibConsts id="2363">1,181,1,1.02101</CalibConsts>
+<CalibConsts id="2364">1,182,0,0.759892</CalibConsts>
+<CalibConsts id="2365">1,182,1,1.10961</CalibConsts>
+<CalibConsts id="2366">1,183,0,0.909779</CalibConsts>
+<CalibConsts id="2367">1,183,1,1.10846</CalibConsts>
+<CalibConsts id="2368">1,184,0,0.89178</CalibConsts>
+<CalibConsts id="2369">1,184,1,1</CalibConsts>
+<CalibConsts id="2370">1,185,0,0.849023</CalibConsts>
+<CalibConsts id="2371">1,185,1,1.17388</CalibConsts>
+<CalibConsts id="2372">1,186,0,1</CalibConsts>
+<CalibConsts id="2373">1,186,1,1</CalibConsts>
+<CalibConsts id="2374">1,187,0,1.12817</CalibConsts>
+<CalibConsts id="2375">1,187,1,1.20145</CalibConsts>
+<CalibConsts id="2376">1,188,0,0.810179</CalibConsts>
+<CalibConsts id="2377">1,188,1,1.08495</CalibConsts>
+<CalibConsts id="2378">1,189,0,0.85858</CalibConsts>
+<CalibConsts id="2379">1,189,1,1.23602</CalibConsts>
+<CalibConsts id="2380">1,190,0,1.07672</CalibConsts>
+<CalibConsts id="2381">1,190,1,1.18293</CalibConsts>
+<CalibConsts id="2382">1,191,0,0.879911</CalibConsts>
+<CalibConsts id="2383">1,191,1,1.07841</CalibConsts>
+<CalibConsts id="2384">1,192,0,0.910615</CalibConsts>
+<CalibConsts id="2385">1,192,1,1.06031</CalibConsts>
+<CalibConsts id="2386">1,193,0,0.92852</CalibConsts>
+<CalibConsts id="2387">1,193,1,1.1119</CalibConsts>
+<CalibConsts id="2388">1,194,0,4.40737</CalibConsts>
+<CalibConsts id="2389">1,194,1,2.87192</CalibConsts>
+<CalibConsts id="2390">1,195,0,0.932887</CalibConsts>
+<CalibConsts id="2391">1,195,1,1.09379</CalibConsts>
+<CalibConsts id="2392">1,196,0,0.879911</CalibConsts>
+<CalibConsts id="2393">1,196,1,1.06557</CalibConsts>
+<CalibConsts id="2394">1,197,0,0.922474</CalibConsts>
+<CalibConsts id="2395">1,197,1,1.1537</CalibConsts>
+<CalibConsts id="2396">1,198,0,1.11173</CalibConsts>
+<CalibConsts id="2397">1,198,1,1.08058</CalibConsts>
+<CalibConsts id="2398">1,199,0,0.913972</CalibConsts>
+<CalibConsts id="2399">1,199,1,1.19477</CalibConsts>
+<CalibConsts id="2400">1,200,0,0.956277</CalibConsts>
+<CalibConsts id="2401">1,200,1,1.30669</CalibConsts>
+<CalibConsts id="2402">1,201,0,0.85858</CalibConsts>
+<CalibConsts id="2403">1,201,1,1.12471</CalibConsts>
+<CalibConsts id="2404">1,202,0,2.06596</CalibConsts>
+<CalibConsts id="2405">1,202,1,3.07764</CalibConsts>
+<CalibConsts id="2406">1,203,0,1.04827</CalibConsts>
+<CalibConsts id="2407">1,203,1,0.952214</CalibConsts>
+<CalibConsts id="2408">1,204,0,0.860815</CalibConsts>
+<CalibConsts id="2409">1,204,1,1.11885</CalibConsts>
+<CalibConsts id="2410">1,205,0,1.16255</CalibConsts>
+<CalibConsts id="2411">1,205,1,1.42832</CalibConsts>
+<CalibConsts id="2412">1,206,0,0.991659</CalibConsts>
+<CalibConsts id="2413">1,206,1,1.08825</CalibConsts>
+<CalibConsts id="2414">1,207,0,1.03514</CalibConsts>
+<CalibConsts id="2415">1,207,1,0.98904</CalibConsts>
+<CalibConsts id="2416">1,208,0,0.932011</CalibConsts>
+<CalibConsts id="2417">1,208,1,1.2346</CalibConsts>
+<CalibConsts id="2418">1,209,0,0.918203</CalibConsts>
+<CalibConsts id="2419">1,209,1,1.14144</CalibConsts>
+<CalibConsts id="2420">1,210,0,1.02023</CalibConsts>
+<CalibConsts id="2421">1,210,1,1.06663</CalibConsts>
+<CalibConsts id="2422">1,211,0,0.976043</CalibConsts>
+<CalibConsts id="2423">1,211,1,1.01907</CalibConsts>
+<CalibConsts id="2424">1,212,0,1.2273</CalibConsts>
+<CalibConsts id="2425">1,212,1,1.20011</CalibConsts>
+<CalibConsts id="2426">1,213,0,1.07206</CalibConsts>
+<CalibConsts id="2427">1,213,1,1.2123</CalibConsts>
+<CalibConsts id="2428">1,214,0,0.781449</CalibConsts>
+<CalibConsts id="2429">1,214,1,1.14387</CalibConsts>
+<CalibConsts id="2430">1,215,0,0.975083</CalibConsts>
+<CalibConsts id="2431">1,215,1,0.945509</CalibConsts>
+<CalibConsts id="2432">1,216,0,0.851941</CalibConsts>
+<CalibConsts id="2433">1,216,1,1.19477</CalibConsts>
+<CalibConsts id="2434">1,217,0,1.10184</CalibConsts>
+<CalibConsts id="2435">1,217,1,1.00949</CalibConsts>
+<CalibConsts id="2436">1,218,0,1</CalibConsts>
+<CalibConsts id="2437">1,218,1,1</CalibConsts>
+<CalibConsts id="2438">1,219,0,1.09576</CalibConsts>
+<CalibConsts id="2439">1,219,1,1.48973</CalibConsts>
+<CalibConsts id="2440">1,220,0,0.968417</CalibConsts>
+<CalibConsts id="2441">1,220,1,1.20145</CalibConsts>
+<CalibConsts id="2442">1,221,0,0.973169</CalibConsts>
+<CalibConsts id="2443">1,221,1,0.899579</CalibConsts>
+<CalibConsts id="2444">1,222,0,1.02763</CalibConsts>
+<CalibConsts id="2445">1,222,1,0.933998</CalibConsts>
+<CalibConsts id="2446">1,223,0,0.974125</CalibConsts>
+<CalibConsts id="2447">1,223,1,1.06031</CalibConsts>
+<CalibConsts id="2448">1,224,0,1.08024</CalibConsts>
+<CalibConsts id="2449">1,224,1,0.973797</CalibConsts>
+<CalibConsts id="2450">1,225,0,0.962776</CalibConsts>
+<CalibConsts id="2451">1,225,1,1.04383</CalibConsts>
+<CalibConsts id="2452">1,226,0,2.2086</CalibConsts>
+<CalibConsts id="2453">1,226,1,2.23305</CalibConsts>
+<CalibConsts id="2454">1,227,0,0.882259</CalibConsts>
+<CalibConsts id="2455">1,227,1,1.08935</CalibConsts>
+<CalibConsts id="2456">1,228,0,1.20347</CalibConsts>
+<CalibConsts id="2457">1,228,1,0.863423</CalibConsts>
+<CalibConsts id="2458">1,229,0,0.934646</CalibConsts>
+<CalibConsts id="2459">1,229,1,0.849089</CalibConsts>
+<CalibConsts id="2460">1,230,0,1.00676</CalibConsts>
+<CalibConsts id="2461">1,230,1,0.888418</CalibConsts>
+<CalibConsts id="2462">1,231,0,1.20347</CalibConsts>
+<CalibConsts id="2463">1,231,1,0.901089</CalibConsts>
+<CalibConsts id="2464">1,232,0,0.941747</CalibConsts>
+<CalibConsts id="2465">1,232,1,0.942191</CalibConsts>
+<CalibConsts id="2466">1,233,0,0.815509</CalibConsts>
+<CalibConsts id="2467">1,233,1,1.06136</CalibConsts>
+<CalibConsts id="2468">1,234,0,1.02976</CalibConsts>
+<CalibConsts id="2469">1,234,1,0.982706</CalibConsts>
+<CalibConsts id="2470">1,235,0,1.11297</CalibConsts>
+<CalibConsts id="2471">1,235,1,1</CalibConsts>
+<CalibConsts id="2472">1,236,0,0.972215</CalibConsts>
+<CalibConsts id="2473">1,236,1,0.907177</CalibConsts>
+<CalibConsts id="2474">1,237,0,1.00574</CalibConsts>
+<CalibConsts id="2475">1,237,1,2.87192</CalibConsts>
+<CalibConsts id="2476">1,238,0,0.894192</CalibConsts>
+<CalibConsts id="2477">1,238,1,0.826229</CalibConsts>
+<CalibConsts id="2478">1,239,0,1.06287</CalibConsts>
+<CalibConsts id="2479">1,239,1,0.912572</CalibConsts>
+<CalibConsts id="2480">1,240,0,1.02023</CalibConsts>
+<CalibConsts id="2481">1,240,1,0.863423</CalibConsts>
+<CalibConsts id="2482">1,241,0,0.91229</CalibConsts>
+<CalibConsts id="2483">1,241,1,0.945509</CalibConsts>
+<CalibConsts id="2484">1,242,0,1.02869</CalibConsts>
+<CalibConsts id="2485">1,242,1,0.83783</CalibConsts>
+<CalibConsts id="2486">1,243,0,1.76766</CalibConsts>
+<CalibConsts id="2487">1,243,1,1.19212</CalibConsts>
+<CalibConsts id="2488">1,244,0,4.52812</CalibConsts>
+<CalibConsts id="2489">1,244,1,1.12236</CalibConsts>
+<CalibConsts id="2490">1,245,0,1</CalibConsts>
+<CalibConsts id="2491">1,245,1,2.67189</CalibConsts>
+<CalibConsts id="2492">1,246,0,1</CalibConsts>
+<CalibConsts id="2493">1,246,1,1</CalibConsts>
+<CalibConsts id="2494">1,247,0,1</CalibConsts>
+<CalibConsts id="2495">1,247,1,1</CalibConsts>
+<CalibConsts id="2496">1,248,0,1</CalibConsts>
+<CalibConsts id="2497">1,248,1,1</CalibConsts>
+<CalibConsts id="2498">1,249,0,1</CalibConsts>
+<CalibConsts id="2499">1,249,1,1</CalibConsts>
+<CalibConsts id="2500">2,0,0,1</CalibConsts>
+<CalibConsts id="2501">2,0,1,1</CalibConsts>
+<CalibConsts id="2502">2,1,0,1</CalibConsts>
+<CalibConsts id="2503">2,1,1,1</CalibConsts>
+<CalibConsts id="2504">2,2,0,1</CalibConsts>
+<CalibConsts id="2505">2,2,1,1</CalibConsts>
+<CalibConsts id="2506">2,3,0,5.20235</CalibConsts>
+<CalibConsts id="2507">2,3,1,6.21629</CalibConsts>
+<CalibConsts id="2508">2,4,0,2.07119</CalibConsts>
+<CalibConsts id="2509">2,4,1,1.62471</CalibConsts>
+<CalibConsts id="2510">2,5,0,1.85409</CalibConsts>
+<CalibConsts id="2511">2,5,1,1.79038</CalibConsts>
+<CalibConsts id="2512">2,6,0,2.0331</CalibConsts>
+<CalibConsts id="2513">2,6,1,1.16918</CalibConsts>
+<CalibConsts id="2514">2,7,0,1.03925</CalibConsts>
+<CalibConsts id="2515">2,7,1,1.3939</CalibConsts>
+<CalibConsts id="2516">2,8,0,1.10966</CalibConsts>
+<CalibConsts id="2517">2,8,1,1.06132</CalibConsts>
+<CalibConsts id="2518">2,9,0,1.86582</CalibConsts>
+<CalibConsts id="2519">2,9,1,0.794303</CalibConsts>
+<CalibConsts id="2520">2,10,0,6.01633</CalibConsts>
+<CalibConsts id="2521">2,10,1,4.6987</CalibConsts>
+<CalibConsts id="2522">2,11,0,1.30442</CalibConsts>
+<CalibConsts id="2523">2,11,1,0.843153</CalibConsts>
+<CalibConsts id="2524">2,12,0,1.005</CalibConsts>
+<CalibConsts id="2525">2,12,1,0.829182</CalibConsts>
+<CalibConsts id="2526">2,13,0,1.0825</CalibConsts>
+<CalibConsts id="2527">2,13,1,0.853944</CalibConsts>
+<CalibConsts id="2528">2,14,0,0.953017</CalibConsts>
+<CalibConsts id="2529">2,14,1,1.02125</CalibConsts>
+<CalibConsts id="2530">2,15,0,1.12662</CalibConsts>
+<CalibConsts id="2531">2,15,1,0.835411</CalibConsts>
+<CalibConsts id="2532">2,16,0,1.33394</CalibConsts>
+<CalibConsts id="2533">2,16,1,0.940622</CalibConsts>
+<CalibConsts id="2534">2,17,0,1.28174</CalibConsts>
+<CalibConsts id="2535">2,17,1,1.03391</CalibConsts>
+<CalibConsts id="2536">2,18,0,1.47155</CalibConsts>
+<CalibConsts id="2537">2,18,1,1.03178</CalibConsts>
+<CalibConsts id="2538">2,19,0,0.993708</CalibConsts>
+<CalibConsts id="2539">2,19,1,1.00889</CalibConsts>
+<CalibConsts id="2540">2,20,0,0.860311</CalibConsts>
+<CalibConsts id="2541">2,20,1,1.2448</CalibConsts>
+<CalibConsts id="2542">2,21,0,0.995946</CalibConsts>
+<CalibConsts id="2543">2,21,1,1.08903</CalibConsts>
+<CalibConsts id="2544">2,22,0,1.02957</CalibConsts>
+<CalibConsts id="2545">2,22,1,1.20581</CalibConsts>
+<CalibConsts id="2546">2,23,0,0.955076</CalibConsts>
+<CalibConsts id="2547">2,23,1,1.0998</CalibConsts>
+<CalibConsts id="2548">2,24,0,1.01655</CalibConsts>
+<CalibConsts id="2549">2,24,1,0.881782</CalibConsts>
+<CalibConsts id="2550">2,25,0,1.22663</CalibConsts>
+<CalibConsts id="2551">2,25,1,0.798104</CalibConsts>
+<CalibConsts id="2552">2,26,0,1</CalibConsts>
+<CalibConsts id="2553">2,26,1,1</CalibConsts>
+<CalibConsts id="2554">2,27,0,0.974009</CalibConsts>
+<CalibConsts id="2555">2,27,1,1.17605</CalibConsts>
+<CalibConsts id="2556">2,28,0,1.03077</CalibConsts>
+<CalibConsts id="2557">2,28,1,0.96885</CalibConsts>
+<CalibConsts id="2558">2,29,0,1.28174</CalibConsts>
+<CalibConsts id="2559">2,29,1,0.87028</CalibConsts>
+<CalibConsts id="2560">2,30,0,1.08782</CalibConsts>
+<CalibConsts id="2561">2,30,1,0.966978</CalibConsts>
+<CalibConsts id="2562">2,31,0,0.915528</CalibConsts>
+<CalibConsts id="2563">2,31,1,0.917344</CalibConsts>
+<CalibConsts id="2564">2,32,0,1.35229</CalibConsts>
+<CalibConsts id="2565">2,32,1,1.04579</CalibConsts>
+<CalibConsts id="2566">2,33,0,1.08117</CalibConsts>
+<CalibConsts id="2567">2,33,1,0.909012</CalibConsts>
+<CalibConsts id="2568">2,34,0,4.83279</CalibConsts>
+<CalibConsts id="2569">2,34,1,3.97152</CalibConsts>
+<CalibConsts id="2570">2,35,0,1.00272</CalibConsts>
+<CalibConsts id="2571">2,35,1,1.0171</CalibConsts>
+<CalibConsts id="2572">2,36,0,1</CalibConsts>
+<CalibConsts id="2573">2,36,1,1.31514</CalibConsts>
+<CalibConsts id="2574">2,37,0,1.11106</CalibConsts>
+<CalibConsts id="2575">2,37,1,1.00484</CalibConsts>
+<CalibConsts id="2576">2,38,0,1.09727</CalibConsts>
+<CalibConsts id="2577">2,38,1,0.834714</CalibConsts>
+<CalibConsts id="2578">2,39,0,1.38621</CalibConsts>
+<CalibConsts id="2579">2,39,1,0.877145</CalibConsts>
+<CalibConsts id="2580">2,40,0,1.44984</CalibConsts>
+<CalibConsts id="2581">2,40,1,0.926687</CalibConsts>
+<CalibConsts id="2582">2,41,0,1.08382</CalibConsts>
+<CalibConsts id="2583">2,41,1,0.986032</CalibConsts>
+<CalibConsts id="2584">2,42,0,3.73165</CalibConsts>
+<CalibConsts id="2585">2,42,1,4.13563</CalibConsts>
+<CalibConsts id="2586">2,43,0,0.912693</CalibConsts>
+<CalibConsts id="2587">2,43,1,0.872556</CalibConsts>
+<CalibConsts id="2588">2,44,0,0.933897</CalibConsts>
+<CalibConsts id="2589">2,44,1,1.01813</CalibConsts>
+<CalibConsts id="2590">2,45,0,1.0356</CalibConsts>
+<CalibConsts id="2591">2,45,1,0.816331</CalibConsts>
+<CalibConsts id="2592">2,46,0,0.957143</CalibConsts>
+<CalibConsts id="2593">2,46,1,0.908187</CalibConsts>
+<CalibConsts id="2594">2,47,0,0.864516</CalibConsts>
+<CalibConsts id="2595">2,47,1,0.802584</CalibConsts>
+<CalibConsts id="2596">2,48,0,1.1683</CalibConsts>
+<CalibConsts id="2597">2,48,1,0.931864</CalibConsts>
+<CalibConsts id="2598">2,49,0,0.815867</CalibConsts>
+<CalibConsts id="2599">2,49,1,0.885683</CalibConsts>
+<CalibConsts id="2600">2,50,0,0.95818</CalibConsts>
+<CalibConsts id="2601">2,50,1,0.980237</CalibConsts>
+<CalibConsts id="2602">2,51,0,0.819648</CalibConsts>
+<CalibConsts id="2603">2,51,1,0.831248</CalibConsts>
+<CalibConsts id="2604">2,52,0,0.994826</CalibConsts>
+<CalibConsts id="2605">2,52,1,1.20003</CalibConsts>
+<CalibConsts id="2606">2,53,0,0.839089</CalibConsts>
+<CalibConsts id="2607">2,53,1,0.794303</CalibConsts>
+<CalibConsts id="2608">2,54,0,1.0417</CalibConsts>
+<CalibConsts id="2609">2,54,1,0.973562</CalibConsts>
+<CalibConsts id="2610">2,55,0,0.815115</CalibConsts>
+<CalibConsts id="2611">2,55,1,1.00182</CalibConsts>
+<CalibConsts id="2612">2,56,0,1.08382</CalibConsts>
+<CalibConsts id="2613">2,56,1,1</CalibConsts>
+<CalibConsts id="2614">2,57,0,0.913636</CalibConsts>
+<CalibConsts id="2615">2,57,1,1.12832</CalibConsts>
+<CalibConsts id="2616">2,58,0,1</CalibConsts>
+<CalibConsts id="2617">2,58,1,1</CalibConsts>
+<CalibConsts id="2618">2,59,0,0.975083</CalibConsts>
+<CalibConsts id="2619">2,59,1,0.996835</CalibConsts>
+<CalibConsts id="2620">2,60,0,0.967615</CalibConsts>
+<CalibConsts id="2621">2,60,1,0.950448</CalibConsts>
+<CalibConsts id="2622">2,61,0,1.02361</CalibConsts>
+<CalibConsts id="2623">2,61,1,0.945063</CalibConsts>
+<CalibConsts id="2624">2,62,0,0.858641</CalibConsts>
+<CalibConsts id="2625">2,62,1,0.839616</CalibConsts>
+<CalibConsts id="2626">2,63,0,1.01306</CalibConsts>
+<CalibConsts id="2627">2,63,1,0.935348</CalibConsts>
+<CalibConsts id="2628">2,64,0,1.1792</CalibConsts>
+<CalibConsts id="2629">2,64,1,0.965113</CalibConsts>
+<CalibConsts id="2630">2,65,0,0.926073</CalibConsts>
+<CalibConsts id="2631">2,65,1,0.937099</CalibConsts>
+<CalibConsts id="2632">2,66,0,4.4</CalibConsts>
+<CalibConsts id="2633">2,66,1,3.63935</CalibConsts>
+<CalibConsts id="2634">2,67,0,1.02837</CalibConsts>
+<CalibConsts id="2635">2,67,1,0.983126</CalibConsts>
+<CalibConsts id="2636">2,68,0,1.04663</CalibConsts>
+<CalibConsts id="2637">2,68,1,0.924974</CalibConsts>
+<CalibConsts id="2638">2,69,0,1.01538</CalibConsts>
+<CalibConsts id="2639">2,69,1,0.947748</CalibConsts>
+<CalibConsts id="2640">2,70,0,0.860311</CalibConsts>
+<CalibConsts id="2641">2,70,1,1.04579</CalibConsts>
+<CalibConsts id="2642">2,71,0,0.939851</CalibConsts>
+<CalibConsts id="2643">2,71,1,0.984093</CalibConsts>
+<CalibConsts id="2644">2,72,0,1.01422</CalibConsts>
+<CalibConsts id="2645">2,72,1,1.29138</CalibConsts>
+<CalibConsts id="2646">2,73,0,0.955076</CalibConsts>
+<CalibConsts id="2647">2,73,1,0.993865</CalibConsts>
+<CalibConsts id="2648">2,74,0,5.42577</CalibConsts>
+<CalibConsts id="2649">2,74,1,5.81873</CalibConsts>
+<CalibConsts id="2650">2,75,0,0.865362</CalibConsts>
+<CalibConsts id="2651">2,75,1,0.831248</CalibConsts>
+<CalibConsts id="2652">2,76,0,0.835127</CalibConsts>
+<CalibConsts id="2653">2,76,1,1.02648</CalibConsts>
+<CalibConsts id="2654">2,77,0,1.24563</CalibConsts>
+<CalibConsts id="2655">2,77,1,0.944172</CalibConsts>
+<CalibConsts id="2656">2,78,0,0.82117</CalibConsts>
+<CalibConsts id="2657">2,78,1,0.814339</CalibConsts>
+<CalibConsts id="2658">2,79,0,0.812121</CalibConsts>
+<CalibConsts id="2659">2,79,1,0.922417</CalibConsts>
+<CalibConsts id="2660">2,80,0,0.934884</CalibConsts>
+<CalibConsts id="2661">2,80,1,0.943282</CalibConsts>
+<CalibConsts id="2662">2,81,0,0.963399</CalibConsts>
+<CalibConsts id="2663">2,81,1,1.15568</CalibConsts>
+<CalibConsts id="2664">2,82,0,0.768375</CalibConsts>
+<CalibConsts id="2665">2,82,1,0.776433</CalibConsts>
+<CalibConsts id="2666">2,83,0,1.03318</CalibConsts>
+<CalibConsts id="2667">2,83,1,0.801299</CalibConsts>
+<CalibConsts id="2668">2,84,0,0.90522</CalibConsts>
+<CalibConsts id="2669">2,84,1,0.897598</CalibConsts>
+<CalibConsts id="2670">2,85,0,0.912693</CalibConsts>
+<CalibConsts id="2671">2,85,1,0.853944</CalibConsts>
+<CalibConsts id="2672">2,86,0,0.937858</CalibConsts>
+<CalibConsts id="2673">2,86,1,1.16782</CalibConsts>
+<CalibConsts id="2674">2,87,0,0.891532</CalibConsts>
+<CalibConsts id="2675">2,87,1,0.963255</CalibConsts>
+<CalibConsts id="2676">2,88,0,0.746329</CalibConsts>
+<CalibConsts id="2677">2,88,1,0.833324</CalibConsts>
+<CalibConsts id="2678">2,89,0,0.96235</CalibConsts>
+<CalibConsts id="2679">2,89,1,0.937978</CalibConsts>
+<CalibConsts id="2680">2,90,0,1</CalibConsts>
+<CalibConsts id="2681">2,90,1,1</CalibConsts>
+<CalibConsts id="2682">2,91,0,1.26705</CalibConsts>
+<CalibConsts id="2683">2,91,1,1.01606</CalibConsts>
+<CalibConsts id="2684">2,92,0,0.889738</CalibConsts>
+<CalibConsts id="2685">2,92,1,1.00082</CalibConsts>
+<CalibConsts id="2686">2,93,0,0.868762</CalibConsts>
+<CalibConsts id="2687">2,93,1,1.00484</CalibConsts>
+<CalibConsts id="2688">2,94,0,0.978319</CalibConsts>
+<CalibConsts id="2689">2,94,1,0.871038</CalibConsts>
+<CalibConsts id="2690">2,95,0,0.948927</CalibConsts>
+<CalibConsts id="2691">2,95,1,0.910666</CalibConsts>
+<CalibConsts id="2692">2,96,0,1.03681</CalibConsts>
+<CalibConsts id="2693">2,96,1,1.122</CalibConsts>
+<CalibConsts id="2694">2,97,0,0.768375</CalibConsts>
+<CalibConsts id="2695">2,97,1,0.876377</CalibConsts>
+<CalibConsts id="2696">2,98,0,3.82857</CalibConsts>
+<CalibConsts id="2697">2,98,1,3.65264</CalibConsts>
+<CalibConsts id="2698">2,99,0,0.968675</CalibConsts>
+<CalibConsts id="2699">2,99,1,0.831939</CalibConsts>
+<CalibConsts id="2700">2,100,0,0.936864</CalibConsts>
+<CalibConsts id="2701">2,100,1,1.0171</CalibConsts>
+<CalibConsts id="2702">2,101,0,0.80989</CalibConsts>
+<CalibConsts id="2703">2,101,1,0.841027</CalibConsts>
+<CalibConsts id="2704">2,102,0,1.00614</CalibConsts>
+<CalibConsts id="2705">2,102,1,0.796833</CalibConsts>
+<CalibConsts id="2706">2,103,0,0.810632</CalibConsts>
+<CalibConsts id="2707">2,103,1,0.90002</CalibConsts>
+<CalibConsts id="2708">2,104,0,0.887061</CalibConsts>
+<CalibConsts id="2709">2,104,1,0.969789</CalibConsts>
+<CalibConsts id="2710">2,105,0,0.939851</CalibConsts>
+<CalibConsts id="2711">2,105,1,0.995843</CalibConsts>
+<CalibConsts id="2712">2,106,0,0.950968</CalibConsts>
+<CalibConsts id="2713">2,106,1,0.876377</CalibConsts>
+<CalibConsts id="2714">2,107,0,0.957143</CalibConsts>
+<CalibConsts id="2715">2,107,1,0.958642</CalibConsts>
+<CalibConsts id="2716">2,108,0,1.07591</CalibConsts>
+<CalibConsts id="2717">2,108,1,0.778244</CalibConsts>
+<CalibConsts id="2718">2,109,0,0.758491</CalibConsts>
+<CalibConsts id="2719">2,109,1,0.899211</CalibConsts>
+<CalibConsts id="2720">2,110,0,0.852845</CalibConsts>
+<CalibConsts id="2721">2,110,1,0.940622</CalibConsts>
+<CalibConsts id="2722">2,111,0,0.807671</CalibConsts>
+<CalibConsts id="2723">2,111,1,0.845289</CalibConsts>
+<CalibConsts id="2724">2,112,0,0.988156</CalibConsts>
+<CalibConsts id="2725">2,112,1,0.90002</CalibConsts>
+<CalibConsts id="2726">2,113,0,1.13385</CalibConsts>
+<CalibConsts id="2727">2,113,1,0.801941</CalibConsts>
+<CalibConsts id="2728">2,114,0,0.875644</CalibConsts>
+<CalibConsts id="2729">2,114,1,0.898404</CalibConsts>
+<CalibConsts id="2730">2,115,0,0.941853</CalibConsts>
+<CalibConsts id="2731">2,115,1,0.962329</CalibConsts>
+<CalibConsts id="2732">2,116,0,0.937858</CalibConsts>
+<CalibConsts id="2733">2,116,1,0.868016</CalibConsts>
+<CalibConsts id="2734">2,117,0,0.782655</CalibConsts>
+<CalibConsts id="2735">2,117,1,0.987004</CalibConsts>
+<CalibConsts id="2736">2,118,0,0.930947</CalibConsts>
+<CalibConsts id="2737">2,118,1,1.02965</CalibConsts>
+<CalibConsts id="2738">2,119,0,0.98376</CalibConsts>
+<CalibConsts id="2739">2,119,1,0.924974</CalibConsts>
+<CalibConsts id="2740">2,120,0,0.981576</CalibConsts>
+<CalibConsts id="2741">2,120,1,0.931864</CalibConsts>
+<CalibConsts id="2742">2,121,0,1.4451</CalibConsts>
+<CalibConsts id="2743">2,121,1,6.37466</CalibConsts>
+<CalibConsts id="2744">2,122,0,1</CalibConsts>
+<CalibConsts id="2745">2,122,1,1.23406</CalibConsts>
+<CalibConsts id="2746">2,123,0,1.04539</CalibConsts>
+<CalibConsts id="2747">2,123,1,1.06584</CalibConsts>
+<CalibConsts id="2748">2,124,0,1.18077</CalibConsts>
+<CalibConsts id="2749">2,124,1,1</CalibConsts>
+<CalibConsts id="2750">2,125,0,1.22493</CalibConsts>
+<CalibConsts id="2751">2,125,1,0.888041</CalibConsts>
+<CalibConsts id="2752">2,126,0,0.757841</CalibConsts>
+<CalibConsts id="2753">2,126,1,1</CalibConsts>
+<CalibConsts id="2754">2,127,0,0.860311</CalibConsts>
+<CalibConsts id="2755">2,127,1,1.14249</CalibConsts>
+<CalibConsts id="2756">2,128,0,0.856977</CalibConsts>
+<CalibConsts id="2757">2,128,1,0.507774</CalibConsts>
+<CalibConsts id="2758">2,129,0,1.0417</CalibConsts>
+<CalibConsts id="2759">2,129,1,0.909012</CalibConsts>
+<CalibConsts id="2760">2,130,0,2.69634</CalibConsts>
+<CalibConsts id="2761">2,130,1,1</CalibConsts>
+<CalibConsts id="2762">2,131,0,0.798195</CalibConsts>
+<CalibConsts id="2763">2,131,1,1.04908</CalibConsts>
+<CalibConsts id="2764">2,132,0,0.860311</CalibConsts>
+<CalibConsts id="2765">2,132,1,1</CalibConsts>
+<CalibConsts id="2766">2,133,0,1.04047</CalibConsts>
+<CalibConsts id="2767">2,133,1,1.04144</CalibConsts>
+<CalibConsts id="2768">2,134,0,0.910814</CalibConsts>
+<CalibConsts id="2769">2,134,1,0.848874</CalibConsts>
+<CalibConsts id="2770">2,135,0,0.914581</CalibConsts>
+<CalibConsts id="2771">2,135,1,0.822368</CalibConsts>
+<CalibConsts id="2772">2,136,0,0.896957</CalibConsts>
+<CalibConsts id="2773">2,136,1,0.966045</CalibConsts>
+<CalibConsts id="2774">2,137,0,0.781963</CalibConsts>
+<CalibConsts id="2775">2,137,1,0.823045</CalibConsts>
+<CalibConsts id="2776">2,138,0,1.76175</CalibConsts>
+<CalibConsts id="2777">2,138,1,2.447</CalibConsts>
+<CalibConsts id="2778">2,139,0,0.908941</CalibConsts>
+<CalibConsts id="2779">2,139,1,0.950448</CalibConsts>
+<CalibConsts id="2780">2,140,0,0.917427</CalibConsts>
+<CalibConsts id="2781">2,140,1,0.961405</CalibConsts>
+<CalibConsts id="2782">2,141,0,1</CalibConsts>
+<CalibConsts id="2783">2,141,1,0.960482</CalibConsts>
+<CalibConsts id="2784">2,142,0,0.959219</CalibConsts>
+<CalibConsts id="2785">2,142,1,0.854673</CalibConsts>
+<CalibConsts id="2786">2,143,0,1</CalibConsts>
+<CalibConsts id="2787">2,143,1,1.10588</CalibConsts>
+<CalibConsts id="2788">2,144,0,0.927044</CalibConsts>
+<CalibConsts id="2789">2,144,1,1</CalibConsts>
+<CalibConsts id="2790">2,145,0,0.853668</CalibConsts>
+<CalibConsts id="2791">2,145,1,1.13343</CalibConsts>
+<CalibConsts id="2792">2,146,0,0.815867</CalibConsts>
+<CalibConsts id="2793">2,146,1,0.931864</CalibConsts>
+<CalibConsts id="2794">2,147,0,0.899695</CalibConsts>
+<CalibConsts id="2795">2,147,1,0.976412</CalibConsts>
+<CalibConsts id="2796">2,148,0,0.949946</CalibConsts>
+<CalibConsts id="2797">2,148,1,0.947748</CalibConsts>
+<CalibConsts id="2798">2,149,0,0.99148</CalibConsts>
+<CalibConsts id="2799">2,149,1,1.03071</CalibConsts>
+<CalibConsts id="2800">2,150,0,0.811376</CalibConsts>
+<CalibConsts id="2801">2,150,1,0.976412</CalibConsts>
+<CalibConsts id="2802">2,151,0,0.995946</CalibConsts>
+<CalibConsts id="2803">2,151,1,0.846719</CalibConsts>
+<CalibConsts id="2804">2,152,0,0.896049</CalibConsts>
+<CalibConsts id="2805">2,152,1,0.90083</CalibConsts>
+<CalibConsts id="2806">2,153,0,1.05036</CalibConsts>
+<CalibConsts id="2807">2,153,1,1.08667</CalibConsts>
+<CalibConsts id="2808">2,154,0,1</CalibConsts>
+<CalibConsts id="2809">2,154,1,1</CalibConsts>
+<CalibConsts id="2810">2,155,0,1.0825</CalibConsts>
+<CalibConsts id="2811">2,155,1,1.01093</CalibConsts>
+<CalibConsts id="2812">2,156,0,0.992593</CalibConsts>
+<CalibConsts id="2813">2,156,1,1.11949</CalibConsts>
+<CalibConsts id="2814">2,157,0,1</CalibConsts>
+<CalibConsts id="2815">2,157,1,0.956809</CalibConsts>
+<CalibConsts id="2816">2,158,0,0.925105</CalibConsts>
+<CalibConsts id="2817">2,158,1,1.02648</CalibConsts>
+<CalibConsts id="2818">2,159,0,0.972937</CalibConsts>
+<CalibConsts id="2819">2,159,1,1.03178</CalibConsts>
+<CalibConsts id="2820">2,160,0,0.847126</CalibConsts>
+<CalibConsts id="2821">2,160,1,0.825761</CalibConsts>
+<CalibConsts id="2822">2,161,0,1.09863</CalibConsts>
+<CalibConsts id="2823">2,161,1,1.06811</CalibConsts>
+<CalibConsts id="2824">2,162,0,1.44746</CalibConsts>
+<CalibConsts id="2825">2,162,1,2.21421</CalibConsts>
+<CalibConsts id="2826">2,163,0,0.738847</CalibConsts>
+<CalibConsts id="2827">2,163,1,0.836109</CalibConsts>
+<CalibConsts id="2828">2,164,0,0.887061</CalibConsts>
+<CalibConsts id="2829">2,164,1,0.989933</CalibConsts>
+<CalibConsts id="2830">2,165,0,1.14708</CalibConsts>
+<CalibConsts id="2831">2,165,1,0.887254</CalibConsts>
+<CalibConsts id="2832">2,166,0,1.01306</CalibConsts>
+<CalibConsts id="2833">2,166,1,1.18161</CalibConsts>
+<CalibConsts id="2834">2,167,0,0.810632</CalibConsts>
+<CalibConsts id="2835">2,167,1,0.850316</CalibConsts>
+<CalibConsts id="2836">2,168,0,1.03318</CalibConsts>
+<CalibConsts id="2837">2,168,1,0.834714</CalibConsts>
+<CalibConsts id="2838">2,169,0,0.828866</CalibConsts>
+<CalibConsts id="2839">2,169,1,0.79179</CalibConsts>
+<CalibConsts id="2840">2,170,0,1.8049</CalibConsts>
+<CalibConsts id="2841">2,170,1,2.61995</CalibConsts>
+<CalibConsts id="2842">2,171,0,0.791764</CalibConsts>
+<CalibConsts id="2843">2,171,1,1.02229</CalibConsts>
+<CalibConsts id="2844">2,172,0,0.688249</CalibConsts>
+<CalibConsts id="2845">2,172,1,1.00686</CalibConsts>
+<CalibConsts id="2846">2,173,0,0.893333</CalibConsts>
+<CalibConsts id="2847">2,173,1,0.985061</CalibConsts>
+<CalibConsts id="2848">2,174,0,0.936864</CalibConsts>
+<CalibConsts id="2849">2,174,1,0.966978</CalibConsts>
+<CalibConsts id="2850">2,175,0,0.955076</CalibConsts>
+<CalibConsts id="2851">2,175,1,1.11202</CalibConsts>
+<CalibConsts id="2852">2,176,0,0.746329</CalibConsts>
+<CalibConsts id="2853">2,176,1,1.01917</CalibConsts>
+<CalibConsts id="2854">2,177,0,0.926073</CalibConsts>
+<CalibConsts id="2855">2,177,1,0.906542</CalibConsts>
+<CalibConsts id="2856">2,178,0,0.755252</CalibConsts>
+<CalibConsts id="2857">2,178,1,0.998825</CalibConsts>
+<CalibConsts id="2858">2,179,0,0.856977</CalibConsts>
+<CalibConsts id="2859">2,179,1,0.966978</CalibConsts>
+<CalibConsts id="2860">2,180,0,0.924138</CalibConsts>
+<CalibConsts id="2861">2,180,1,0.770456</CalibConsts>
+<CalibConsts id="2862">2,181,0,0.788938</CalibConsts>
+<CalibConsts id="2863">2,181,1,0.950448</CalibConsts>
+<CalibConsts id="2864">2,182,0,0.838294</CalibConsts>
+<CalibConsts id="2865">2,182,1,0.985061</CalibConsts>
+<CalibConsts id="2866">2,183,0,0.852845</CalibConsts>
+<CalibConsts id="2867">2,183,1,1.08785</CalibConsts>
+<CalibConsts id="2868">2,184,0,0.950968</CalibConsts>
+<CalibConsts id="2869">2,184,1,1</CalibConsts>
+<CalibConsts id="2870">2,185,0,0.948927</CalibConsts>
+<CalibConsts id="2871">2,185,1,1.15836</CalibConsts>
+<CalibConsts id="2872">2,186,0,1</CalibConsts>
+<CalibConsts id="2873">2,186,1,1</CalibConsts>
+<CalibConsts id="2874">2,187,0,0.90522</CalibConsts>
+<CalibConsts id="2875">2,187,1,1</CalibConsts>
+<CalibConsts id="2876">2,188,0,1.14116</CalibConsts>
+<CalibConsts id="2877">2,188,1,1.27169</CalibConsts>
+<CalibConsts id="2878">2,189,0,0.965502</CalibConsts>
+<CalibConsts id="2879">2,189,1,0.898404</CalibConsts>
+<CalibConsts id="2880">2,190,0,1.25625</CalibConsts>
+<CalibConsts id="2881">2,190,1,0.836808</CalibConsts>
+<CalibConsts id="2882">2,191,0,1.05161</CalibConsts>
+<CalibConsts id="2883">2,191,1,0.868016</CalibConsts>
+<CalibConsts id="2884">2,192,0,0.908008</CalibConsts>
+<CalibConsts id="2885">2,192,1,0.966045</CalibConsts>
+<CalibConsts id="2886">2,193,0,0.732726</CalibConsts>
+<CalibConsts id="2887">2,193,1,0.907364</CalibConsts>
+<CalibConsts id="2888">2,194,0,2.74658</CalibConsts>
+<CalibConsts id="2889">2,194,1,2.90937</CalibConsts>
+<CalibConsts id="2890">2,195,0,1.07591</CalibConsts>
+<CalibConsts id="2891">2,195,1,0.981198</CalibConsts>
+<CalibConsts id="2892">2,196,0,1.00272</CalibConsts>
+<CalibConsts id="2893">2,196,1,0.948647</CalibConsts>
+<CalibConsts id="2894">2,197,0,1.06554</CalibConsts>
+<CalibConsts id="2895">2,197,1,1.08903</CalibConsts>
+<CalibConsts id="2896">2,198,0,1.11667</CalibConsts>
+<CalibConsts id="2897">2,198,1,1.02438</CalibConsts>
+<CalibConsts id="2898">2,199,0,0.917427</CalibConsts>
+<CalibConsts id="2899">2,199,1,1.014</CalibConsts>
+<CalibConsts id="2900">2,200,0,1.11526</CalibConsts>
+<CalibConsts id="2901">2,200,1,0.998825</CalibConsts>
+<CalibConsts id="2902">2,201,0,0.822698</CalibConsts>
+<CalibConsts id="2903">2,201,1,0.895991</CalibConsts>
+<CalibConsts id="2904">2,202,0,2.72963</CalibConsts>
+<CalibConsts id="2905">2,202,1,2.35488</CalibConsts>
+<CalibConsts id="2906">2,203,0,0.98376</CalibConsts>
+<CalibConsts id="2907">2,203,1,0.92583</CalibConsts>
+<CalibConsts id="2908">2,204,0,0.897868</CalibConsts>
+<CalibConsts id="2909">2,204,1,1.06811</CalibConsts>
+<CalibConsts id="2910">2,205,0,0.89878</CalibConsts>
+<CalibConsts id="2911">2,205,1,1.122</CalibConsts>
+<CalibConsts id="2912">2,206,0,0.959219</CalibConsts>
+<CalibConsts id="2913">2,206,1,0.78681</CalibConsts>
+<CalibConsts id="2914">2,207,0,0.99037</CalibConsts>
+<CalibConsts id="2915">2,207,1,0.984093</CalibConsts>
+<CalibConsts id="2916">2,208,0,0.899695</CalibConsts>
+<CalibConsts id="2917">2,208,1,0.947748</CalibConsts>
+<CalibConsts id="2918">2,209,0,0.903371</CalibConsts>
+<CalibConsts id="2919">2,209,1,1.00585</CalibConsts>
+<CalibConsts id="2920">2,210,0,0.902449</CalibConsts>
+<CalibConsts id="2921">2,210,1,0.92583</CalibConsts>
+<CalibConsts id="2922">2,211,0,0.951991</CalibConsts>
+<CalibConsts id="2923">2,211,1,0.930132</CalibConsts>
+<CalibConsts id="2924">2,212,0,0.784043</CalibConsts>
+<CalibConsts id="2925">2,212,1,0.903269</CalibConsts>
+<CalibConsts id="2926">2,213,0,0.691478</CalibConsts>
+<CalibConsts id="2927">2,213,1,0.926687</CalibConsts>
+<CalibConsts id="2928">2,214,0,0.928017</CalibConsts>
+<CalibConsts id="2929">2,214,1,1.02965</CalibConsts>
+<CalibConsts id="2930">2,215,0,0.963399</CalibConsts>
+<CalibConsts id="2931">2,215,1,1.13343</CalibConsts>
+<CalibConsts id="2932">2,216,0,0.839886</CalibConsts>
+<CalibConsts id="2933">2,216,1,1.10466</CalibConsts>
+<CalibConsts id="2934">2,217,0,0.99037</CalibConsts>
+<CalibConsts id="2935">2,217,1,1.05239</CalibConsts>
+<CalibConsts id="2936">2,218,0,1</CalibConsts>
+<CalibConsts id="2937">2,218,1,1</CalibConsts>
+<CalibConsts id="2938">2,219,0,0.999322</CalibConsts>
+<CalibConsts id="2939">2,219,1,1.06244</CalibConsts>
+<CalibConsts id="2940">2,220,0,0.90522</CalibConsts>
+<CalibConsts id="2941">2,220,1,0.854673</CalibConsts>
+<CalibConsts id="2942">2,221,0,1.02243</CalibConsts>
+<CalibConsts id="2943">2,221,1,0.897598</CalibConsts>
+<CalibConsts id="2944">2,222,0,0.819648</CalibConsts>
+<CalibConsts id="2945">2,222,1,0.990913</CalibConsts>
+<CalibConsts id="2946">2,223,0,0.985953</CalibConsts>
+<CalibConsts id="2947">2,223,1,1.02438</CalibConsts>
+<CalibConsts id="2948">2,224,0,1.06043</CalibConsts>
+<CalibConsts id="2949">2,224,1,1.02125</CalibConsts>
+<CalibConsts id="2950">2,225,0,0.937858</CalibConsts>
+<CalibConsts id="2951">2,225,1,1.00991</CalibConsts>
+<CalibConsts id="2952">2,226,0,2.5125</CalibConsts>
+<CalibConsts id="2953">2,226,1,4.20514</CalibConsts>
+<CalibConsts id="2954">2,227,0,1.02125</CalibConsts>
+<CalibConsts id="2955">2,227,1,1.3978</CalibConsts>
+<CalibConsts id="2956">2,228,0,0.908941</CalibConsts>
+<CalibConsts id="2957">2,228,1,1.08667</CalibConsts>
+<CalibConsts id="2958">2,229,0,0.955076</CalibConsts>
+<CalibConsts id="2959">2,229,1,1.0986</CalibConsts>
+<CalibConsts id="2960">2,230,0,0.975083</CalibConsts>
+<CalibConsts id="2961">2,230,1,1.29808</CalibConsts>
+<CalibConsts id="2962">2,231,0,0.89878</CalibConsts>
+<CalibConsts id="2963">2,231,1,1.18021</CalibConsts>
+<CalibConsts id="2964">2,232,0,1.21651</CalibConsts>
+<CalibConsts id="2965">2,232,1,1.05907</CalibConsts>
+<CalibConsts id="2966">2,233,0,0.804</CalibConsts>
+<CalibConsts id="2967">2,233,1,1.18721</CalibConsts>
+<CalibConsts id="2968">2,234,0,1.36062</CalibConsts>
+<CalibConsts id="2969">2,234,1,1.19573</CalibConsts>
+<CalibConsts id="2970">2,235,0,1.12234</CalibConsts>
+<CalibConsts id="2971">2,235,1,1.15836</CalibConsts>
+<CalibConsts id="2972">2,236,0,1.2</CalibConsts>
+<CalibConsts id="2973">2,236,1,1.00889</CalibConsts>
+<CalibConsts id="2974">2,237,0,0.95818</CalibConsts>
+<CalibConsts id="2975">2,237,1,0.983126</CalibConsts>
+<CalibConsts id="2976">2,238,0,0.969737</CalibConsts>
+<CalibConsts id="2977">2,238,1,1.53031</CalibConsts>
+<CalibConsts id="2978">2,239,0,0.926073</CalibConsts>
+<CalibConsts id="2979">2,239,1,1.26847</CalibConsts>
+<CalibConsts id="2980">2,240,0,1.35229</CalibConsts>
+<CalibConsts id="2981">2,240,1,1.2589</CalibConsts>
+<CalibConsts id="2982">2,241,0,1.02361</CalibConsts>
+<CalibConsts id="2983">2,241,1,1.08431</CalibConsts>
+<CalibConsts id="2984">2,242,0,1.32</CalibConsts>
+<CalibConsts id="2985">2,242,1,1.27819</CalibConsts>
+<CalibConsts id="2986">2,243,0,1.96533</CalibConsts>
+<CalibConsts id="2987">2,243,1,2.96101</CalibConsts>
+<CalibConsts id="2988">2,244,0,2.0009</CalibConsts>
+<CalibConsts id="2989">2,244,1,1</CalibConsts>
+<CalibConsts id="2990">2,245,0,3.5376</CalibConsts>
+<CalibConsts id="2991">2,245,1,3.43925</CalibConsts>
+<CalibConsts id="2992">2,246,0,1</CalibConsts>
+<CalibConsts id="2993">2,246,1,1</CalibConsts>
+<CalibConsts id="2994">2,247,0,1</CalibConsts>
+<CalibConsts id="2995">2,247,1,1</CalibConsts>
+<CalibConsts id="2996">2,248,0,1</CalibConsts>
+<CalibConsts id="2997">2,248,1,1</CalibConsts>
+<CalibConsts id="2998">2,249,0,1</CalibConsts>
+<CalibConsts id="2999">2,249,1,1</CalibConsts>
+
+ </date>
+ 
+<!--##################################################################-->
+</LumiGEM>

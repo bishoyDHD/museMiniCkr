@@ -1,0 +1,63 @@
+				
+				
+				
+				
+				
+				
+"
+ Martin Noak
+
+ Mail:  martin.noak@desy.de
+ Geb.: 1e/ Raum EG.513 
+ Tel.:  3329
+"	"
+ Messdatum: TT.MM.2010
+ 
+"			
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+"Point Group
+Justierung Targetcell::targetcell-1-n.justierung"				
+Point Name		X	Y	Z
+1		-599.231	-0.0245	139.7477
+2		499.4596	0.0096	139.6565
+3		0.2005	100.3527	99.6978
+4		0.3628	100.3299	-99.9138
+5		-662.8696	-0.083	99.6768
+6		-663.3624	0.1208	-99.1854

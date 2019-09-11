@@ -1,0 +1,638 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+ 
+
+<mapper>
+    <config>
+        <scifi>addSciFiChannel</scifi>
+        <scifirefclock>addSciFiReferenceClock</scifirefclock>
+        <tdc>addTestBeamTDC</tdc>
+        <trb>addTestBeamTRB</trb>
+        <adc>addTestBeamADC</adc>
+        <SiPMtdc>addSiPMTDC</SiPMtdc>
+        <SiPMadc>addSiPMADC</SiPMadc>
+        <SiPMtrb>addSiPMTRB</SiPMtrb>
+        <SiPMref>addSiPMReferenceClock</SiPMref>
+        <SiPMmqdc>addSiPM_MQDC</SiPMmqdc> <!--  03/15/17 multiple MQDC mapper  for SiPM-->
+        <SiPMtrig>addSiPMTrigger</SiPMtrig>
+
+        <SPSadc>addSPSADC</SPSadc>
+        <SPStdc>addSPSTDC</SPStdc>
+        <SPStrb>addSPSTRB</SPStrb>
+        <SPSref>addSPSReferenceClock</SPSref>
+        <SPSmqdc> addSPS_MQDC</SPSmqdc>  <!-- -3/15/17 multiple MQDC  mapper for SPS-->
+        <SPStrig>addSPSTrigger</SPStrig>
+
+        <PbGlassadc>addPbGlassADC</PbGlassadc>
+        <PbGlassmqdc>addPbGlass_MQDC</PbGlassmqdc>
+        <PbGlasstdc>addPbGlassTDC</PbGlasstdc>
+        <PbGlasstrb>addPbGlassTRB</PbGlasstrb>
+        <PbGlassref>addPbGlassReferenceClock</PbGlassref>
+        <PbGlasstrig>addPbGlassTrigger</PbGlasstrig>
+        
+        <stt>addStrawChannel</stt>
+        <sttrefclock>addStrawReferenceClock</sttrefclock>
+
+        <cmd>cmdline</cmd>
+    </config>
+
+
+<run nr="116">
+    <!--Plane 1 is something connected to MCFD-->
+    <SiPMtrb id="1,0,0">0x1160,1</SiPMtrb>
+    <SiPMtrb id="1,1,0">0x1160,2</SiPMtrb>
+    <SiPMtrb id="1,2,0">0x1160,3</SiPMtrb>
+    <SiPMtrb id="1,3,0">0x1160,4</SiPMtrb>
+    <SiPMtrb id="1,4,0">0x1160,5</SiPMtrb>
+    <SiPMtrb id="1,5,0">0x1160,6</SiPMtrb>
+    <SiPMtrb id="1,6,0">0x1160,7</SiPMtrb>
+    <SiPMtrb id="1,7,0">0x1160,8</SiPMtrb>
+    <SiPMtrb id="1,8,0">0x1160,9</SiPMtrb>
+    <SiPMtrb id="1,9,0">0x1160,10</SiPMtrb>
+    <SiPMtrb id="1,10,0">0x1160,11</SiPMtrb>
+    <SiPMtrb id="1,11,0">0x1160,12</SiPMtrb>
+    <SiPMtrb id="1,12,0">0x1160,13</SiPMtrb>
+    <SiPMtrb id="1,13,0">0x1160,14</SiPMtrb>
+    <SiPMtrb id="1,14,0">0x1160,15</SiPMtrb>
+    <SiPMtrb id="1,15,0">0x1160,16</SiPMtrb>
+
+    <SiPMtrb id="1,0,1">0x1160,17</SiPMtrb>
+    <SiPMtrb id="1,1,1">0x1160,18</SiPMtrb>
+    <SiPMtrb id="1,2,1">0x1160,19</SiPMtrb>
+    <SiPMtrb id="1,3,1">0x1160,20</SiPMtrb>
+    <SiPMtrb id="1,4,1">0x1160,21</SiPMtrb>
+    <SiPMtrb id="1,5,1">0x1160,22</SiPMtrb>
+    <SiPMtrb id="1,6,1">0x1160,23</SiPMtrb>
+    <SiPMtrb id="1,7,1">0x1160,24</SiPMtrb>
+    <SiPMtrb id="1,8,1">0x1160,25</SiPMtrb>
+    <SiPMtrb id="1,9,1">0x1160,26</SiPMtrb>
+    <SiPMtrb id="1,10,1">0x1160,27</SiPMtrb>
+    <SiPMtrb id="1,11,1">0x1160,28</SiPMtrb>
+    <SiPMtrb id="1,12,1">0x1160,29</SiPMtrb>
+    <SiPMtrb id="1,13,1">0x1160,30</SiPMtrb>
+    <SiPMtrb id="1,14,1">0x1160,31</SiPMtrb>
+    <SiPMtrb id="1,15,1">0x1160,32</SiPMtrb>
+    <!--plane 0 is something connected to PADIWA-->
+    <SiPMtrb id="0,0,0">0x1161,15</SiPMtrb>
+    <SiPMtrb id="0,1,0">0x1161,13</SiPMtrb>
+    <SiPMtrb id="0,2,0">0x1161,11</SiPMtrb>
+    <SiPMtrb id="0,3,0">0x1161,9</SiPMtrb>
+    <SiPMtrb id="0,4,0">0x1161,7</SiPMtrb>
+    <SiPMtrb id="0,5,0">0x1161,5</SiPMtrb>
+    <SiPMtrb id="0,6,0">0x1161,3</SiPMtrb>
+    <SiPMtrb id="0,7,0">0x1161,1</SiPMtrb>
+    <SiPMtrb id="0,8,0">0x1161,16</SiPMtrb>
+    <SiPMtrb id="0,9,0">0x1161,14</SiPMtrb>
+    <SiPMtrb id="0,10,0">0x1161,12</SiPMtrb>
+    <SiPMtrb id="0,11,0">0x1161,10</SiPMtrb>
+    <SiPMtrb id="0,12,0">0x1161,8</SiPMtrb>
+    <SiPMtrb id="0,13,0">0x1161,6</SiPMtrb>
+    <SiPMtrb id="0,14,0">0x1161,4</SiPMtrb>
+    <SiPMtrb id="0,15,0">0x1161,2</SiPMtrb>
+
+    <SiPMtrb id="0,0,1">0x1161,31</SiPMtrb>
+    <SiPMtrb id="0,1,1">0x1161,29</SiPMtrb>
+    <SiPMtrb id="0,2,1">0x1161,27</SiPMtrb>
+    <SiPMtrb id="0,3,1">0x1161,25</SiPMtrb>
+    <SiPMtrb id="0,4,1">0x1161,23</SiPMtrb>
+    <SiPMtrb id="0,5,1">0x1161,21</SiPMtrb>
+    <SiPMtrb id="0,6,1">0x1161,19</SiPMtrb>
+    <SiPMtrb id="0,7,1">0x1161,17</SiPMtrb>
+    <SiPMtrb id="0,8,1">0x1161,32</SiPMtrb>
+    <SiPMtrb id="0,9,1">0x1161,30</SiPMtrb>
+    <SiPMtrb id="0,10,1">0x1161,28</SiPMtrb>
+    <SiPMtrb id="0,11,1">0x1161,26</SiPMtrb>
+    <SiPMtrb id="0,12,1">0x1161,24</SiPMtrb>
+    <SiPMtrb id="0,13,1">0x1161,22</SiPMtrb>
+    <SiPMtrb id="0,14,1">0x1161,20</SiPMtrb>
+    <SiPMtrb id="0,15,1">0x1161,18</SiPMtrb>
+
+<!-- Everything below comes in through mcfd-->
+    <SiPMtrb id="2,0,0">0x1160,33</SiPMtrb><!-- this is SiPM 50 upstream of paddle -->
+    <SiPMtrb id="2,0,1">0x1160,34</SiPMtrb>
+    <SiPMtrb id="2,1,0">0x1160,35</SiPMtrb><!-- this is SiPM 51 downstream of paddle -->
+    <SiPMtrb id="2,1,1">0x1160,36</SiPMtrb>
+    <SiPMtrb id="3,0,1">0x1160,47</SiPMtrb>
+    <SiPMref id="0">0x1160,47</SiPMref> <!-- rf clock in TRB into MCFD-->
+    <SiPMtrig id="0">0x1160,48</SiPMtrig> <!-- trigger in TRB into  MCFD-->
+
+
+<!-- MQDC starts from 0 even though physical label starts from 1-->
+    <SiPMmqdc id="1,0,0">0,0</SiPMmqdc>
+    <SiPMmqdc id="1,1,0">0,1</SiPMmqdc>
+    <SiPMmqdc id="1,2,0">0,2</SiPMmqdc>
+    <SiPMmqdc id="1,3,0">0,3</SiPMmqdc>
+    <SiPMmqdc id="1,4,0">0,4</SiPMmqdc>
+    <SiPMmqdc id="1,5,0">0,5</SiPMmqdc>
+    <SiPMmqdc id="1,6,0">0,6</SiPMmqdc>
+    <SiPMmqdc id="1,7,0">0,7</SiPMmqdc>
+    <SiPMmqdc id="1,8,0">0,8</SiPMmqdc>
+    <SiPMmqdc id="1,9,0">0,9</SiPMmqdc>
+    <SiPMmqdc id="1,10,0">0,10</SiPMmqdc>
+    <SiPMmqdc id="1,11,0">0,11</SiPMmqdc>
+    <SiPMmqdc id="1,12,0">0,12</SiPMmqdc>
+    <SiPMmqdc id="1,13,0">0,13</SiPMmqdc>
+    <SiPMmqdc id="1,14,0">0,14</SiPMmqdc>
+    <SiPMmqdc id="1,15,0">0,15</SiPMmqdc>
+
+    <SiPMmqdc id="1,0,1">0,16</SiPMmqdc>
+    <SiPMmqdc id="1,1,1">0,17</SiPMmqdc>
+    <SiPMmqdc id="1,2,1">0,18</SiPMmqdc>
+    <SiPMmqdc id="1,3,1">0,19</SiPMmqdc>
+    <SiPMmqdc id="1,4,1">0,20</SiPMmqdc>
+    <SiPMmqdc id="1,5,1">0,21</SiPMmqdc>
+    <SiPMmqdc id="1,6,1">0,22</SiPMmqdc>
+    <SiPMmqdc id="1,7,1">0,23</SiPMmqdc>
+    <SiPMmqdc id="1,8,1">0,24</SiPMmqdc>
+    <SiPMmqdc id="1,9,1">0,25</SiPMmqdc>
+    <SiPMmqdc id="1,10,1">0,26</SiPMmqdc>
+    <SiPMmqdc id="1,11,1">0,27</SiPMmqdc>
+    <SiPMmqdc id="1,12,1">0,28</SiPMmqdc>
+    <SiPMmqdc id="1,13,1">0,29</SiPMmqdc>
+    <SiPMmqdc id="1,14,1">0,30</SiPMmqdc>
+    <SiPMmqdc id="1,15,1">0,31</SiPMmqdc>
+
+    <SiPMmqdc id="2,0,0">1,0</SiPMmqdc><!-- this is SiPM 50 upstream of paddle -->
+    <SiPMmqdc id="2,0,1">1,1</SiPMmqdc>
+    <SiPMmqdc id="2,1,0">1,2</SiPMmqdc><!-- this is SiPM 51 downstream of paddle -->
+    <SiPMmqdc id="2,1,1">1,3</SiPMmqdc>
+</run>
+
+<run nr="119">
+
+<!-- side, plane, straw in plane, trb, channel -->
+<!-- planes 0-4 are front planes which are vertical-->
+<stt id="1,0,0" > 0x1350,1  </stt>
+<stt id="1,0,1" > 0x1350,2  </stt>
+<stt id="1,0,2" > 0x1350,3  </stt>
+<stt id="1,0,3" > 0x1350,4  </stt>
+<stt id="1,0,4" > 0x1350,5  </stt>
+<stt id="1,0,5" > 0x1350,6  </stt>
+<stt id="1,0,6" > 0x1350,7  </stt>
+<stt id="1,0,7" > 0x1350,8  </stt>
+<stt id="1,0,8" > 0x1350,9  </stt>
+<stt id="1,0,9" > 0x1350,10 </stt>
+<stt id="1,0,10"> 0x1350,11 </stt>
+<stt id="1,0,11"> 0x1350,12 </stt>
+<stt id="1,0,12"> 0x1350,13 </stt>
+<stt id="1,0,13"> 0x1350,14 </stt>
+<stt id="1,0,14"> 0x1350,15 </stt>
+<stt id="1,0,15"> 0x1350,16 </stt>
+
+<stt id="1,1,0" > 0x1350,17 </stt>
+<stt id="1,1,1" > 0x1350,18 </stt>
+<stt id="1,1,2" > 0x1350,19 </stt>
+<stt id="1,1,3" > 0x1350,20 </stt>
+<stt id="1,1,4" > 0x1350,21 </stt>
+<stt id="1,1,5" > 0x1350,22 </stt>
+<stt id="1,1,6" > 0x1350,23 </stt>
+<stt id="1,1,7" > 0x1350,24 </stt>
+<stt id="1,1,8" > 0x1350,25 </stt>
+<stt id="1,1,9" > 0x1350,26 </stt>
+<stt id="1,1,10"> 0x1350,27 </stt>
+<stt id="1,1,11"> 0x1350,28 </stt>
+<stt id="1,1,12"> 0x1350,29 </stt>
+<stt id="1,1,13"> 0x1350,30 </stt>
+<stt id="1,1,14"> 0x1350,31 </stt>
+<stt id="1,1,15"> 0x1350,32 </stt>
+
+<stt id="1,2,0" > 0x1350,33 </stt>
+<stt id="1,2,1" > 0x1350,34 </stt>
+<stt id="1,2,2" > 0x1350,35 </stt>
+<stt id="1,2,3" > 0x1350,36 </stt>
+<stt id="1,2,4" > 0x1350,37 </stt>
+<stt id="1,2,5" > 0x1350,38 </stt>
+<stt id="1,2,6" > 0x1350,39 </stt>
+<stt id="1,2,7" > 0x1350,40 </stt>
+<stt id="1,2,8" > 0x1350,41 </stt>
+<stt id="1,2,9" > 0x1350,42 </stt>
+<stt id="1,2,10"> 0x1350,43 </stt>
+<stt id="1,2,11"> 0x1350,44 </stt>
+<stt id="1,2,12"> 0x1350,45 </stt>
+<stt id="1,2,13"> 0x1350,46 </stt>
+<stt id="1,2,14"> 0x1350,47 </stt>
+<stt id="1,2,15"> 0x1350,48 </stt>
+
+<stt id="1,3,0" > 0x1351,1  </stt>
+<stt id="1,3,1" > 0x1351,2  </stt>
+<stt id="1,3,2" > 0x1351,3  </stt>
+<stt id="1,3,3" > 0x1351,4  </stt>
+<stt id="1,3,4" > 0x1351,5  </stt>
+<stt id="1,3,5" > 0x1351,6  </stt>
+<stt id="1,3,6" > 0x1351,7  </stt>
+<stt id="1,3,7" > 0x1351,8  </stt>
+<stt id="1,3,8" > 0x1351,9  </stt>
+<stt id="1,3,9" > 0x1351,10 </stt>
+<stt id="1,3,10"> 0x1351,11 </stt>
+<stt id="1,3,11"> 0x1351,12 </stt>
+<stt id="1,3,12"> 0x1351,13 </stt>
+<stt id="1,3,13"> 0x1351,14 </stt>
+<stt id="1,3,14"> 0x1351,15 </stt>
+<stt id="1,3,15"> 0x1351,16 </stt>
+
+<stt id="1,4,0" > 0x1351,17 </stt>
+<stt id="1,4,1" > 0x1351,18 </stt>
+<stt id="1,4,2" > 0x1351,19 </stt>
+<stt id="1,4,3" > 0x1351,20 </stt>
+<stt id="1,4,4" > 0x1351,21 </stt>
+<stt id="1,4,5" > 0x1351,22 </stt>
+<stt id="1,4,6" > 0x1351,23 </stt>
+<stt id="1,4,7" > 0x1351,24 </stt>
+<stt id="1,4,8" > 0x1351,25 </stt>
+<stt id="1,4,9" > 0x1351,26 </stt>
+<stt id="1,4,10"> 0x1351,27 </stt>
+<stt id="1,4,11"> 0x1351,28 </stt>
+<stt id="1,4,12"> 0x1351,29 </stt>
+<stt id="1,4,13"> 0x1351,30 </stt>
+<stt id="1,4,14"> 0x1351,31 </stt>
+<stt id="1,4,15"> 0x1351,32 </stt>
+
+
+
+
+<!-- side, plane, straw in plane, trb, channel -->
+<!-- planes 5-9 are back planes which are horizontal-->
+<stt id="1,5,0" > 0x1352,1  </stt>
+<stt id="1,5,1" > 0x1352,2  </stt>
+<stt id="1,5,2" > 0x1352,3  </stt>
+<stt id="1,5,3" > 0x1352,4  </stt>
+<stt id="1,5,4" > 0x1352,5  </stt>
+<stt id="1,5,5" > 0x1352,6  </stt>
+<stt id="1,5,6" > 0x1352,7  </stt>
+<stt id="1,5,7" > 0x1352,8  </stt>
+<stt id="1,5,8" > 0x1352,9  </stt>
+<stt id="1,5,9" > 0x1352,10 </stt>
+<stt id="1,5,10"> 0x1352,11 </stt>
+<stt id="1,5,11"> 0x1352,12 </stt>
+<stt id="1,5,12"> 0x1352,13 </stt>
+<stt id="1,5,13"> 0x1352,14 </stt>
+<stt id="1,5,14"> 0x1352,15 </stt>
+<stt id="1,5,15"> 0x1352,16 </stt>
+
+<stt id="1,6,0" > 0x1352,17 </stt>
+<stt id="1,6,1" > 0x1352,18 </stt>
+<stt id="1,6,2" > 0x1352,19 </stt>
+<stt id="1,6,3" > 0x1352,20 </stt>
+<stt id="1,6,4" > 0x1352,21 </stt>
+<stt id="1,6,5" > 0x1352,22 </stt>
+<stt id="1,6,6" > 0x1352,23 </stt>
+<stt id="1,6,7" > 0x1352,24 </stt>
+<stt id="1,6,8" > 0x1352,25 </stt>
+<stt id="1,6,9" > 0x1352,26 </stt>
+<stt id="1,6,10"> 0x1352,27 </stt>
+<stt id="1,6,11"> 0x1352,28 </stt>
+<stt id="1,6,12"> 0x1352,29 </stt>
+<stt id="1,6,13"> 0x1352,30 </stt>
+<stt id="1,6,14"> 0x1352,31 </stt>
+<stt id="1,6,15"> 0x1352,32 </stt>
+
+<stt id="1,7,0" > 0x1352,33 </stt>
+<stt id="1,7,1" > 0x1352,34 </stt>
+<stt id="1,7,2" > 0x1352,35 </stt>
+<stt id="1,7,3" > 0x1352,36 </stt>
+<stt id="1,7,4" > 0x1352,37 </stt>
+<stt id="1,7,5" > 0x1352,38 </stt>
+<stt id="1,7,6" > 0x1352,39 </stt>
+<stt id="1,7,7" > 0x1352,40 </stt>
+<stt id="1,7,8" > 0x1352,41 </stt>
+<stt id="1,7,9" > 0x1352,42 </stt>
+<stt id="1,7,10"> 0x1352,43 </stt>
+<stt id="1,7,11"> 0x1352,44 </stt>
+<stt id="1,7,12"> 0x1352,45 </stt>
+<stt id="1,7,13"> 0x1352,46 </stt>
+<stt id="1,7,14"> 0x1352,47 </stt>
+<stt id="1,7,15"> 0x1352,48 </stt>
+
+<stt id="1,8,0" > 0x1353,1  </stt>
+<stt id="1,8,1" > 0x1353,2  </stt>
+<stt id="1,8,2" > 0x1353,3  </stt>
+<stt id="1,8,3" > 0x1353,4  </stt>
+<stt id="1,8,4" > 0x1353,5  </stt>
+<stt id="1,8,5" > 0x1353,6  </stt>
+<stt id="1,8,6" > 0x1353,7  </stt>
+<stt id="1,8,7" > 0x1353,8  </stt>
+<stt id="1,8,8" > 0x1353,9  </stt>
+<stt id="1,8,9" > 0x1353,10 </stt>
+<stt id="1,8,10"> 0x1353,11 </stt>
+<stt id="1,8,11"> 0x1353,12 </stt>
+<stt id="1,8,12"> 0x1353,13 </stt>
+<stt id="1,8,13"> 0x1353,14 </stt>
+<stt id="1,8,14"> 0x1353,15 </stt>
+<stt id="1,8,15"> 0x1353,16 </stt>
+
+<stt id="1,9,0" > 0x1353,17 </stt>
+<stt id="1,9,1" > 0x1353,18 </stt>
+<stt id="1,9,2" > 0x1353,19 </stt>
+<stt id="1,9,3" > 0x1353,20 </stt>
+<stt id="1,9,4" > 0x1353,21 </stt>
+<stt id="1,9,5" > 0x1353,22 </stt>
+<stt id="1,9,6" > 0x1353,23 </stt>
+<stt id="1,9,7" > 0x1353,24 </stt>
+<stt id="1,9,8" > 0x1353,25 </stt>
+<stt id="1,9,9" > 0x1353,26 </stt>
+<stt id="1,9,10"> 0x1353,27 </stt>
+<stt id="1,9,11"> 0x1353,28 </stt>
+<stt id="1,9,12"> 0x1353,29 </stt>
+<stt id="1,9,13"> 0x1353,30 </stt>
+<stt id="1,9,14"> 0x1353,31 </stt>
+<stt id="1,9,15"> 0x1353,32 </stt>
+
+
+
+</run>
+
+<run nr="120">
+    <SiPMref id="1">0x1161,47</SiPMref><!-- This is the RF into the PADIWA -->
+    <SiPMtrig id="1">0x1161,48</SiPMtrig>
+    <SiPMtrb id="3,0,0">0x1160,47</SiPMtrb><!--This is the RF into the MCFD-->
+</run>
+
+<run nr="129">
+    <SiPMtrig id="2">0x1161,48</SiPMtrig>
+    <SiPMref id="3">0x1161,47</SiPMref>
+</run>
+
+<run nr="254">
+    <SiPMtrb id="3,1,0">0x1160,37</SiPMtrb><!--Beam monitor tests-->
+    <SiPMtrb id="3,1,1">0x1160,38</SiPMtrb>
+    <SiPMtrb id="3,2,0">0x1160,39</SiPMtrb>
+    <SiPMtrb id="3,2,1">0x1160,40</SiPMtrb>
+    <SiPMtrb id="3,3,0">0x1160,41</SiPMtrb>
+    <SiPMtrb id="3,3,1">0x1160,42</SiPMtrb>
+
+
+</run>
+
+<run nr="258">
+    <SPStrig id="2">0x1161,48</SPStrig>
+    <SPSref id="3">0x1161,47</SPSref>
+    <SPStrb id="0,0,0">0x1161,33</SPStrb><!--SC103 UP-->
+    <SPStrb id="0,1,0">0x1161,34</SPStrb><!--SC104 UP-->
+    <SPStrb id="0,2,0">0x1161,35</SPStrb><!--SC107 UP-->
+    <SPStrb id="0,3,0">0x1161,36</SPStrb><!--SC108 UP-->
+    <SPStrb id="0,0,1">0x1161,37</SPStrb><!--SC103 Down-->
+    <SPStrb id="0,1,1">0x1161,38</SPStrb><!--SC104 Down-->
+    <SPStrb id="0,2,1">0x1161,39</SPStrb><!--SC107 Down-->
+    <SPStrb id="0,3,1">0x1161,40</SPStrb><!--SC108 Down-->
+    
+    <SPStrb id="0,4,0">0x1161,41</SPStrb><!--SC202U-->
+    <SPStrb id="0,5,0">0x1161,42</SPStrb><!--SC207U-->
+    <SPStrb id="0,6,0">0x1161,43</SPStrb><!--SC208U-->
+    <SPStrb id="0,4,1">0x1161,44</SPStrb><!--SC202D-->
+    <SPStrb id="0,5,1">0x1161,45</SPStrb><!--SC207D-->
+    <SPStrb id="0,6,1">0x1161,46</SPStrb><!--SC208D-->
+
+    <SPSmqdc id="0,0,0">2,0</SPSmqdc><!--SC103 UP-->
+    <SPSmqdc id="0,1,0">2,1</SPSmqdc><!--SC104 UP-->
+    <SPSmqdc id="0,2,0">2,2</SPSmqdc><!--SC107 UP-->
+    <SPSmqdc id="0,3,0">2,3</SPSmqdc><!--SC108 UP-->
+    <SPSmqdc id="0,0,1">2,4</SPSmqdc><!--SC103 Down-->
+    <SPSmqdc id="0,1,1">2,5</SPSmqdc><!--SC104 Down-->
+    <SPSmqdc id="0,2,1">2,6</SPSmqdc><!--SC107 Down-->
+    <SPSmqdc id="0,3,1">2,7</SPSmqdc><!--SC108 Down-->
+    
+    <SPSmqdc id="0,4,0">2,8</SPSmqdc><!--SC202U-->
+    <SPSmqdc id="0,5,0">2,9</SPSmqdc><!--SC207U-->
+    <SPSmqdc id="0,6,0">2,10</SPSmqdc><!--SC208U-->
+    <SPSmqdc id="0,4,1">2,11</SPSmqdc><!--SC202D-->
+    <SPSmqdc id="0,5,1">2,12</SPSmqdc><!--SC207D-->
+    <SPSmqdc id="0,6,1">2,13</SPSmqdc><!--SC208D-->
+
+
+    <PbGlasstrig id="2">0x1161,48</PbGlasstrig>
+    <PbGlassref id="3">0x1161,47</PbGlassref>
+    <PbGlasstrb id="0,0">0x1162,1</PbGlasstrb><!--x,y coords of lead glass cal-->
+    <PbGlasstrb id="0,1">0x1162,2</PbGlasstrb>
+    <PbGlasstrb id="0,2">0x1162,3</PbGlasstrb>
+    <PbGlasstrb id="1,0">0x1162,4</PbGlasstrb>
+    <PbGlasstrb id="1,1">0x1162,5</PbGlasstrb>
+    <PbGlasstrb id="1,2">0x1162,6</PbGlasstrb>
+    <PbGlasstrb id="2,0">0x1162,7</PbGlasstrb>
+    <PbGlasstrb id="2,1">0x1162,8</PbGlasstrb>
+    <PbGlasstrb id="2,2">0x1162,9</PbGlasstrb>
+
+    <PbGlassmqdc id="0,0">1,16</PbGlassmqdc>
+    <PbGlassmqdc id="0,1">1,17</PbGlassmqdc>
+    <PbGlassmqdc id="0,2">1,18</PbGlassmqdc>
+    <PbGlassmqdc id="1,0">1,19</PbGlassmqdc>
+    <PbGlassmqdc id="1,1">1,20</PbGlassmqdc>
+    <PbGlassmqdc id="1,2">1,21</PbGlassmqdc>
+    <PbGlassmqdc id="2,0">1,22</PbGlassmqdc>
+    <PbGlassmqdc id="2,1">1,23</PbGlassmqdc>
+    <PbGlassmqdc id="2,2">1,24</PbGlassmqdc>
+</run>
+
+
+  <run nr="316">
+    <SPStrig id="2">0x1161,48</SPStrig>
+    <PbGlasstrig id="2">0x1161,48</PbGlasstrig>
+    <SiPMtrig id="2">0x1161,48</SiPMtrig>
+    <sttrefclock id="3">0x1161,47</sttrefclock>
+    <trb id="&quot;trig&quot;">0x1161,48</trb>
+    <trb id="&quot;2x2&quot;">0x1162,10</trb>
+  </run>
+
+<!-- MIcro STT mapping -->
+  <run nr="318"> 
+<stt id="2,0,0" > 0x1163,1  </stt>
+<stt id="2,0,1" > 0x1163,2  </stt>
+<stt id="2,0,2" > 0x1163,3  </stt>
+<stt id="2,0,3" > 0x1163,4  </stt>
+<stt id="2,0,4" > 0x1163,5  </stt>
+<stt id="2,0,5" > 0x1163,6  </stt>
+<stt id="2,0,6" > 0x1163,7  </stt>
+<stt id="2,0,7" > 0x1163,8  </stt>
+<stt id="2,0,8" > 0x1163,9  </stt>
+<stt id="2,0,9" > 0x1163,10 </stt>
+<stt id="2,0,10"> 0x1163,11 </stt>
+<stt id="2,0,11"> 0x1163,12 </stt>
+<stt id="2,0,12"> 0x1163,13 </stt>
+<stt id="2,0,13"> 0x1163,14 </stt>
+<stt id="2,0,14"> 0x1163,15 </stt>
+<stt id="2,0,15"> 0x1163,16 </stt>
+
+<stt id="2,1,0" > 0x1163,17 </stt>
+<stt id="2,1,1" > 0x1163,18 </stt>
+<stt id="2,1,2" > 0x1163,19 </stt>
+<stt id="2,1,3" > 0x1163,20 </stt>
+<stt id="2,1,4" > 0x1163,21 </stt>
+<stt id="2,1,5" > 0x1163,22 </stt>
+<stt id="2,1,6" > 0x1163,23 </stt>
+<stt id="2,1,7" > 0x1163,24 </stt>
+<stt id="2,1,8" > 0x1163,25 </stt>
+<stt id="2,1,9" > 0x1163,26 </stt>
+<stt id="2,1,10"> 0x1163,27 </stt>
+<stt id="2,1,11"> 0x1163,28 </stt>
+<stt id="2,1,12"> 0x1163,29 </stt>
+<stt id="2,1,13"> 0x1163,30 </stt>
+<stt id="2,1,14"> 0x1163,31 </stt>
+<stt id="2,1,15"> 0x1163,32 </stt>
+
+<stt id="2,2,0" > 0x1163,33 </stt>
+<stt id="2,2,1" > 0x1163,34 </stt>
+<stt id="2,2,2" > 0x1163,35 </stt>
+<stt id="2,2,3" > 0x1163,36 </stt>
+<stt id="2,2,4" > 0x1163,37 </stt>
+<stt id="2,2,5" > 0x1163,38 </stt>
+<stt id="2,2,6" > 0x1163,39 </stt>
+<stt id="2,2,7" > 0x1163,40 </stt>
+<stt id="2,2,8" > 0x1163,41 </stt>
+<stt id="2,2,9" > 0x1163,42 </stt>
+<stt id="2,2,10"> 0x1163,43 </stt>
+<stt id="2,2,11"> 0x1163,44 </stt>
+<stt id="2,2,13"> 0x1163,46 </stt>
+<stt id="2,2,14"> 0x1163,47 </stt>
+<stt id="2,2,15"> 0x1163,48 </stt>
+
+<stt id="2,3,0" > 0x1162,17 </stt>
+<stt id="2,3,1" > 0x1162,18 </stt>
+<stt id="2,3,2" > 0x1162,19 </stt>
+<stt id="2,3,3" > 0x1162,20 </stt>
+<stt id="2,3,4" > 0x1162,21 </stt>
+<stt id="2,3,5" > 0x1162,22 </stt>
+<stt id="2,3,6" > 0x1162,23 </stt>
+<stt id="2,3,7" > 0x1162,24 </stt>
+<stt id="2,3,8" > 0x1162,25 </stt>
+<stt id="2,3,9" > 0x1162,26 </stt>
+<stt id="2,3,10"> 0x1162,27 </stt>
+<stt id="2,3,11"> 0x1162,28 </stt>
+<stt id="2,3,12"> 0x1162,29 </stt>
+<stt id="2,3,13"> 0x1162,30 </stt>
+<stt id="2,3,14"> 0x1162,31 </stt>
+<stt id="2,3,15"> 0x1162,32 </stt>
+
+<stt id="2,4,0" > 0x1162,33  </stt>
+<stt id="2,4,1" > 0x1162,34 </stt>
+<stt id="2,4,2" > 0x1162,35  </stt>
+<stt id="2,4,3" > 0x1162,36  </stt>
+<stt id="2,4,4" > 0x1162,37  </stt>
+<stt id="2,4,5" > 0x1162,38 </stt>
+<stt id="2,4,6" > 0x1162,39  </stt>
+<stt id="2,4,7" > 0x1162,40 </stt>
+<stt id="2,4,8" > 0x1162,41 </stt>
+<stt id="2,4,9" > 0x1162,42 </stt>
+<stt id="2,4,10"> 0x1162,43 </stt>
+<stt id="2,4,11"> 0x1162,44 </stt>
+<stt id="2,4,12"> 0x1162,45 </stt>
+<stt id="2,4,13"> 0x1162,46 </stt>
+<stt id="2,4,14"> 0x1162,47 </stt>
+<stt id="2,4,15"> 0x1162,48 </stt>
+
+  </run>
+
+<!-- TRB3 TDC channel mapping starts from 1 not fron 0  -->
+<!-- <run nr="527">
+    <SiPMtrb id="3,1,0">0x1160,0</SiPMtrb>
+    <SiPMtrb id="3,1,1">0x1160,1</SiPMtrb>
+    <SiPMtrb id="3,2,0">0x1160,2</SiPMtrb>
+    <SiPMtrb id="3,2,1">0x1160,3</SiPMtrb>
+    <SiPMtrb id="3,3,0">0x1160,4</SiPMtrb>
+    <SiPMtrb id="3,3,1">0x1160,5</SiPMtrb>
+  </run>
+-->
+<!-- Ievgen: The correct mapping is bellow -->
+ <run nr="527">
+    <SiPMtrb id="3,1,0">0x1160,1</SiPMtrb>
+    <SiPMtrb id="3,1,1">0x1160,2</SiPMtrb>
+    <SiPMtrb id="3,2,0">0x1160,3</SiPMtrb>
+    <SiPMtrb id="3,2,1">0x1160,4</SiPMtrb>
+    <SiPMtrb id="3,3,0">0x1160,5</SiPMtrb>
+    <SiPMtrb id="3,3,1">0x1160,6</SiPMtrb>
+ </run>
+
+
+
+  <run nr="7204"> <!-- New Maping for STT -->
+<stt id="2,0,0" > 0x1350,1 </stt>
+<stt id="2,0,1" > 0x1350,2 </stt>
+<stt id="2,0,2" > 0x1350,3 </stt>
+<stt id="2,0,3" > 0x1350,4 </stt>
+<stt id="2,0,4" > 0x1350,5 </stt>
+<stt id="2,0,5" > 0x1350,6 </stt>
+<stt id="2,0,6" > 0x1350,7 </stt>
+<stt id="2,0,7" > 0x1350,8 </stt>
+<stt id="2,0,8" > 0x1350,9 </stt>
+<stt id="2,0,9" > 0x1350,10 </stt>
+<stt id="2,0,10" > 0x1350,11 </stt>
+<stt id="2,0,11" > 0x1350,12 </stt>
+<stt id="2,0,12" > 0x1350,13 </stt>
+<stt id="2,0,13" > 0x1350,14 </stt>
+<stt id="2,0,14" > 0x1350,15 </stt>
+<stt id="2,0,15" > 0x1350,16 </stt>
+<stt id="2,0,16" > 0x1351,39 </stt>
+<stt id="2,0,17" > 0x1351,40 </stt>
+<stt id="2,1,0" > 0x1350,17 </stt>
+<stt id="2,1,1" > 0x1350,18 </stt>
+<stt id="2,1,2" > 0x1350,19 </stt>
+<stt id="2,1,3" > 0x1350,20 </stt>
+<stt id="2,1,4" > 0x1350,21 </stt>
+<stt id="2,1,5" > 0x1350,22 </stt>
+<stt id="2,1,6" > 0x1350,23 </stt>
+<stt id="2,1,7" > 0x1350,24 </stt>
+<stt id="2,1,8" > 0x1350,25 </stt>
+<stt id="2,1,9" > 0x1350,26 </stt>
+<stt id="2,1,10" > 0x1350,27 </stt>
+<stt id="2,1,11" > 0x1350,28 </stt>
+<stt id="2,1,12" > 0x1350,29 </stt>
+<stt id="2,1,13" > 0x1350,30 </stt>
+<stt id="2,1,14" > 0x1350,31 </stt>
+<stt id="2,1,15" > 0x1350,32 </stt>
+<stt id="2,1,16" > 0x1351,38 </stt>
+<stt id="2,2,0" > 0x1350,33 </stt>
+<stt id="2,2,1" > 0x1350,34 </stt>
+<stt id="2,2,2" > 0x1350,35 </stt>
+<stt id="2,2,3" > 0x1350,36 </stt>
+<stt id="2,2,4" > 0x1350,37 </stt>
+<stt id="2,2,5" > 0x1350,38 </stt>
+<stt id="2,2,6" > 0x1350,39 </stt>
+<stt id="2,2,7" > 0x1350,40 </stt>
+<stt id="2,2,8" > 0x1350,41 </stt>
+<stt id="2,2,9" > 0x1350,42 </stt>
+<stt id="2,2,10" > 0x1350,43 </stt>
+<stt id="2,2,11" > 0x1350,44 </stt>
+<stt id="2,2,12" > 0x1350,45 </stt>
+<stt id="2,2,13" > 0x1350,46 </stt>
+<stt id="2,2,14" > 0x1350,47 </stt>
+<stt id="2,2,15" > 0x1350,48 </stt>
+<stt id="2,2,16" > 0x1351,36 </stt>
+<stt id="2,2,17" > 0x1351,37 </stt>
+<stt id="2,3,0" > 0x1351,1 </stt>
+<stt id="2,3,1" > 0x1351,2 </stt>
+<stt id="2,3,2" > 0x1351,3 </stt>
+<stt id="2,3,3" > 0x1351,4 </stt>
+<stt id="2,3,4" > 0x1351,5 </stt>
+<stt id="2,3,5" > 0x1351,6 </stt>
+<stt id="2,3,6" > 0x1351,7 </stt>
+<stt id="2,3,7" > 0x1351,8 </stt>
+<stt id="2,3,8" > 0x1351,9 </stt>
+<stt id="2,3,9" > 0x1351,10 </stt>
+<stt id="2,3,10" > 0x1351,11 </stt>
+<stt id="2,3,11" > 0x1351,12 </stt>
+<stt id="2,3,12" > 0x1351,13 </stt>
+<stt id="2,3,13" > 0x1351,14 </stt>
+<stt id="2,3,14" > 0x1351,15 </stt>
+<stt id="2,3,15" > 0x1351,16 </stt>
+<stt id="2,3,16" > 0x1351,35 </stt>
+<stt id="2,4,0" > 0x1351,17 </stt>
+<stt id="2,4,1" > 0x1351,18 </stt>
+<stt id="2,4,2" > 0x1351,19 </stt>
+<stt id="2,4,3" > 0x1351,20 </stt>
+<stt id="2,4,4" > 0x1351,21 </stt>
+<stt id="2,4,5" > 0x1351,22 </stt>
+<stt id="2,4,6" > 0x1351,23 </stt>
+<stt id="2,4,7" > 0x1351,24 </stt>
+<stt id="2,4,8" > 0x1351,25 </stt>
+<stt id="2,4,9" > 0x1351,26 </stt>
+<stt id="2,4,10" > 0x1351,27 </stt>
+<stt id="2,4,11" > 0x1351,28 </stt>
+<stt id="2,4,12" > 0x1351,29 </stt>
+<stt id="2,4,13" > 0x1351,30 </stt>
+<stt id="2,4,14" > 0x1351,31 </stt>
+<stt id="2,4,15" > 0x1351,32 </stt>
+<stt id="2,4,16" > 0x1351,33 </stt>
+<stt id="2,4,17" > 0x1351,34 </stt>
+  </run>
+
+</mapper>
+
+

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<muse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation='recipe.xsd'>
+
+<init>init/GEMlumi_XY.xml</init>
+
+<source>MUSEteleTracks</source> <!-- the source tree name-->
+<destination>TrackingView</destination> <!-- the destination tree name-->
+
+<plugins>
+  <plugin> 
+     <name>TrackingView</name>
+     <file>libTrackingView</file>
+  </plugin>
+</plugins>
+
+
+<!-- These functions will be called at the 'very' beginning -->
+<defineHistograms>
+  <TrackingView>defineHistograms</TrackingView>
+</defineHistograms>
+
+<!-- These functions will be called at the beginning --> 
+<startup>
+ <TrackingView>startup</TrackingView>
+</startup>
+
+<!-- These functions will be executed for every event, in order of appearance -->
+<execute>
+ <TrackingView>process</TrackingView>
+</execute>
+
+<!-- These functions will be called at the end of the file --> 
+<finalize>
+ <TrackingView>finalize</TrackingView>
+</finalize>
+
+</muse>

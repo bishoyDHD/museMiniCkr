@@ -1,0 +1,335 @@
+#ifndef __DET_LUMIGEM__
+#define __DET_LUMIGEM__
+
+#include "TObject.h"
+#include "Plugin.h"
+#include "TTree.h"
+#include "TH1.h"
+#include "TH2.h"
+#include "lumigemtree.h"
+#include "musetdc1190tree.h"
+#include "museadctree.h"
+
+#include <iostream>
+#include "TGTab.h"
+
+#include<muserawtree.h>
+
+#include "cLumiGEMBinaryBlobRead.h"
+#include "cLumiGEMAsciiRead.h"
+#include "cGEM.h"
+#include "cAPV.h"
+#include "cHitFinder.h"
+#include "Tab_LumiGEM.h"
+
+class TEvePointSet;
+
+
+extern const char GEMname[4][8];
+extern const char leftright[3][8];
+extern const char xystr[3][8];
+extern const char goodbad[2][8];
+
+
+class cmodeinfo{
+ public:
+  int x_event,y_event,x,y,maxx,maxy,maxchx,maxchy;
+};
+
+
+class cmodeinfo_apv{
+ public:
+  int x_event_apv1,y_event_apv1,x_apv1,y_apv1,maxx_apv1,maxy_apv1,maxchx_apv1,maxchy_apv1;
+  int x_event_apv2,y_event_apv2,x_apv2,y_apv2,maxx_apv2,maxy_apv2,maxchx_apv2,maxchy_apv2;
+};
+
+class Det_LumiGEM : public Plugin
+{
+ private:
+
+  TEvePointSet * LHits;
+bool preproc;
+ std::vector< std::vector<double> > cmcthx; // New Hit finder routines
+ std::vector< std::vector<double> > cmcthy; // New Hit finder routines
+
+ public:
+
+////////////////////////////////
+   // New Hit finder routines
+      std::vector<unsigned int> localMax(std::vector<double> dat, double thresh);
+      std::vector<unsigned int> localMax(std::vector<double> dat, std::vector<double> thresh);
+      double meanHit(unsigned int ind, std::vector<double> dat, LumiGEMhit *hit);
+      unsigned int maxind(std::vector<double> dat, std::vector<bool> mask);
+///////////////////////REad ASCII files ///////////////////////////////////
+
+ FILE *asciifile;
+//cLumiGEMBinaryBlobRead *blobreader;
+  cLumiGEMAsciiRead      *asciireader;
+  Long_t startup_ASCII();
+  Long_t process_ASCII();
+  Long_t done_ASCII();
+ // histograms for raw data cooking:
+ // TH1I          *hx;
+  // TH1I          *rmshisto[2][3];
+  TH2D          *hm0, *hm1, *hm2, *hm3, *hm4, *hm5;
+  TH1D *LMhitmapX[2][3], *LMhitmapXw[2][3], *LMhitmapY[2][3], *LMhitmapYw[2][3];
+  TH1D *clustercount[2][3];
+  TH2D *clust_cosmic[2][3];
+  // TH1D *oneclustereve[2][3];
+  Long_t defineHistogramsASCII();
+ void InitHitFinderASCII(); 
+ int    ReadTelescopeDataASCII(int t);
+ int    CheckRangeASCII(int n, int *dat, int low, int high);
+  void   cleanupASCII();
+void findClustersASCII(int t,int i);
+ bool common_process_innerASCII(int t,int i);
+  //////////////////////////////
+
+   //  double cmode_mean_x[2][3],cmode_mean_y[2][3];
+   double cmode_mean_x_apv1[2][3],cmode_mean_y_apv1[2][3],cmode_mean_x_apv2[2][3],cmode_mean_y_apv2[2][3];
+ double getavgpedx[3][250],getavgpedy[3][250],avg_ped_x[3][250],avg_ped_y[3][250];
+ double getavgonlypedx[3][250],getavgonlypedy[3][250],avg_pedonly_x[3][250],avg_pedonly_y[3][250];
+
+  int           *xdat,    *ydat;
+  int           *xdatraw, *ydatraw;
+  int           *tmpdat;
+  //
+  int apvx1,apvy1;
+
+  // data quality checking configuration:
+  int valAPVsyncDataRangeLow, valAPVsyncDataRangeHigh;
+  int valAPVoutOfSyncSampleThreshold, valAPVoutOfSyncEventThreshold;
+  int valAPVzeroSamplesEventThreshold;
+  int APVoutOfSyncCNT, APVzeroSamplesCNT;
+  //
+  // hit and cluster finder configuration:
+  double valLMGaussFilterSigma;
+  int    valLMMinimumAmplitude, valLMMinimumDistance, valLMMaximumNLM, valCFMinimumAmplitude;
+  double valCFSigmaMin, valCFSigmaMax;
+  unsigned int triggerpatternOI;
+  int    valmake1dhits;
+  int    valrepairbrokenstrips;
+  //
+  // histograms for raw data cooking:
+  TH1I          *hx;
+  TH1D          *rmshisto[2][3];
+  TH2D          *H_XvsX[2][3][3];
+  TH2D          *H_YvsY[2][3][3];
+  TH2D          *H_hitmap2d[2][3];
+  TH2D          *hm2d[2][3];
+
+  TH1D *osci[24];
+
+  TH1D *totadc_xped[3][250];
+  TH1D *totadc_yped[3][250];
+  TH2D *totadc_yped_eve[3][250];
+  TH2D *totadc_yped_strip[3];
+  TH2D *totadc_xped_strip[3];
+  TH2D *avg_yped_strip[3];
+  TH2D *avg_xped_strip[3];
+  TH2D *xcm_ped[2][3];
+  TH2D *ycm_ped[2][3];
+  TH2D *GEM0X_bin2bin_ped,*GEM1X_bin2bin_ped,*GEM2X_bin2bin_ped;
+  TH2D *GEM0Y_bin2bin_ped,*GEM1Y_bin2bin_ped,*GEM2Y_bin2bin_ped;
+
+  //
+  // histograms for explora:
+  TH1I          *rmshisto_explora[2];
+  TH2I          *chargesharing_explora[2];
+  TH2I          *clustermultiplicity_explora;
+  TH2I          *amplitudes_explora;
+  TH2I          *hitmap_explora[2][3];
+
+  TH2D *h2maxxADCb4cm[2][3],*h2maxyADCb4cm[2][3],*h2maxxADCcm[2][3],*h2maxyADCcm[2][3],*h2maxxADCcmped[2][3],*h2maxyADCcmped[2][3];
+  //  TH2D *h2maxxADCcm[2][3],*h2maxyADCcm[2][3];
+  TH2D *h2adcspec_x[2][3],*h2adcspec_y[2][3],*h2adcspec_nopk_x[2][3],*h2adcspec_nopk_y[2][3],*h2evespec_nopk_x[2][3],*h2evespec_nopk_y[2][3];
+  TH2D *h2adcspec_cmode_x[2][3],*h2adcspec_cmode_y[2][3],*h2adcspec_cmode_nopk_x[2][3],*h2adcspec_cmode_nopk_y[2][3];
+  TH2D *h2adcspec_cm_pedsub_x[2][3],*h2adcspec_cm_pedsub_y[2][3],*h2adcspec_cm_pedsub_nopk_x[2][3],*h2adcspec_cm_pedsub_nopk_y[2][3];
+  TH2D *h2adcspec_cm_pedsub_peak_x[2][3],*h2adcspec_cm_pedsub_peak_y[2][3];
+
+  TH2D *h2adcspec_pedsub_nopk_x[2][3],*h2adcspec_pedsub_nopk_y[2][3];
+
+  TH2D *h2adcspec_base_x[2][3],*h2adcspec_base_y[2][3],*h2adcspec_base_nopk_x[2][3],*h2adcspec_base_nopk_y[2][3];
+  TH2D *h2hitmaps[2][3],*h2amplmapsx[2][3],*h2amplmapsy[2][3],*normamplmapsx[2][3],*normamplmapsy[2][3],*H_amplmap2d[2][3];
+TH2D *deadchmap[2][3];
+  //  TH2D *normamplmapsx[2][3],*normamplmapsy[2][3];
+
+  TH1D *H_hitampx[2][3],*H_hitampy[2][3],*totentries[2][3];
+
+  TH1D *h1cmode_after_x[2][3],*h1cmode_after_y[2][3];
+  // TH1D *h1adcspec_cmode_x[2][3],*h1adcspec_cmode_y[2][3];
+  TH1D *h1adcspec_cmode_x_apv1[2][3],*h1adcspec_cmode_y_apv1[2][3],*h1adcspec_cmode_x_apv2[2][3],*h1adcspec_cmode_y_apv2[2][3];
+  // TH1D *h1_cmode_x[2][3],*h1_cmode_y[2][3];
+
+  int nx,ny;
+  //
+  // objects needed by all plugin configurations:xs
+  cGEM          *GEM[2][3];
+  cHitFinder    *hitfinder;
+  //cLumiGEMDataRead *datareader;
+  cLumiGEMBinaryBlobRead *blobreader;
+  // branches on input tree:
+  MRTBinaryBlob *LUMI[2];
+  MRTEventInfo  *eventinfo;
+  MRTRunInfo    *runinfo;
+  // branch on output tree:
+  LumiGEM       *gemo;
+  std::vector <LumiGEMhit> hitlist; // to store 1d hits if 2d hits should appear in gemo!
+  int StringToValue(const char *needle, const char haystack[][8]);
+  void ShowBasicConfig();
+  //
+  // trigger and eventid:
+  int lumitriggercounter[2], lumibankcounter[2];
+  //
+  double         beamcharge;
+  double         runstarttime, runstoptime;
+  double         thiseventtime, lasteventtime;
+  TH1D          *histo_estlumi;
+  double         estlumicounter;
+  double         nextsctime;
+  //
+  // Detector status:
+  bool           ProcessDetectorFlagOnly;
+  char           WriteDetectorFlagFilename[512];
+  unsigned int   DetectorStatus;
+
+
+  //stuff for inner loop
+  bool zeroFLAG, outofsyncFLAG;
+  int xclustercnt[3], yclustercnt[3];
+
+  Long_t common_process();
+  bool common_process_inner(int t,int i);
+
+  bool use_gainmatch,dead_ch_masking;
+  bool doSubtractped,doSubtractcmode,getmeancmode,doSubtractbaseline,onlybin2binsub,doSubtractonlyped,doAPVcalib;
+  bool doFindClusters;
+
+  cmodeinfo findCMode(int t,int i);
+  cmodeinfo_apv findCMode_apv(int t,int i);
+
+  void subtractCMode(int t,int i,cmodeinfo_apv &);
+  void subtractBin2Bin(int t,int i);
+ void subtractonlyBin2Bin(int t,int i);
+  void findClusters(int t,int i);
+  int perchannelped[250*2*3*2];
+  int deadchannels[250*2*3*2];
+  double CalibConsts[250*2*3*2];
+  bool allSpecHist;
+  bool someSpecHist;
+ void dobaselinesub(int t,int i);
+
+ // APV channel-to-channel calibration//////////////////////////////
+ void callib_apvchannels(int t,int i);
+ // Long_t Calib_histo();
+Long_t done_APVcalib();
+Long_t startup_APVcalib();
+ //////////////////////////////////////////////////////////////////
+
+ public:
+  Det_LumiGEM(TTree *in, TTree *out, TFile *inf_, TFile *outf_, TObject *p);
+  virtual ~Det_LumiGEM();
+  //
+  // general configuration:
+  int    verbose;
+  Long_t SetVerbosity(int verb) { verbose = verb; return 0; };
+  Long_t SetTriggerPattern(int id, unsigned int triggerpattern) { triggerpatternOI = triggerpattern; return 0; };
+  Long_t setDetectorFlagOnly(bool trueorfalse=true) { ProcessDetectorFlagOnly = trueorfalse; return 0; };
+  Long_t SetDetectorFlagFilename(const char *fn) { sprintf(WriteDetectorFlagFilename, "%s", fn); return 0; };
+  //
+  // configuration of APV/GEM mapping:
+  Long_t AddAPVtoGEM(int lAPVnum, int telescope, const char *gem, const char *xy, int skipfirst);
+  Long_t AddAPVtoGEMright(int id, int lAPVnum, const char *gem, const char *xy, int skipfirst);
+  Long_t AddAPVtoGEMleft(int id, int lAPVnum, const char *gem, const char *xy, int skipfirst);
+  Long_t ModifyAPVright(int id, int lAPVnum, const char *chlist, int size, cAPV::eSampleModification m);
+  Long_t ModifyAPVleft(int id, int lAPVnum, const char *chlist, int size, cAPV::eSampleModification m);
+  Long_t SwapGEMaxis(int id, const char *sector, const char *gem, const char *xy);
+
+  //Long_t SkipAPVChannelsright(int id, int lAPVnum, const char *channelstoskip, int size);
+  Long_t SkipAPVChannelsright(int id, int lAPVnum, const char *channelstoskip, int size);
+  //
+  // configuration of data quality checking:
+  Long_t SetAPVsyncDataRange(int id, int low, int high)
+  { valAPVsyncDataRangeLow=low; valAPVsyncDataRangeHigh=high; return 0; };
+  Long_t SetAPVoutOfSyncSampleThreshold(int id, int val)  { valAPVoutOfSyncSampleThreshold=val;  return 0; };
+  Long_t SetAPVoutOfSyncEventThreshold(int id, int val)   { valAPVoutOfSyncEventThreshold=val;   return 0; };
+  Long_t SetAPVzeroSamplesEventThreshold(int id, int val) { valAPVzeroSamplesEventThreshold=val; return 0; };
+  //
+  // configuration of hit and cluster finder:
+  Long_t SetLMGaussFilterSigma(int id, double val) { valLMGaussFilterSigma = val; return 0; };
+  Long_t SetLMMininumAmplitude(int id, int val)    { valLMMinimumAmplitude = val; return 0; };
+  Long_t SetLMMinimumDistance(int id, int val)     { valLMMinimumDistance  = val; return 0; };
+  Long_t SetLMMaximumNLM(int id, int val)          { valLMMaximumNLM       = val; return 0; };
+  Long_t SetCFMinimumAmplitude(int id, int val)    { valCFMinimumAmplitude = val; return 0; };
+  Long_t SetCFSigmaRange(int id, double min, double max) { valCFSigmaMin = min; valCFSigmaMax = max; return 0; };
+  Long_t SetMake1dClusters(int id, int val)        { valmake1dhits = val; return 0; };
+  Long_t SetRepairBrokenStrips(int id, int val)    { valrepairbrokenstrips = val; return 0; };
+  //
+
+
+  //configuration for pedestal
+
+  Long_t SetPerChannelPedestal(int id, int ,int ,int,int , int );
+
+  // mask the dead channels
+ Long_t Maskdeadchannels(int id, int ,int ,int,int,int);
+
+ // Do APV channel-2-channel gain calibration
+  Long_t Channel_2_channel_gain_calib(int id, int ,int ,int, int, double);
+ 
+
+  // configuration of SC channels to be watched:
+  Long_t watchSCchannel(int id, const char *name, int sector, double low, double high);
+  Long_t watchSCHVchannel(int id, const char *name, int sector, double setpoint, double tolerance);
+  //
+  // initialization routines:
+  void InitSC();               // initialize slow control interface
+  void InitLumiBranches_in();  // initialize lumi data branches in input tree
+  void InitLumiBranches_out(); // initialize lumi data branches in output tree
+  void InitRMShistos();        // initialize RMS histos (data quality control)
+  void InitHitFinder();        // initialize hit and cluster finder
+  //
+
+  // for cooking of raw data:
+  Long_t defineHistograms();
+  Long_t defineHistogramsSpec();
+  Long_t defineHistogramsSpecAll();
+  Long_t startup();
+  Long_t process();
+
+  Long_t showTraces();
+  Long_t done();
+  Long_t cmdline(char *cmd);
+  //
+  // For the Event Display
+  Long_t startup_vis();
+  bool vis;
+
+  // for pedestal:
+  Long_t startup_findPedestal();
+  Long_t dumpPedestals();
+
+ // for common mode:
+  Long_t startup_cmode();
+  Long_t getmean_cmode();
+
+  // for only pedestal: (without Cmode subtraction)
+  Long_t startup_onlyPedestal();
+  Long_t dumponlyPedestals();
+
+  //
+  // common routines for all plugin configurations:
+  int    CheckRange(int n, int *dat, int low, int high);
+  int    ReadTelescopeData(int t);
+  void   cleanup();
+  //
+  // stuff for the Visual Cooker (visco):
+  TGCompositeFrame *viscotab;
+  Tab_LumiGEM      *LumiGUI;
+
+  //vectors related to common-mode noise and bin-2-bin pedestal subtractions
+
+  ClassDef(Det_LumiGEM,1);
+};
+
+#endif
